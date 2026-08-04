@@ -1,0 +1,266 @@
+const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+const { run: verifyReleaseGate } = require('./verify_canonical_release_gate');
+
+const root = path.resolve(__dirname);
+const target = 'https://ai.cauai.fun';
+function activeBrandAssetFromIndex(indexHtml) {
+  const imageTag = [...indexHtml.matchAll(/<img\b[^>]*>/gi)]
+    .map(match => match[0])
+    .find(tag => /\bclass=(['"])[^'"]*\bhero-logo\b[^'"]*\1/i.test(tag));
+  const src = imageTag?.match(/\bsrc=(['"])([^'"]+)\1/i)?.[2] || '';
+  const normalized = src.replace(/^\.?(?:\/|\\)/, '').replace(/\\/g, '/');
+  if (!normalized.startsWith('assets/brand/') || normalized.includes('..')) fail('release_stage_active_brand_asset_invalid');
+  return normalized;
+}
+
+const activeBrandAsset = activeBrandAssetFromIndex(fs.readFileSync(path.join(root, 'index.html'), 'utf8'));
+function recursiveJavaScriptFiles(directory, relativeRoot) {
+  return fs.readdirSync(directory, {withFileTypes:true}).flatMap(entry => {
+    const absolute = path.join(directory, entry.name);
+    const relative = relativeRoot + '/' + entry.name;
+    if (entry.isDirectory()) return recursiveJavaScriptFiles(absolute, relative);
+    return entry.isFile() && entry.name.endsWith('.js') ? [relative] : [];
+  });
+}
+
+function recursiveFiles(directory, relativeRoot) {
+  return fs.readdirSync(directory, {withFileTypes:true}).flatMap(entry => {
+    const absolute = path.join(directory, entry.name);
+    const relative = relativeRoot + '/' + entry.name;
+    if (entry.isDirectory()) return recursiveFiles(absolute, relative);
+    return entry.isFile() ? [relative] : [];
+  });
+}
+
+const runtimeBridgeJavaScriptFiles = recursiveJavaScriptFiles(path.join(root, 'bridge'), 'bridge').sort();
+const step02SkillBundleFiles = recursiveFiles(path.join(root, 'runtime', 'skill-bundles', 'shortdrama-localization-runtime-1'), 'runtime/skill-bundles/shortdrama-localization-runtime-1').sort();
+const step04AbcdSkillBundleFiles = recursiveFiles(path.join(root, 'runtime', 'skill-bundles', 'shortdrama-step04-abcd-runtime-1'), 'runtime/skill-bundles/shortdrama-step04-abcd-runtime-1').sort();
+const step02RuntimeContractFiles = recursiveFiles(path.join(root, 'docs', 'step02-runtime-contract'), 'docs/step02-runtime-contract').sort();
+// Step04 D is a release dependency, not an implicit path outside the package.
+const step04DToolsSourceRoot = path.resolve(root, '..', 'tools');
+const step04DExternalFiles = [
+  'render_step04_abcd_docx.py',
+  'qa_step04_abcd_docx_preview.js',
+  'finalize_step04_abcd.py',
+].map(name => ({source:path.join(step04DToolsSourceRoot, name), target:`tools/${name}`})).concat(
+  recursiveFiles(path.join(step04DToolsSourceRoot, 'vendor'), 'tools/vendor').map(target => ({
+    source:path.join(root, '..', target),
+    target
+  }))
+);
+for (const dependency of step04DExternalFiles) {
+  if (!fs.existsSync(dependency.source)) fail('release_stage_step04_d_dependency_missing:' + dependency.source);
+}
+const step04DExternalTargets = new Set(step04DExternalFiles.map(item => item.target));
+const runtimeFiles = [...new Set([
+  'server.js',
+  'index.html',
+  'app.js',
+  'mvp.js',
+  'mvp-step02-r13.js',
+  'mvp-step03-r1.js',
+  'mvp-step01-ledger-r1.js',
+  'mvp-step01-story-r1.js',
+  'mvp-source-truth-r1.js',
+  'styles.css',
+  'product.css',
+  'product-system.css',
+  'hero-oil-paint.css',
+  'canvas.css',
+  'canvas.js',
+  'favicon.svg',
+  'manifest.webmanifest',
+  'sw.js',
+  'vendor/gsap-3.13.0.min.js',
+  'vendor/gsap-flip-3.13.0.min.js',
+  'assets/home/niannian-hero-oil-paint-quiet-v1.png',
+  'assets/home/niannian-hero-oil-vortex-loop-v2.mp4',
+  'assets/showcase/short-drama-keyart-v1.png',
+  'assets/showcase/animation-drama-keyart-v1.png',
+  'assets/showcase/redraw-keyart-partial-xuedi-v1.png',
+  'assets/brand/niannian-ai-fused-monogram-v6-brand-pink.png',
+  activeBrandAsset,
+  'package.json',
+  'package-lock.json',
+  'release_static_sha_gate.js',
+  'scripts/probe_step02_mcgrox.js',
+  'scripts/recover_step01_frame_evidence.js',
+  'scripts/run_step03_worker.js',
+  'bridge/niannian_step01_hq_runner.py',
+  'bridge/mac-employee-training/execute_step01_hq_full.py',
+  'bridge/niannian_low_risk_policy.js',
+  'bridge/niannian_shot_review.js',
+  'docs/shot-review-contract/contract-manifest.json',
+  'docs/shot-review-contract/api-contract.md',
+  'docs/shot-review-contract/mapping-rules.md',
+  'docs/shot-review-contract/schemas/revision-overlay.schema.json',
+  'docs/shot-review-contract/schemas/shot-review-model.schema.json',
+  'docs/shot-review-contract/schemas/single-shot-reanalysis-input.schema.json',
+  'docs/shot-review-contract/schemas/single-shot-reanalysis-output.schema.json',
+  'AGENTS.md',
+  'bridge/skill_registry.json',
+  'bridge/video_channel_evidence_registry.json',
+  'bridge/runtime_profiles.json',
+  'bridge/runtime_capability_status.template.json',
+  'bridge/mimo_n06_capability_status.template.json',
+  'bridge/mac-employee-training/route_matrix.json',
+  'bridge/mac-skill-bundles/niannian-mac-production-skills-v1.manifest.json',
+  ...step02SkillBundleFiles,
+  ...step04AbcdSkillBundleFiles,
+  ...step02RuntimeContractFiles,
+  ...step04DExternalFiles.map(item => item.target),
+  ...runtimeBridgeJavaScriptFiles
+])];
+
+function fail(message) {
+  throw new Error(message);
+}
+
+function samePath(left, right) {
+  return path.resolve(left).replace(/\\/g, '/').toLowerCase() === path.resolve(right).replace(/\\/g, '/').toLowerCase();
+}
+
+function isInside(base, candidate) {
+  const relative = path.relative(base, candidate);
+  return relative && !relative.startsWith('..' + path.sep) && relative !== '..' && !path.isAbsolute(relative);
+}
+
+function sha256(filePath) {
+  return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+}
+
+function copyFile(sourcePath, destinationPath) {
+  const stat = fs.lstatSync(sourcePath);
+  if (!stat.isFile()) fail('release_stage_source_file_invalid:' + sourcePath);
+  fs.mkdirSync(path.dirname(destinationPath), { recursive:true });
+  fs.copyFileSync(sourcePath, destinationPath, fs.constants.COPYFILE_EXCL);
+}
+
+function copyDirectory(sourcePath, destinationPath) {
+  const stat = fs.lstatSync(sourcePath);
+  if (!stat.isDirectory()) fail('release_stage_dependency_directory_invalid:' + sourcePath);
+  fs.mkdirSync(destinationPath, { recursive:true });
+  for (const entry of fs.readdirSync(sourcePath, { withFileTypes:true })) {
+    const sourceChild = path.join(sourcePath, entry.name);
+    const destinationChild = path.join(destinationPath, entry.name);
+    if (entry.isDirectory()) copyDirectory(sourceChild, destinationChild);
+    else if (entry.isFile()) copyFile(sourceChild, destinationChild);
+    else fail('release_stage_dependency_entry_invalid:' + sourceChild);
+  }
+}
+
+function walkFiles(directory, relative = '') {
+  return fs.readdirSync(directory, { withFileTypes:true }).flatMap(entry => {
+    const relativePath = relative ? relative + '/' + entry.name : entry.name;
+    const absolutePath = path.join(directory, entry.name);
+    if (entry.isDirectory()) return walkFiles(absolutePath, relativePath);
+    if (entry.isFile()) return [relativePath];
+    fail('release_stage_output_entry_invalid:' + relativePath);
+  });
+}
+
+function lockedDependencyDirectories() {
+  const lock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json'), 'utf8'));
+  const packages = lock.packages && typeof lock.packages === 'object' ? lock.packages : null;
+  if (!packages) fail('release_stage_lock_packages_missing');
+  return Object.entries(packages)
+    .filter(([relativePath, metadata]) => {
+      if (!relativePath.startsWith('node_modules/') || !metadata || typeof metadata !== 'object' || !metadata.version) return false;
+      const installed = fs.existsSync(path.join(root, relativePath));
+      if (!installed && metadata.optional) return false;
+      if (!installed) fail('release_stage_required_dependency_missing:' + relativePath);
+      return true;
+    })
+    .map(([relativePath]) => relativePath.replace(/\\/g, '/'))
+    .sort();
+}
+
+function stageManifest(stageRoot) {
+  const files = walkFiles(stageRoot).sort();
+  const file_sha256 = {};
+  let total_bytes = 0;
+  for (const relativePath of files) {
+    const filePath = path.join(stageRoot, relativePath);
+    file_sha256[relativePath] = sha256(filePath);
+    total_bytes += fs.statSync(filePath).size;
+  }
+  return { files, file_sha256, total_bytes };
+}
+
+function buildStage(candidateRoot) {
+  const resolvedCandidateRoot = path.resolve(candidateRoot);
+  if (samePath(resolvedCandidateRoot, root) || isInside(root, resolvedCandidateRoot) || isInside(resolvedCandidateRoot, root)) {
+    fail('release_stage_output_must_be_isolated_workspace_sibling');
+  }
+  if (fs.existsSync(resolvedCandidateRoot)) fail('release_stage_output_already_exists');
+
+  const stageRoot = path.join(resolvedCandidateRoot, 'package');
+  const packageManifestPath = path.join(resolvedCandidateRoot, 'release-package-manifest.json');
+  const candidateSummaryPath = path.join(resolvedCandidateRoot, 'release-candidate-summary.json');
+  fs.mkdirSync(stageRoot, { recursive:true });
+
+  for (const relativePath of runtimeFiles.filter(relativePath => !step04DExternalTargets.has(relativePath))) {
+    copyFile(path.join(root, relativePath), path.join(stageRoot, relativePath));
+  }
+  for (const dependency of step04DExternalFiles) {
+    copyFile(dependency.source, path.join(stageRoot, dependency.target));
+  }
+  for (const relativePath of lockedDependencyDirectories()) {
+    copyDirectory(path.join(root, relativePath), path.join(stageRoot, relativePath));
+  }
+
+  const inventory = stageManifest(stageRoot);
+  const packageManifest = {
+    schema_version: 'niannian_release_package_manifest_v1',
+    source_root: root,
+    target,
+    package_root: stageRoot,
+    files: inventory.files,
+    file_sha256: inventory.file_sha256,
+    total_bytes: inventory.total_bytes,
+    dependency_source: 'package-lock.json production packages only',
+    excluded_by_construction: ['data-local', 'data', 'output', 'logs', '.local', 'mature-web', 'deploy', 'verification_frontend'],
+    generated_at: new Date().toISOString()
+  };
+  fs.writeFileSync(packageManifestPath, JSON.stringify(packageManifest, null, 2) + '\n', { encoding:'utf8', flag:'wx' });
+
+  const verification = verifyReleaseGate(['--target', target, '--package-manifest', packageManifestPath]);
+  if (!verification.release_ready) fail('release_stage_gate_not_ready');
+
+  const projectManifest = JSON.parse(fs.readFileSync(path.join(root, 'PROJECT_MANIFEST.json'), 'utf8'));
+  const productionRelease = projectManifest.release_governance.current_production_release;
+  const summary = {
+    schema_version: 'niannian_release_candidate_v1',
+    target,
+    source_root: root,
+    stage_root: stageRoot,
+    package_manifest: packageManifestPath,
+    file_count: inventory.files.length,
+    total_bytes: inventory.total_bytes,
+    gate: verification,
+    deployed_release_id: productionRelease.release_id,
+    production_parity: productionRelease.parity_with_current_canonical,
+    production_impact: 'Current canonical differs from the deployed immutable release. This candidate is local-only and has not been uploaded or activated.',
+    next_gate: 'separate production deployment authorization for remote staging, verification, activation, and public readback'
+  };
+  fs.writeFileSync(candidateSummaryPath, JSON.stringify(summary, null, 2) + '\n', { encoding:'utf8', flag:'wx' });
+  return summary;
+}
+
+function parseArgs(argv) {
+  if (argv.length !== 2 || argv[0] !== '--output' || !argv[1]) fail('release_stage_output_required');
+  return { output:argv[1] };
+}
+
+if (require.main === module) {
+  try {
+    process.stdout.write(JSON.stringify(buildStage(parseArgs(process.argv.slice(2)).output)) + '\n');
+  } catch (error) {
+    process.stderr.write(String(error.message || error) + '\n');
+    process.exitCode = 1;
+  }
+}
+
+module.exports = { buildStage, runtimeFiles, lockedDependencyDirectories, activeBrandAssetFromIndex, recursiveJavaScriptFiles, recursiveFiles };
