@@ -59,17 +59,28 @@
     "repository": "https://github.com/1008611-creater/niannian-ai-canonical-local",
     "branch": "main",
     "sanitized_source_commit": "1b8d3f99270c4a90d954382bb8ea29ad42f5b502",
+    "aligned_source_commit": "3dfaf5f34b9b5447255a2d223ab3c6e4f7d3198c",
+    "aligned_source_tag": "online-baseline-20260804-workbench-clarity-r2-short-drama-modal-fix1",
+    "aligned_safe_file_count": 482,
+    "excluded_mutable_runtime_config_files": [
+      "bridge/mimo_n06_capability_status.template.json",
+      "bridge/runtime_capability_status.template.json",
+      "bridge/runtime_profiles.json",
+      "bridge/video_channel_evidence_registry.json"
+    ],
+    "safe_payload_sha256_alignment": true,
     "deployment_eligible": false,
     "matching_files": {
       "server.js": "147d0dc303dbe1b451ee9a95fea87fbd5f63455e82a716525e7e2c6ce492e27f"
     },
-    "mismatched_active_entrypoints": [
+    "initial_mismatched_active_entrypoints": [
       "index.html",
       "app.js",
       "product.css",
       "mvp-step02-r13.js"
     ],
-    "reason": "The sanitized local source snapshot predates or diverges from the exact active Haika release package."
+    "current_mismatched_active_entrypoints": [],
+    "reason": "The sanitized source now matches the active release's safe payload, but a deterministic complete-package build is not yet established; candidates must continue to originate from the active Haika package."
   },
   "rollback": {
     "release_id": "niannian-web-20260804-workbench-clarity-r2",
