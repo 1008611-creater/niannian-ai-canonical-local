@@ -74,8 +74,6 @@
         "product.css",
         "product-system.css",
         "hero-oil-paint.css",
-        "canvas.css",
-        "canvas.js",
         "manifest.webmanifest",
         "sw.js",
         "vendor/gsap-3.13.0.min.js",

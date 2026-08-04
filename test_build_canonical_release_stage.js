@@ -49,6 +49,9 @@ try {
   assert.equal(activeBrandAssetFromIndex('<img class="hero-logo" src="./assets/brand/current.svg" alt="">'), 'assets/brand/current.svg');
   assert.throws(() => activeBrandAssetFromIndex('<img class="hero-logo" src="https://example.invalid/brand.svg" alt="">'), /release_stage_active_brand_asset_invalid/);
   assert(packageManifest.files.includes('assets/brand/niannian-ai-mark-transparent.svg'));
+  assert.equal(packageManifest.files.includes('canvas.js'), false);
+  assert.equal(packageManifest.files.includes('canvas.css'), false);
+  assert.equal(packageManifest.files.includes('nomi-canvas-entry.js'), false);
   assert(packageManifest.files.includes('studio/index.html'));
   assert(packageManifest.files.includes('director-desk/index.html'));
   assert(packageManifest.files.some(file => file.startsWith('studio/assets/')));

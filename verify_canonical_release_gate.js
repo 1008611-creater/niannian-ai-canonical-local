@@ -135,7 +135,7 @@ function exactSortedPaths(values, label) {
   return normalized;
 }
 
-function verifySharedFileBaseline(governance, sourceRoot = root) {
+function verifySharedFileBaseline(governance, sourceRoot = root, allowedChanges = []) {
   const baseline = governance.shared_file_handoff_baseline;
   if (!baseline || baseline.schema_version !== 'niannian_shared_file_handoff_baseline_v2') fail('shared_file_baseline_contract_invalid');
   if (!/^release-baseline-[a-z0-9-]+$/.test(String(baseline.review_id || ''))) fail('shared_file_baseline_review_id_invalid');
@@ -147,6 +147,8 @@ function verifySharedFileBaseline(governance, sourceRoot = root) {
   const actualPaths = exactSortedPaths(Object.keys(baselineFiles), 'shared_file_baseline_paths');
   if (actualPaths.length !== expectedPaths.length || actualPaths.some((item, index) => item !== expectedPaths[index])) fail('shared_file_baseline_paths_not_exact');
 
+  const allowed = new Set((Array.isArray(allowedChanges) ? allowedChanges : []).map(value => normalizeRelativePath(value)));
+  const changedFiles = [];
   for (const relativePath of actualPaths) {
     const expectedHash = String(baselineFiles[relativePath] || '');
     if (!/^[a-f0-9]{64}$/.test(expectedHash)) fail('shared_file_baseline_hash_invalid:' + relativePath);
@@ -154,7 +156,10 @@ function verifySharedFileBaseline(governance, sourceRoot = root) {
     const relativeToRoot = path.relative(sourceRoot, filePath);
     if (!relativeToRoot || relativeToRoot.startsWith('..') || path.isAbsolute(relativeToRoot)) fail('shared_file_baseline_path_invalid');
     if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) fail('shared_file_baseline_missing:' + relativePath);
-    if (sha256(filePath) !== expectedHash) fail('shared_file_baseline_mismatch:' + relativePath);
+    if (sha256(filePath) !== expectedHash) {
+      if (!allowed.has(relativePath)) fail('shared_file_baseline_mismatch:' + relativePath);
+      changedFiles.push(relativePath);
+    }
   }
 
   const attestationPath = path.resolve(sourceRoot, normalizeRelativePath(baseline.attestation?.path));
@@ -187,7 +192,15 @@ function verifySharedFileBaseline(governance, sourceRoot = root) {
     if (!/^[a-f0-9]{64}$/.test(String(evidence.sha256 || '')) || sha256(evidencePath) !== evidence.sha256) fail('shared_file_attestation_evidence_hash_mismatch:' + evidence.path);
   }
   if (evidenceCoverage.size !== expectedPaths.length || expectedPaths.some(relativePath => !evidenceCoverage.has(relativePath))) fail('shared_file_attestation_evidence_coverage_incomplete');
-  return { review_id:baseline.review_id, attestation:path.relative(sourceRoot, attestationPath).replace(/\\/g, '/') };
+  return { review_id:baseline.review_id, attestation:path.relative(sourceRoot, attestationPath).replace(/\\/g, '/'), changed_files:changedFiles };
+}
+
+function candidateAllowedFiles(packageManifestPath) {
+  if (!packageManifestPath) return [];
+  const release = readJson(path.resolve(packageManifestPath), 'release_package_manifest').release;
+  if (!release) return [];
+  if (!Array.isArray(release.allowed_files) || !release.allowed_files.length) fail('release_candidate_allowed_files_missing');
+  return exactSortedPaths(release.allowed_files, 'release_candidate_allowed_files');
 }
 
 function verifyPackageManifest(packageManifestPath, governance, target) {
@@ -241,8 +254,8 @@ function run(argv = process.argv.slice(2)) {
   if (manifest.source_of_truth?.legacy_base_repo?.deployment_policy !== 'prohibited' || governance.legacy_source_deployment !== 'prohibited') fail('legacy_source_deployment_not_prohibited');
   if (!Array.isArray(governance.target_allowlist) || governance.target_allowlist.length !== 1 || governance.target_allowlist[0] !== options.target) fail('release_target_not_allowlisted');
 
-  const baselineResult = verifySharedFileBaseline(governance, root);
-
+  const allowedChanges = candidateAllowedFiles(options['package-manifest']);
+  const baselineResult = verifySharedFileBaseline(governance, root, allowedChanges);
   const packageResult = options['package-manifest']
     ? verifyPackageManifest(options['package-manifest'], governance, options.target)
     : null;
@@ -258,6 +271,7 @@ function run(argv = process.argv.slice(2)) {
     static_resource_closure: packageResult?.static_resource_closure || null,
     release_ready: Boolean(packageResult),
     shared_file_baseline: 'verified',
+    shared_file_baseline_changed_files: baselineResult.changed_files,
     shared_file_baseline_review_id: baselineResult.review_id,
     shared_file_attestation: baselineResult.attestation,
     legacy_base_repo_deployment: 'prohibited',
@@ -279,4 +293,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { run, verifySharedFileBaseline, protectedSharedFiles, verifyStaticResourceClosure, staticReferences, localStaticReference };
+module.exports = { run, verifySharedFileBaseline, protectedSharedFiles, verifyStaticResourceClosure, staticReferences, localStaticReference, candidateAllowedFiles };

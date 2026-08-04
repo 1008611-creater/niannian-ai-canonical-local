@@ -25,6 +25,10 @@ const releaseStaticDirectories = Object.freeze([
   'studio',
   'director-desk'
 ]);
+const localValidationAllowedFiles = Object.freeze([
+  'server.js', 'index.html', 'app.js', 'mvp.js', 'product.css', 'styles.css',
+  'product-system.css', 'hero-oil-paint.css', 'sw.js', 'bridge/niannian_controller_bridge.js'
+]);
 function recursiveJavaScriptFiles(directory, relativeRoot) {
   return fs.readdirSync(directory, {withFileTypes:true}).flatMap(entry => {
     const absolute = path.join(directory, entry.name);
@@ -80,8 +84,6 @@ const runtimeFiles = [...new Set([
   'amber-authority.css',
   'director-desk.css',
   'step04-delivery.css',
-  'canvas.css',
-  'canvas.js',
   'director-desk-host.js',
   'favicon.svg',
   'manifest.webmanifest',
@@ -163,6 +165,14 @@ function gitRevision() {
   }
 }
 
+function gitWorktreeClean() {
+  try {
+    return childProcess.execFileSync('git', ['status', '--porcelain'], { cwd:root, encoding:'utf8', stdio:['ignore', 'pipe', 'ignore'] }).trim() === '';
+  } catch {
+    fail('release_stage_git_status_unavailable');
+  }
+}
+
 function normalizeCandidateContract(candidate = {}) {
   const releaseId = String(candidate.release_id || 'local-validation-stage').trim();
   const parentReleaseId = String(candidate.parent_release_id || 'online-baseline-unset').trim();
@@ -172,7 +182,7 @@ function normalizeCandidateContract(candidate = {}) {
   if (!scope || scope.length > 500) fail('release_stage_scope_invalid');
   const allowedFiles = Array.isArray(candidate.allowed_files) && candidate.allowed_files.length
     ? candidate.allowed_files.map(value => normalizeRelativePath(value, 'release_stage_allowed_file_invalid')).sort()
-    : ['release-package-manifest.json'];
+    : localValidationAllowedFiles.slice();
   if (new Set(allowedFiles).size !== allowedFiles.length) fail('release_stage_allowed_files_duplicate');
   return { release_id:releaseId, parent_release_id:parentReleaseId, scope, allowed_files:allowedFiles };
 }
@@ -250,6 +260,8 @@ function buildStage(candidateRoot, candidate = {}) {
   const packageManifestPath = path.join(resolvedCandidateRoot, 'release-package-manifest.json');
   const candidateSummaryPath = path.join(resolvedCandidateRoot, 'release-candidate-summary.json');
   const candidateContract = normalizeCandidateContract(candidate);
+  const namedCandidate = Boolean(candidate.release_id || candidate.parent_release_id || candidate.scope || candidate.allowed_files);
+  if (namedCandidate && !gitWorktreeClean()) fail('release_stage_named_candidate_requires_clean_git_worktree');
   fs.mkdirSync(stageRoot, { recursive:true });
 
   for (const relativePath of runtimeFiles.filter(relativePath => !step04DExternalTargets.has(relativePath) && !isWithinStaticDirectory(relativePath))) {
@@ -344,4 +356,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { buildStage, runtimeFiles, releaseStaticDirectories, lockedDependencyDirectories, activeBrandAssetFromIndex, recursiveJavaScriptFiles, recursiveFiles, normalizeCandidateContract, parseArgs };
+module.exports = { buildStage, runtimeFiles, releaseStaticDirectories, lockedDependencyDirectories, activeBrandAssetFromIndex, recursiveJavaScriptFiles, recursiveFiles, normalizeCandidateContract, parseArgs, gitWorktreeClean };

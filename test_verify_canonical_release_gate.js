@@ -11,7 +11,7 @@ const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'niannian-release-go
 
 function writePackageManifest(name, value) {
   const filePath = path.join(temporaryRoot, name + '.json');
-  fs.writeFileSync(filePath, JSON.stringify(value), 'utf8');
+  fs.writeFileSync(filePath, JSON.stringify({ release:{ allowed_files:['sw.js'] }, ...value }), 'utf8');
   return filePath;
 }
 
@@ -55,19 +55,20 @@ try {
   assert.throws(() => verifyStaticResourceClosure(closureStage, incompleteClosureFiles), /release_package_static_resource_missing:studio\/assets\/entry\.js->studio\/assets\/chunk\.js/);
 
   const governance = JSON.parse(fs.readFileSync(path.join(root, 'PROJECT_MANIFEST.json'), 'utf8')).release_governance;
-  const baselineResult = verifySharedFileBaseline(governance, root);
+  const baselineResult = verifySharedFileBaseline(governance, root, ['sw.js']);
   assert.match(baselineResult.review_id, /^release-baseline-/);
   assert.equal(baselineResult.attestation, governance.shared_file_handoff_baseline.attestation.path);
+  assert.deepEqual(baselineResult.changed_files, ['sw.js']);
   assert.deepEqual(Object.keys(governance.shared_file_handoff_baseline.files).sort(), protectedSharedFiles.slice().sort());
   const missingProtectedPath = structuredClone(governance);
   delete missingProtectedPath.shared_file_handoff_baseline.files['server.js'];
-  assert.throws(() => verifySharedFileBaseline(missingProtectedPath, root), /shared_file_baseline_paths_not_exact/);
+  assert.throws(() => verifySharedFileBaseline(missingProtectedPath, root, ['sw.js']), /shared_file_baseline_paths_not_exact/);
   const malformedHash = structuredClone(governance);
   malformedHash.shared_file_handoff_baseline.files['server.js'] = '0'.repeat(63);
-  assert.throws(() => verifySharedFileBaseline(malformedHash, root), /shared_file_baseline_hash_invalid:server.js/);
+  assert.throws(() => verifySharedFileBaseline(malformedHash, root, ['sw.js']), /shared_file_baseline_hash_invalid:server.js/);
   const attestationTamper = structuredClone(governance);
   attestationTamper.shared_file_handoff_baseline.attestation.sha256 = '0'.repeat(64);
-  assert.throws(() => verifySharedFileBaseline(attestationTamper, root), /shared_file_attestation_hash_mismatch/);
+  assert.throws(() => verifySharedFileBaseline(attestationTamper, root, ['sw.js']), /shared_file_attestation_hash_mismatch/);
 
   const approvedFiles = requiredFiles.concat(['bridge/niannian_low_risk_policy.js', 'node_modules/mammoth/index.js']);
   const approvedStage = createStage('approved-stage', approvedFiles);
@@ -95,8 +96,17 @@ try {
   );
   assert.equal(result.release_ready, true);
 
-  const staticResult = run(['--target', 'https://ai.cauai.fun']);
-  assert.equal(staticResult.release_ready, false);
+  const undeclaredSharedChange = writePackageManifest('undeclared-shared-change', {
+    release:{ allowed_files:['product.css'] },
+    source_root:root,
+    target:'https://ai.cauai.fun',
+    package_root:approvedStage,
+    files:approvedFiles,
+    ...approvedIntegrity
+  });
+  expectFailure(['--target', 'https://ai.cauai.fun', '--package-manifest', undeclaredSharedChange], 'shared_file_baseline_mismatch:sw.js');
+
+  expectFailure(['--target', 'https://ai.cauai.fun'], 'shared_file_baseline_mismatch:sw.js');
 
   const dataLeakFiles = requiredFiles.concat(['data-local/projects.json']);
   const dataLeakStage = createStage('data-local-leak-stage', dataLeakFiles);

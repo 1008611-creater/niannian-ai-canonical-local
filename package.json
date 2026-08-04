@@ -49,6 +49,7 @@
     "test:release-stage": "node test_build_canonical_release_stage.js",
     "test:release-readiness": "node test_release_readiness_gate.js",
     "test:release-static-sha": "node test_release_static_sha_gate.js",
+    "test:retired-surface-cleanup": "node test_retired_surface_cleanup.js",
     "test:public-candidate-static": "node test_verify_public_candidate_static.js",
     "test:runtime-capabilities": "node test_niannian_runtime_capability_status.js",
     "test:mac-gateway-contract": "node test_mac_relay_ssh_gateway_contract.js",

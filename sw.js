@@ -7,7 +7,6 @@ const APP_SHELL = [
   '/video-batch-gate/video-batch-panel.css?v=20260727-video-batch-cost-gate-r1',
   '/product-system.css?v=20260727-media-direct-r1',
   '/hero-oil-paint.css?v=20260727-media-direct-r1',
-  '/canvas.css?v=20260802-project-media-canvas-r1',
   '/vendor/gsap-3.13.0.min.js?v=3.13.0',
   '/vendor/gsap-flip-3.13.0.min.js?v=3.13.0',
   '/app.js?v=20260802-workbench-launcher-r1',
@@ -18,7 +17,6 @@ const APP_SHELL = [
   '/mvp-step01-ledger-r1.js?v=20260727-media-direct-r1',
   '/mvp-step01-story-r1.js?v=20260727-media-direct-r1',
   '/mvp-source-truth-r1.js?v=20260727-media-direct-r1',
-  '/canvas.js?v=20260802-project-media-canvas-r1',
   '/manifest.webmanifest'
 ];
 
