@@ -79,7 +79,7 @@ try {
   assert.equal(packageManifest.files.some(file => /^(?:data-local|data|output|logs|\.local)(?:\/|$)/.test(file)), false);
   assert.deepEqual(
     result.gate.static_resource_closure.missing_optional_css_assets,
-    [{ source:'product.css', target:'assets/workbench/production-console-bg-v1.png' }]
+    []
   );
   assert(lockedDependencyDirectories().includes('node_modules/mammoth'));
   assert(!lockedDependencyDirectories().includes('node_modules/@emnapi/runtime'));

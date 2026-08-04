@@ -15,6 +15,9 @@ const serviceWorker = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 assert.equal(serviceWorker.includes('/canvas.js?'), false, 'retired_canvas_script_precached');
 assert.equal(serviceWorker.includes('/canvas.css?'), false, 'retired_canvas_css_precached');
 
+const productCss = fs.readFileSync(path.join(root, 'product.css'), 'utf8');
+assert.equal(productCss.includes('assets/workbench/production-console-bg-v1.png'), false, 'retired_workbench_background_referenced');
+
 const app = fs.readFileSync(path.join(root, 'app.js'), 'utf8');
 const activeClient = fs.readFileSync(path.join(root, 'mvp-step02-r13.js'), 'utf8');
 assert.match(app, /\/studio\/#\/studio\?projectId=/, 'legacy_canvas_project_redirect_missing');
@@ -36,6 +39,7 @@ process.stdout.write(JSON.stringify({
     'retired self-built canvas source absent',
     'superseded r8-r12 client revisions absent',
     'retired canvas assets are not precached or packaged',
+    'retired workbench background is not referenced',
     'legacy #canvas project URLs continue to resolve to formal /studio/ deep links'
   ]
 }) + '\n');
