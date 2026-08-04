@@ -3,7 +3,7 @@
 const assert = require('assert');
 const fs = require('fs');
 
-const mvp = fs.readFileSync(require.resolve('./mvp.js'), 'utf8');
+const mvp = fs.readFileSync(require.resolve('./mvp-step02-r13.js'), 'utf8');
 const server = fs.readFileSync(require.resolve('./server.js'), 'utf8');
 const vertical = fs.readFileSync(require.resolve('./bridge/niannian_redraw_step02_vertical.js'), 'utf8');
 const redrawBody = mvp.indexOf('function renderRedrawStageBody');
@@ -13,8 +13,7 @@ assert(start > 0 && end > start);
 const stage = mvp.slice(start, end);
 
 for (const required of ['project?.step02','candidate.sourceRows','candidate.dialogueBindings','candidate.assetCandidates','step02.acceptance?.sha256','data-step02-action="prepare"','data-step02-action="dispatch"','data-step02-action="reconcile"','data-step02-action="accept"']) assert(stage.includes(required), required);
-assert(stage.includes('员工结果始终是 candidate'));
-assert(stage.includes('服务端 reducer'));
+assert(stage.includes('candidate-only 员工回执'));
 assert(!stage.includes('待识别'));
 assert(!stage.includes('[1, 2, 3, 4]'));
 assert(mvp.includes("'/api/projects/' + encodeURIComponent(projectId) + '/step02/' + action"));

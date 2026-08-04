@@ -8,7 +8,6 @@ const protectedSharedFiles = Object.freeze([
   'server.js',
   'index.html',
   'app.js',
-  'mvp.js',
   'product.css',
   'styles.css',
   'product-system.css',

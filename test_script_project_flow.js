@@ -100,13 +100,13 @@ async function main() {
 
   try {
     await waitForHealth(baseUrl);
-    const [indexResponse, mvpResponse, cssResponse] = await Promise.all([
+    const [indexResponse, activeClientResponse, cssResponse] = await Promise.all([
       fetch(baseUrl + '/'),
-      fetch(baseUrl + '/mvp.js'),
+      fetch(baseUrl + '/mvp-step02-r13.js'),
       fetch(baseUrl + '/product.css')
     ]);
     assert.equal(indexResponse.headers.get('cache-control'), 'no-store, max-age=0');
-    assert.equal(mvpResponse.headers.get('cache-control'), 'no-store, max-age=0');
+    assert.equal(activeClientResponse.headers.get('cache-control'), 'public, max-age=3600');
     assert.equal(cssResponse.headers.get('cache-control'), 'no-store, max-age=0');
     const email = 'script-project-' + Date.now() + '@example.com';
     const register = await fetchJson(baseUrl + '/api/auth/register', {

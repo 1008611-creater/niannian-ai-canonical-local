@@ -7466,7 +7466,7 @@ async function serveStatic(request, response, pathname) {
     const resolved = stats.isDirectory() ? path.join(filePath,'index.html') : filePath;
     const data = await fsp.readFile(resolved);
     const fileName = path.basename(resolved).toLowerCase();
-    const cacheControl = ['index.html','mvp.js','app.js','sw.js','manifest.webmanifest','product.css','product-system.css'].includes(fileName) ? 'no-store, max-age=0' : 'public, max-age=3600';
+    const cacheControl = ['index.html','app.js','sw.js','manifest.webmanifest','product.css','product-system.css'].includes(fileName) ? 'no-store, max-age=0' : 'public, max-age=3600';
     response.writeHead(200, {'Content-Type':contentTypes[path.extname(resolved).toLowerCase()] || 'application/octet-stream','Cache-Control':cacheControl});
     response.end(data);
   } catch {

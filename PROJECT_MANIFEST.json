@@ -69,7 +69,6 @@
         "server.js",
         "index.html",
         "app.js",
-        "mvp.js",
         "styles.css",
         "product.css",
         "product-system.css",
@@ -123,13 +122,12 @@
       "capture_reason": "Verified active Haika ai.cauai.fun safe-payload alignment replaces an obsolete local Step04 staging baseline; no production write occurred.",
       "attestation": {
         "path": "release_baseline_attestation_20260805_online_alignment.json",
-        "sha256": "58b0f5b9852bf55651e6cfcca7303333d211d1bb02d0b5d92e1c9cbf8ab0ec58"
+        "sha256": "f930845798324a5de1319037d473724aa44de8566e80964cd1239019f343b8b2"
       },
       "files": {
         "server.js": "147d0dc303dbe1b451ee9a95fea87fbd5f63455e82a716525e7e2c6ce492e27f",
         "index.html": "234cb54c4278d0f7dad70af6bf504042e4210344ae871198f51e9b8764f59dba",
         "app.js": "4c512e50f7687468aa4916da87dd8244b3d3b796b5415d7ecd72bb5cabf702ae",
-        "mvp.js": "714033c2a051d43ef09957a83f414cf2cf7f537927254360a8ee21f5b25a7315",
         "product.css": "4d090191c1dc9da0c8aa06df0b4b9d6f946a061aac71e391873f78434fc85f72",
         "styles.css": "d8254de1de1b0cddeee13301ee64a0e5605294980a9c8de384ea76625822a489",
         "product-system.css": "86836318ae20e3eda006d1a6aee23a3fe199f31b3893376a9ae2c04d66864875",

@@ -26,7 +26,7 @@ const releaseStaticDirectories = Object.freeze([
   'director-desk'
 ]);
 const localValidationAllowedFiles = Object.freeze([
-  'server.js', 'index.html', 'app.js', 'mvp.js', 'product.css', 'styles.css',
+  'server.js', 'index.html', 'app.js', 'product.css', 'styles.css',
   'product-system.css', 'hero-oil-paint.css', 'sw.js', 'bridge/niannian_controller_bridge.js'
 ]);
 function recursiveJavaScriptFiles(directory, relativeRoot) {
@@ -71,7 +71,6 @@ const runtimeFiles = [...new Set([
   'server.js',
   'index.html',
   'app.js',
-  'mvp.js',
   'mvp-step02-r13.js',
   'mvp-step03-r1.js',
   'mvp-step01-ledger-r1.js',

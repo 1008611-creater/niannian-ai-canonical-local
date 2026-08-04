@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const root = path.resolve(__dirname, '..');
 const manifestPath = path.join(root, 'PROJECT_MANIFEST.json');
 const protectedFiles = [
-  'server.js', 'index.html', 'app.js', 'mvp.js', 'product.css', 'styles.css',
+  'server.js', 'index.html', 'app.js', 'product.css', 'styles.css',
   'product-system.css', 'hero-oil-paint.css', 'sw.js', 'bridge/niannian_controller_bridge.js'
 ];
 const oldManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
