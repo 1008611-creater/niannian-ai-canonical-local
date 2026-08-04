@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const childProcess = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const { run: verifyReleaseGate } = require('./verify_canonical_release_gate');
@@ -16,6 +17,14 @@ function activeBrandAssetFromIndex(indexHtml) {
 }
 
 const activeBrandAsset = activeBrandAssetFromIndex(fs.readFileSync(path.join(root, 'index.html'), 'utf8'));
+// These are complete, separately built browser surfaces.  Copying only their entry
+// modules is unsafe because their hashed dynamic chunks are part of the runtime.
+const releaseStaticDirectories = Object.freeze([
+  'assets',
+  'vendor',
+  'studio',
+  'director-desk'
+]);
 function recursiveJavaScriptFiles(directory, relativeRoot) {
   return fs.readdirSync(directory, {withFileTypes:true}).flatMap(entry => {
     const absolute = path.join(directory, entry.name);
@@ -68,8 +77,12 @@ const runtimeFiles = [...new Set([
   'product.css',
   'product-system.css',
   'hero-oil-paint.css',
+  'amber-authority.css',
+  'director-desk.css',
+  'step04-delivery.css',
   'canvas.css',
   'canvas.js',
+  'director-desk-host.js',
   'favicon.svg',
   'manifest.webmanifest',
   'sw.js',
@@ -131,6 +144,43 @@ function sha256(filePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
 }
 
+function normalizeRelativePath(value, label = 'release_stage_path_invalid') {
+  if (typeof value !== 'string' || !value.trim()) fail(label);
+  const normalized = value.replace(/\\/g, '/').replace(/^\.\//, '');
+  if (normalized.startsWith('/') || /^[A-Za-z]:\//.test(normalized) || normalized.split('/').some(part => !part || part === '.' || part === '..')) {
+    fail(label);
+  }
+  return normalized;
+}
+
+function gitRevision() {
+  try {
+    const revision = childProcess.execFileSync('git', ['rev-parse', 'HEAD'], { cwd:root, encoding:'utf8', stdio:['ignore', 'pipe', 'ignore'] }).trim();
+    if (!/^[a-f0-9]{40}$/i.test(revision)) fail('release_stage_git_revision_invalid');
+    return revision.toLowerCase();
+  } catch {
+    fail('release_stage_git_revision_unavailable');
+  }
+}
+
+function normalizeCandidateContract(candidate = {}) {
+  const releaseId = String(candidate.release_id || 'local-validation-stage').trim();
+  const parentReleaseId = String(candidate.parent_release_id || 'online-baseline-unset').trim();
+  const scope = String(candidate.scope || 'local package integrity validation only').trim();
+  if (!/^[a-z0-9][a-z0-9-]{2,127}$/i.test(releaseId)) fail('release_stage_release_id_invalid');
+  if (!/^[a-z0-9][a-z0-9-]{2,127}$/i.test(parentReleaseId)) fail('release_stage_parent_release_id_invalid');
+  if (!scope || scope.length > 500) fail('release_stage_scope_invalid');
+  const allowedFiles = Array.isArray(candidate.allowed_files) && candidate.allowed_files.length
+    ? candidate.allowed_files.map(value => normalizeRelativePath(value, 'release_stage_allowed_file_invalid')).sort()
+    : ['release-package-manifest.json'];
+  if (new Set(allowedFiles).size !== allowedFiles.length) fail('release_stage_allowed_files_duplicate');
+  return { release_id:releaseId, parent_release_id:parentReleaseId, scope, allowed_files:allowedFiles };
+}
+
+function isWithinStaticDirectory(relativePath) {
+  return releaseStaticDirectories.some(directory => relativePath === directory || relativePath.startsWith(directory + '/'));
+}
+
 function copyFile(sourcePath, destinationPath) {
   const stat = fs.lstatSync(sourcePath);
   if (!stat.isFile()) fail('release_stage_source_file_invalid:' + sourcePath);
@@ -189,7 +239,7 @@ function stageManifest(stageRoot) {
   return { files, file_sha256, total_bytes };
 }
 
-function buildStage(candidateRoot) {
+function buildStage(candidateRoot, candidate = {}) {
   const resolvedCandidateRoot = path.resolve(candidateRoot);
   if (samePath(resolvedCandidateRoot, root) || isInside(root, resolvedCandidateRoot) || isInside(resolvedCandidateRoot, root)) {
     fail('release_stage_output_must_be_isolated_workspace_sibling');
@@ -199,10 +249,14 @@ function buildStage(candidateRoot) {
   const stageRoot = path.join(resolvedCandidateRoot, 'package');
   const packageManifestPath = path.join(resolvedCandidateRoot, 'release-package-manifest.json');
   const candidateSummaryPath = path.join(resolvedCandidateRoot, 'release-candidate-summary.json');
+  const candidateContract = normalizeCandidateContract(candidate);
   fs.mkdirSync(stageRoot, { recursive:true });
 
-  for (const relativePath of runtimeFiles.filter(relativePath => !step04DExternalTargets.has(relativePath))) {
+  for (const relativePath of runtimeFiles.filter(relativePath => !step04DExternalTargets.has(relativePath) && !isWithinStaticDirectory(relativePath))) {
     copyFile(path.join(root, relativePath), path.join(stageRoot, relativePath));
+  }
+  for (const relativeDirectory of releaseStaticDirectories) {
+    copyDirectory(path.join(root, relativeDirectory), path.join(stageRoot, relativeDirectory));
   }
   for (const dependency of step04DExternalFiles) {
     copyFile(dependency.source, path.join(stageRoot, dependency.target));
@@ -213,7 +267,12 @@ function buildStage(candidateRoot) {
 
   const inventory = stageManifest(stageRoot);
   const packageManifest = {
-    schema_version: 'niannian_release_package_manifest_v1',
+    schema_version: 'niannian_release_package_manifest_v2',
+    release: {
+      ...candidateContract,
+      source_git_revision: gitRevision(),
+      materialization: 'local_candidate_only_not_deployed'
+    },
     source_root: root,
     target,
     package_root: stageRoot,
@@ -221,7 +280,8 @@ function buildStage(candidateRoot) {
     file_sha256: inventory.file_sha256,
     total_bytes: inventory.total_bytes,
     dependency_source: 'package-lock.json production packages only',
-    excluded_by_construction: ['data-local', 'data', 'output', 'logs', '.local', 'mature-web', 'deploy', 'verification_frontend'],
+    included_static_directories: releaseStaticDirectories,
+    excluded_by_construction: ['data-local', 'data', 'output', 'outputs', 'logs', '.local', 'mature-web', 'deploy', 'verification_frontend', '.env*', 'release-governance-archive'],
     generated_at: new Date().toISOString()
   };
   fs.writeFileSync(packageManifestPath, JSON.stringify(packageManifest, null, 2) + '\n', { encoding:'utf8', flag:'wx' });
@@ -235,6 +295,7 @@ function buildStage(candidateRoot) {
     schema_version: 'niannian_release_candidate_v1',
     target,
     source_root: root,
+    release: packageManifest.release,
     stage_root: stageRoot,
     package_manifest: packageManifestPath,
     file_count: inventory.files.length,
@@ -250,17 +311,37 @@ function buildStage(candidateRoot) {
 }
 
 function parseArgs(argv) {
-  if (argv.length !== 2 || argv[0] !== '--output' || !argv[1]) fail('release_stage_output_required');
-  return { output:argv[1] };
+  const values = {};
+  for (let index = 0; index < argv.length; index += 2) {
+    const key = argv[index];
+    const value = argv[index + 1];
+    if (!key?.startsWith('--') || !value || value.startsWith('--')) fail('release_stage_argument_invalid');
+    values[key.slice(2)] = value;
+  }
+  if (!values.output) fail('release_stage_output_required');
+  const hasCandidateIdentity = values['release-id'] || values['parent-release'] || values.scope || values['allowed-file'];
+  if (hasCandidateIdentity && (!values['release-id'] || !values['parent-release'] || !values.scope || !values['allowed-file'])) {
+    fail('release_stage_candidate_contract_incomplete');
+  }
+  return {
+    output:values.output,
+    candidate: hasCandidateIdentity ? {
+      release_id:values['release-id'],
+      parent_release_id:values['parent-release'],
+      scope:values.scope,
+      allowed_files:values['allowed-file'].split(',').filter(Boolean)
+    } : {}
+  };
 }
 
 if (require.main === module) {
   try {
-    process.stdout.write(JSON.stringify(buildStage(parseArgs(process.argv.slice(2)).output)) + '\n');
+    const options = parseArgs(process.argv.slice(2));
+    process.stdout.write(JSON.stringify(buildStage(options.output, options.candidate)) + '\n');
   } catch (error) {
     process.stderr.write(String(error.message || error) + '\n');
     process.exitCode = 1;
   }
 }
 
-module.exports = { buildStage, runtimeFiles, lockedDependencyDirectories, activeBrandAssetFromIndex, recursiveJavaScriptFiles, recursiveFiles };
+module.exports = { buildStage, runtimeFiles, releaseStaticDirectories, lockedDependencyDirectories, activeBrandAssetFromIndex, recursiveJavaScriptFiles, recursiveFiles, normalizeCandidateContract, parseArgs };

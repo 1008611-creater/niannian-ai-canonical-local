@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { run, verifySharedFileBaseline, protectedSharedFiles } = require('./verify_canonical_release_gate');
+const { run, verifySharedFileBaseline, protectedSharedFiles, verifyStaticResourceClosure } = require('./verify_canonical_release_gate');
 
 const root = __dirname;
 const requiredFiles = JSON.parse(fs.readFileSync(path.join(root, 'PROJECT_MANIFEST.json'), 'utf8')).release_governance.release_package.required_files;
@@ -41,6 +41,19 @@ function expectFailure(args, expectedMessage) {
 }
 
 try {
+  const closureStage = path.join(temporaryRoot, 'static-resource-closure');
+  fs.mkdirSync(path.join(closureStage, 'studio', 'assets'), { recursive:true });
+  fs.writeFileSync(path.join(closureStage, 'studio', 'index.html'), '<script type="module" src="./assets/entry.js"></script><link rel="stylesheet" href="./assets/style.css">', 'utf8');
+  fs.writeFileSync(path.join(closureStage, 'studio', 'assets', 'entry.js'), "import('./chunk.js');", 'utf8');
+  fs.writeFileSync(path.join(closureStage, 'studio', 'assets', 'chunk.js'), 'export const ready = true;', 'utf8');
+  fs.writeFileSync(path.join(closureStage, 'studio', 'assets', 'style.css'), "@font-face{src:url('./font.woff2')}", 'utf8');
+  fs.writeFileSync(path.join(closureStage, 'studio', 'assets', 'font.woff2'), 'font', 'utf8');
+  const closureFiles = walkFilesForTest(closureStage);
+  const closure = verifyStaticResourceClosure(closureStage, closureFiles);
+  assert.equal(closure.reference_count, 4);
+  const incompleteClosureFiles = closureFiles.filter(file => file !== 'studio/assets/chunk.js');
+  assert.throws(() => verifyStaticResourceClosure(closureStage, incompleteClosureFiles), /release_package_static_resource_missing:studio\/assets\/entry\.js->studio\/assets\/chunk\.js/);
+
   const governance = JSON.parse(fs.readFileSync(path.join(root, 'PROJECT_MANIFEST.json'), 'utf8')).release_governance;
   const baselineResult = verifySharedFileBaseline(governance, root);
   assert.match(baselineResult.review_id, /^release-baseline-/);
@@ -119,4 +132,12 @@ try {
   process.stdout.write(JSON.stringify({ ok:true, verified:['canonical E source required', 'legacy D source rejected', 'data-local package path rejected', 'ai.cauai.fun only target', 'fixed ten-file shared baseline checked', 'hash-bound review attestation checked', 'missing protected path and malformed hash rejected', 'isolated staging inventory must exactly match manifest'] }) + '\n');
 } finally {
   fs.rmSync(temporaryRoot, { recursive:true, force:true });
+}
+
+function walkFilesForTest(directory, relative = '') {
+  return fs.readdirSync(directory, { withFileTypes:true }).flatMap(entry => {
+    const relativePath = relative ? relative + '/' + entry.name : entry.name;
+    const absolutePath = path.join(directory, entry.name);
+    return entry.isDirectory() ? walkFilesForTest(absolutePath, relativePath) : [relativePath];
+  });
 }

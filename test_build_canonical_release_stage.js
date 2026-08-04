@@ -13,6 +13,8 @@ try {
   const summary = JSON.parse(fs.readFileSync(path.join(candidateRoot, 'release-candidate-summary.json'), 'utf8'));
   assert.equal(result.gate.release_ready, true);
   assert.equal(result.target, 'https://ai.cauai.fun');
+  assert.equal(result.release.release_id, 'local-validation-stage');
+  assert.match(result.release.source_git_revision, /^[a-f0-9]{40}$/);
   assert(
     ['diverged_requires_new_staged_release', 'verified_current_parity']
       .includes(summary.production_parity)
@@ -47,6 +49,10 @@ try {
   assert.equal(activeBrandAssetFromIndex('<img class="hero-logo" src="./assets/brand/current.svg" alt="">'), 'assets/brand/current.svg');
   assert.throws(() => activeBrandAssetFromIndex('<img class="hero-logo" src="https://example.invalid/brand.svg" alt="">'), /release_stage_active_brand_asset_invalid/);
   assert(packageManifest.files.includes('assets/brand/niannian-ai-mark-transparent.svg'));
+  assert(packageManifest.files.includes('studio/index.html'));
+  assert(packageManifest.files.includes('director-desk/index.html'));
+  assert(packageManifest.files.some(file => file.startsWith('studio/assets/')));
+  assert(packageManifest.files.some(file => file.startsWith('director-desk/')));
   assert(packageManifest.files.includes('bridge/niannian_shot_review.js'));
   assert(packageManifest.files.includes('bridge/niannian_video_channel_registry.js'));
   assert(packageManifest.files.includes('bridge/niannian_redraw_step02_vertical.js'));
@@ -68,6 +74,10 @@ try {
   assert(packageManifest.files.includes('docs/shot-review-contract/contract-manifest.json'));
   assert(packageManifest.files.includes('docs/shot-review-contract/schemas/shot-review-model.schema.json'));
   assert.equal(packageManifest.files.some(file => /^(?:data-local|data|output|logs|\.local)(?:\/|$)/.test(file)), false);
+  assert.deepEqual(
+    result.gate.static_resource_closure.missing_optional_css_assets,
+    [{ source:'product.css', target:'assets/workbench/production-console-bg-v1.png' }]
+  );
   assert(lockedDependencyDirectories().includes('node_modules/mammoth'));
   assert(!lockedDependencyDirectories().includes('node_modules/@emnapi/runtime'));
   process.stdout.write(JSON.stringify({ ok:true, file_count:result.file_count, total_bytes:result.total_bytes, verified:['isolated staging', 'locked production dependencies', 'active brand asset derived from current HTML', 'exact package manifest', 'release gate', 'local runtime data excluded'] }) + '\n');

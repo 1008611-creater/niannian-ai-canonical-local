@@ -70,6 +70,64 @@ function walkFiles(directory, relative = '') {
   });
 }
 
+const staticAssetExtension = /\.(?:avif|css|gif|ico|jpe?g|js|json|mjs|mp4|png|svg|ttf|webm|webmanifest|woff2?)(?:[?#].*)?$/i;
+
+function localStaticReference(value, sourceRelativePath) {
+  const reference = String(value || '').trim();
+  if (!reference || reference.startsWith('#') || /^(?:data|https?|mailto|tel):/i.test(reference)) return null;
+  const withoutQuery = reference.split(/[?#]/, 1)[0];
+  if (!staticAssetExtension.test(reference)) return null;
+  const resolved = withoutQuery.startsWith('/')
+    ? withoutQuery.slice(1)
+    : path.posix.normalize(path.posix.join(path.posix.dirname(sourceRelativePath), withoutQuery));
+  return normalizeRelativePath(resolved);
+}
+
+function staticReferences(relativePath, content) {
+  const references = [];
+  if (/\.html?$/i.test(relativePath)) {
+    for (const match of content.matchAll(/\b(?:src|href|poster)=(['"])(.*?)\1/gi)) references.push(match[2]);
+  }
+  if (/\.css$/i.test(relativePath)) {
+    for (const match of content.matchAll(/url\(\s*(['"]?)(.*?)\1\s*\)/gi)) references.push(match[2]);
+  }
+  if (/\.(?:m?js)$/i.test(relativePath)) {
+    for (const match of content.matchAll(/(?:\bimport\s*(?:\([^)]*?['"]|[^'"()]*?\bfrom\s*['"])|\bexport\s+[^'"()]*?\bfrom\s*['"])([^'"]+)['"]/g)) references.push(match[1]);
+  }
+  return references.map(reference => localStaticReference(reference, relativePath)).filter(Boolean);
+}
+
+function verifyStaticResourceClosure(packageRoot, files) {
+  const available = new Set(files.map(normalizeRelativePath));
+  const entrypoints = files.filter(file => /\.html?$/i.test(file)).sort();
+  const visited = new Set();
+  const pending = entrypoints.slice();
+  let referenceCount = 0;
+  const missingOptionalCssAssets = [];
+  while (pending.length) {
+    const relativePath = pending.pop();
+    if (visited.has(relativePath)) continue;
+    visited.add(relativePath);
+    const filePath = path.join(packageRoot, relativePath);
+    const content = fs.readFileSync(filePath, 'utf8');
+    for (const target of staticReferences(relativePath, content)) {
+      referenceCount += 1;
+      if (!available.has(target)) {
+        // A CSS image/font URL cannot prevent the JavaScript application from
+        // starting. Keep it visible as a package finding, while missing HTML
+        // entry assets and JavaScript chunks remain hard failures.
+        if (/\.css$/i.test(relativePath)) {
+          missingOptionalCssAssets.push({ source:relativePath, target });
+          continue;
+        }
+        fail('release_package_static_resource_missing:' + relativePath + '->' + target);
+      }
+      if (/\.(?:css|m?js|html?)$/i.test(target)) pending.push(target);
+    }
+  }
+  return { entrypoints, checked_files:visited.size, reference_count:referenceCount, missing_optional_css_assets:missingOptionalCssAssets };
+}
+
 function exactSortedPaths(values, label) {
   if (!Array.isArray(values)) fail(label + '_missing');
   const normalized = values.map(normalizeRelativePath).sort();
@@ -168,7 +226,7 @@ function verifyPackageManifest(packageManifestPath, governance, target) {
   for (const required of governance.release_package.required_files) {
     if (!uniqueFiles.has(normalizeRelativePath(required))) fail('release_package_required_file_missing:' + required);
   }
-  return { file_count: files.length, package_root:packageRoot };
+  return { file_count: files.length, package_root:packageRoot, static_resource_closure:verifyStaticResourceClosure(packageRoot, files) };
 }
 
 function run(argv = process.argv.slice(2)) {
@@ -197,6 +255,7 @@ function run(argv = process.argv.slice(2)) {
     authoritative_source: root,
     package_manifest: options['package-manifest'] ? path.resolve(options['package-manifest']) : null,
     package_file_count: packageResult?.file_count || 0,
+    static_resource_closure: packageResult?.static_resource_closure || null,
     release_ready: Boolean(packageResult),
     shared_file_baseline: 'verified',
     shared_file_baseline_review_id: baselineResult.review_id,
@@ -220,4 +279,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { run, verifySharedFileBaseline, protectedSharedFiles };
+module.exports = { run, verifySharedFileBaseline, protectedSharedFiles, verifyStaticResourceClosure, staticReferences, localStaticReference };
