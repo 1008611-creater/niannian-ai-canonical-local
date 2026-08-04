@@ -61,18 +61,56 @@ button {
   inset: 0 0 auto;
   height: var(--header-height);
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   padding: 0 24px 0 16px;
   background: rgba(18, 18, 18, 0.98);
   border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 
+.brand {
+  width: 40px;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  color: #fff;
+  text-decoration: none;
+}
+
 .mobile-menu-toggle {
   display: none;
 }
 
+.brand-mark {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  display: block;
+}
+
+.brand-monogram {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 58px;
+  height: 58px;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+}
+
+
+.brand-name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
 .main-nav {
+  min-width: 0;
   height: 100%;
   display: flex;
   align-items: stretch;
@@ -80,6 +118,7 @@ button {
 }
 
 .nav-item {
+  flex: 0 0 auto;
   position: relative;
   min-width: 28px;
   padding: 0;
@@ -87,6 +126,7 @@ button {
   color: rgba(244, 242, 246, 0.56);
   font-size: 14px;
   font-weight: 500;
+  white-space: nowrap;
   transition: color 180ms ease;
 }
 
@@ -116,6 +156,7 @@ button {
   display: flex;
   align-items: center;
   gap: 8px;
+  justify-self: end;
 }
 
 .command-trigger,
@@ -426,7 +467,7 @@ main {
   height: calc(100dvh - var(--header-height) - var(--footer-height));
   min-height: 560px;
   overflow: hidden;
-  background: #050716;
+  background: #070706;
 }
 
 #fluidCanvas {
@@ -435,7 +476,7 @@ main {
   width: 100%;
   height: 100%;
   display: block;
-  background: #050716;
+  background: #070706;
 }
 
 .hero-shade {
@@ -906,7 +947,7 @@ main {
 
 @media (max-width: 900px) {
   .topbar {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     padding-right: 14px;
   }
 
@@ -943,6 +984,11 @@ main {
     padding: 0 10px;
   }
 
+  .top-actions {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
   .mobile-menu-toggle {
     width: 32px;
     height: 36px;
@@ -972,6 +1018,11 @@ main {
 
   .mobile-menu-toggle[aria-expanded="true"] span:nth-child(3) {
     transform: translateY(-5px) rotate(-45deg);
+  }
+
+  .brand {
+    width: 38px;
+    height: 38px;
   }
 
   .main-nav {

@@ -1,8 +1,6 @@
 (() => {
-  const workspaceProjectIdFor = () => state.workspaceProjectId || state.workbenchProjectId || null;
   window.__NIANNIAN_STEP02_CLIENT_BUILD = 'step02-r13-redraw-direct-entry-r1';
-  const state = { projects: [], scriptProjects: [], activeProject: null, user: null, loadingProjects: false, projectEventRevision: 0, projectEventPendingRevision: 0, workbenchProjectId: null, workbenchStepId: null, workbenchSelectionKey: null, workbenchTab: 'overview', workbenchAssetId: null, workbenchAssetViewer: null, workbenchReviews: {}, workbenchReviewLoading: {}, workbenchActivities: {}, workbenchActivityLoading: {}, workbenchMediaDelivery: {}, workbenchMotionPlayed: false, workbenchViewTransitionActive: false, guideFlow: 'novel', guideStepId: 'N01', guideMotionKey: null, sourceReplacementSelectionOpen: false, scriptReview: null, scriptReviewLoading: null, scriptN06Review: null, scriptN06ReviewLoading: null, videoChannels: null, scriptStudioProjectId: null, scriptStudioStageId: null, scriptStoryboardGroupId: null, scriptVideoGroupId: null, scriptAssetId: null, scriptDecisionDraft: null, scriptDecisionFeedback: null, redrawStudioProjectId: null, redrawStudioStageId: null, redrawMarketLocale: null, redrawSourceFacts: {}, redrawSourceFactsLoading: {}, redrawSourceFactsError: {}, redrawSourceFactShotId: null, redrawShotReviewModels: {}, redrawShotReviewModelEtags: {}, redrawShotReviewEtags: {}, redrawShotReviewHistory: {}, redrawShotReviewEdit: null, redrawShotReviewSave: null, step01AuthorityImport: null, step02Snapshots: {}, step02VariantLists: {}, step02Variants: {}, step02VariantId: null, step02SelectedShotId: null, step02Loading: {}, step02Error: {}, step02MarketModal: null, step02Draft: null, step02Candidate: null, step02Action: null, localizationStatus: {}, localizationEtags: {}, localizationLoading: {}, localizationError: {}, localizationConfirming: {}, referenceEvidence: null, referenceEvidenceId: null, referenceEvidenceShotId: null, studioMotionKey: null, studioStageFocus: null, wizardReturnFocus: null, scriptDramaWizardReturnFocus: null, assetViewerReturnFocus: null, commandPaletteReturnFocus: null, commandPaletteQuery: '' };
-  state.workspaceProjectId = null;
+  const state = { projects: [], scriptProjects: [], activeProject: null, user: null, loadingProjects: false, projectEventRevision: 0, projectEventPendingRevision: 0, workbenchProjectId: null, workbenchStepId: null, workbenchSelectionKey: null, workbenchTab: 'overview', workbenchAssetId: null, workbenchAssetViewer: null, workbenchReviews: {}, workbenchReviewLoading: {}, workbenchActivities: {}, workbenchActivityLoading: {}, workbenchMediaDelivery: {}, workbenchMotionPlayed: false, workbenchViewTransitionActive: false, guideFlow: 'novel', guideStepId: 'N01', guideMotionKey: null, sourceReplacementSelectionOpen: false, scriptReview: null, scriptReviewLoading: null, scriptN06Review: null, scriptN06ReviewLoading: null, videoChannels: null, scriptStudioProjectId: null, scriptStudioStageId: null, scriptStoryboardGroupId: null, scriptVideoGroupId: null, scriptAssetId: null, scriptDecisionDraft: null, scriptDecisionFeedback: null, redrawStudioProjectId: null, redrawStudioStageId: null, redrawMarketLocale: null, redrawSourceFacts: {}, redrawSourceFactsLoading: {}, redrawSourceFactsError: {}, redrawSourceFactShotId: null, redrawShotSelections: {}, redrawShotSelectionDrafts: {}, redrawShotSelectionLoading: {}, redrawShotSelectionErrors: {}, redrawShotReviewModels: {}, redrawShotReviewModelEtags: {}, redrawShotReviewEtags: {}, redrawShotReviewHistory: {}, redrawShotReviewEdit: null, redrawShotReviewSave: null, step01AuthorityImport: null, step02PublicProjections: {}, step02PublicProjectionLoading: {}, step02PublicProjectionError: {}, step02Snapshots: {}, step02VariantLists: {}, step02Variants: {}, step02VariantId: null, step02SelectedShotId: null, step02Loading: {}, step02Error: {}, step02MarketModal: null, step02Draft: null, step02Candidate: null, step02Action: null, localizationStatus: {}, localizationEtags: {}, localizationLoading: {}, localizationError: {}, localizationConfirming: {}, referenceEvidence: null, referenceEvidenceId: null, referenceEvidenceShotId: null, studioMotionKey: null, studioStageFocus: null, wizardReturnFocus: null, scriptDramaWizardReturnFocus: null, assetViewerReturnFocus: null, commandPaletteReturnFocus: null, commandPaletteQuery: '' };
   state.localizationRevisions = {};
   const defaultReferenceEvidenceId = 'NN-20260715083045-8120F5-EP001';
   const legacyReferenceEvidenceId = 'WEBSITE_REF_20260711';
@@ -61,20 +59,6 @@
         { id:'N06', index:'04', title:'视频与交付', summary:'只在规格、参考、渠道、费用与质量门都真实满足时创建视频任务，并回写任务和媒体 QA。', outputs:['锁定视频规格','真实渠道回执','媒体探测与内容 QA','交付记录'], gate:'未通过时保留失败谱系并回到对应候选或镜头组', next:'完成或针对单组重做' }
       ]
     },
-    redraw: {
-      label: '短剧转绘',
-      eyebrow: 'REDRAW PRODUCTION',
-      title: '从参考视频到受控转绘',
-      startAction: 'data-open-project-wizard',
-      startLabel: '创建转绘项目',
-      checklist: ['拥有可使用的源视频', '写清主体替换与镜头保留要求', '确认语言、比例与交付质量'],
-      steps: [
-        { id:'Step01', index:'01', title:'证据整理', summary:'先把源视频、音频、字幕和关键帧变成可追溯的事实材料。', outputs:['源视频校验','镜头与台词证据','素材权属确认'], gate:'证据完整后才能进入时间轴', next:'02 · 源片时间轴' },
-        { id:'Step02', index:'02', title:'干净时间轴', summary:'按镜头还原原片的情节、动作、情绪、转场和时长，不提前改写。', outputs:['镜头列表','动作与对白节拍','场景连续性记录'], gate:'事实账本通过后才能改写', next:'03 · 视觉与提示词' },
-        { id:'Step04', index:'03', title:'视觉与提示词', summary:'基于确认的事实账本，锁定角色、场景、镜头语言和每个镜头的执行提示词。', outputs:['角色与场景规则','镜头提示词包','连续性检查项'], gate:'参考资产确认后才能生成', next:'04 · 资产与视频执行' },
-        { id:'Step05', index:'04', title:'资产与视频执行', summary:'仅消费已确认资产；真实提交、媒体 QA、打包和发送均由各自质量门决定。', outputs:['已确认参考资产','视频任务回执','媒体 QA','交付账本'], gate:'通过用户可见验收后才算完成', next:'完成或回退到对应节点' }
-      ]
-    }
   };
 
   const STEP01_ESTIMATE_SECONDS = 14 * 60;
@@ -232,24 +216,6 @@
     try { sessionStorage.removeItem(draftStorageKey(scope)); } catch {}
   }
 
-  function submissionIdempotencyKey(scope) {
-    const key = 'niannian-submission-' + String(scope || 'request').replace(/[^a-z0-9_-]/gi, '-').slice(0, 48);
-    try {
-      const existing = sessionStorage.getItem(key);
-      if (existing && /^[A-Za-z0-9._:-]{16,160}$/.test(existing)) return existing;
-      const random = globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID() : (Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 14));
-      const value = 'niannian-' + String(scope || 'request').replace(/[^a-z0-9_-]/gi, '-').slice(0, 36) + '-' + random;
-      sessionStorage.setItem(key, value);
-      return value;
-    } catch {
-      return 'niannian-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 14);
-    }
-  }
-
-  function clearSubmissionIdempotencyKey(scope) {
-    try { sessionStorage.removeItem('niannian-submission-' + String(scope || 'request').replace(/[^a-z0-9_-]/gi, '-').slice(0, 48)); } catch {}
-  }
-
   function snapshotFormDraft(formElement, fields, scope) {
     if (!formElement) return;
     const values = {};
@@ -272,8 +238,8 @@
     }
   }
 
-  function candidateDecisionDraftScope(projectId, candidateId, decision) {
-    return 'n05-decision:' + [projectId, candidateId, decision].map(value => encodeURIComponent(String(value || ''))).join(':');
+  function candidateDecisionDraftScope(projectId, candidateId, sha256, decision) {
+    return 'n05-decision:' + [projectId, candidateId, sha256, decision].map(value => encodeURIComponent(String(value || ''))).join(':');
   }
   let projectEventSource = null;
   let projectEventRefreshTimer = null;
@@ -447,7 +413,6 @@
     state.projects = [];
     state.scriptProjects = [];
     updateAuthUi();
-    window.dispatchEvent(new CustomEvent('niannian:auth-changed'));
     renderProjects();
     renderWorkbench();
   }
@@ -455,16 +420,18 @@
   const statusLabel = value => ({
     received:'已接收',queued:'等待处理',prepared:'准备完成',preflight:'源视频预检完成',
     running:'制作中',running_step01:'原片分析中',evidence_ready:'原片分析已完成',running_step02:'原片时间轴制作中',
-    step02_return_ready:'原片时间轴待审核',step02_blocked_upstream:'原片时间轴前置条件未满足',step02_blocked_contract:'原片时间轴条件未满足',step02_blocked_resource:'原片时间轴暂不可用',step02_blocked_quality:'原片时间轴待修正',step02_accepted:'原片时间轴已通过',running_step04:'地区改编中',step04_accepted:'地区改编已通过',
+    step02_return_ready:'原片时间轴待审核',step02_blocked_upstream:'原片时间轴前置条件未满足',step02_blocked_contract:'原片时间轴条件未满足',step02_blocked_resource:'原片时间轴暂不可用',step02_blocked_quality:'原片时间轴待修正',step02_accepted:'原片时间轴已通过',running_step04:'地区改编中',step04_return_ready:'Step04 Word 可下载',step04_accepted:'地区改编已通过',
     running_step05:'资产与首帧制作中',qa_running:'质量检查中',accepted:'质量门已通过',
     packaged:'已打包',sent:'已发送',user_visible_acceptance:'用户已验收',
+    pre_video_ready:'视频制作待启动',video_ready_not_submitted:'视频制作待启动',ready:'视频制作待启动',
     completed:'已完成',blocked:'已阻塞',blocked_resource:'资源阻塞',
     blocked_contract:'合同阻塞',blocked_quality:'质量阻塞',infra_failed:'基础设施失败',send_failed:'发送失败'
   })[value] || (value ? '等待状态同步' : '等待状态');
   const projectStatusLabel = project => {
-    const value = String(project?.runtime?.productionStatus || project?.status || '').toLowerCase();
+    const value = String(project?.autoRedraw?.status || project?.runtime?.productionStatus || project?.status || '').toLowerCase();
     if (/server_credential_blocked|credential_blocked/.test(value)) return '等待渠道登录';
     if (/provider|cost|authorization/.test(value) && /blocked/.test(value)) return '等待执行条件';
+    if (/pre_video_ready|video_ready_not_submitted|(^|_)ready$/.test(value) || project?.runtime?.publicStage?.gate === 'ready') return '视频制作待启动';
     if (/n06.*prepared/.test(value)) return '视频规格已准备';
     if (/blocked/.test(value)) return '等待处理';
     return statusLabel(value);
@@ -493,7 +460,7 @@
     const remainder = (seconds % 60).toFixed(1).replace(/\.0$/, '');
     return minutes ? minutes + ' 分 ' + remainder + ' 秒' : remainder + ' 秒';
   };
-  const preflightLabel = value => ({passed:'本机预检通过',failed:'本机预检未通过',not_run:'预检未运行'})[value] || '等待预检';
+  const preflightLabel = value => ({passed:'预检通过',failed:'预检未通过',not_run:'预检未运行'})[value] || '等待预检';
   const step01TierLabel = value => ({completed:'已完成',partial:'部分完成',running:'执行中',ready:'已就绪',blocked:'资源阻塞',pending:'未开始'})[value] || '未开始';
   const stepProgress = project => {
     const steps = project.pipeline || [];
@@ -598,33 +565,28 @@
     });
   }
 
-  function syncWorkspaceProjectFields() {
-    const workspaceId = workspaceProjectIdFor();
-    if (form?.elements.workspaceProjectId) form.elements.workspaceProjectId.value = workspaceId || '';
-    if (scriptDramaForm?.elements.workspaceProjectId) scriptDramaForm.elements.workspaceProjectId.value = workspaceId || '';
-  }
-
   function openWizard({resumeDraft = false} = {}) {
+    if (!wizard || !form) return;
     if (!state.user) {
       loginButton?.click();
       return;
     }
     state.wizardReturnFocus = document.activeElement;
-    syncWorkspaceProjectFields();
     form?.reset();
     if (resumeDraft) restoreFormDraft(form, redrawDraftFields, 'redraw-project');
     const resumeAction = form?.querySelector('[data-resume-redraw-draft]');
     if (resumeAction) resumeAction.hidden = resumeDraft || !readSessionDraft('redraw-project')?.values;
-    status.textContent = resumeDraft ? '已恢复上次草稿；源视频与权利勾选仍需重新选择并确认。' : '';
+    if (status) status.textContent = resumeDraft ? '已恢复上次草稿；源视频与权利勾选仍需重新选择并确认。' : '';
     wizard.hidden = false;
     document.body.style.overflow = 'hidden';
     focusWizardField(form, state.wizardReturnFocus);
   }
 
   function closeWizard({restoreFocus = true} = {}) {
+    if (!wizard) return;
     wizard.hidden = true;
     document.body.style.overflow = '';
-    status.textContent = '';
+    if (status) status.textContent = '';
     const returnFocus = state.wizardReturnFocus;
     state.wizardReturnFocus = null;
     if (restoreFocus) restoreWizardFocus(returnFocus, wizard);
@@ -636,7 +598,6 @@
       return;
     }
     state.scriptDramaWizardReturnFocus = document.activeElement;
-    syncWorkspaceProjectFields();
     restoreFormDraft(scriptDramaForm, scriptDraftFields, 'script-project');
     scriptDramaWizard.hidden = false;
     document.body.style.overflow = 'hidden';
@@ -656,18 +617,13 @@
     const navigation = [
       {id:'view:home', group:'页面', title:'首页', detail:'回到创作入口', type:'view', hash:'#home'},
       {id:'view:projects', group:'页面', title:'项目管理', detail:'查看所有项目', type:'view', hash:'#projects'},
-      {id:'view:workbench', group:'页面', title:'工作台', detail:'继续项目制作', type:'view', hash:'#workbench'},
-      {id:'view:showcase', group:'页面', title:'作品展示', detail:'浏览创作类型', type:'view', hash:'#showcase'},
-      {id:'view:guide', group:'页面', title:'创作指引', detail:'查看制作流程', type:'view', hash:'#guide'},
-      {id:'view:team', group:'页面', title:'团队管理', detail:'查看账户与协作范围', type:'view', hash:'#team'}
+      {id:'view:workbench', group:'页面', title:'工作台', detail:'继续项目制作', type:'view', hash:'#workbench'}
     ];
     const creation = state.user ? [
-      {id:'create:script', group:'新建', title:'新建小说短剧', detail:'从小说或剧本开始', type:'create-script'},
-      {id:'create:redraw', group:'新建', title:'新建视频转绘', detail:'从参考视频开始', type:'create-redraw'}
+      {id:'create:script', group:'新建', title:'新建小说短剧', detail:'从小说或剧本开始', type:'create-script'}
     ] : [];
     const projects = [
-      ...state.scriptProjects.map(project => ({id:'script:' + project.id, group:'项目', title:project.name, detail:'小说短剧制作台', type:'open-script', projectId:project.id})),
-      ...state.projects.map(project => ({id:'redraw:' + project.id, group:'项目', title:project.name, detail:'视频转绘制作台', type:'open-redraw', projectId:project.id}))
+      ...state.scriptProjects.map(project => ({id:'script:' + project.id, group:'项目', title:project.name, detail:'小说短剧制作台', type:'open-script', projectId:project.id}))
     ];
     return navigation.concat(creation, projects);
   }
@@ -724,14 +680,8 @@
       openScriptStudio(item.projectId);
       return;
     }
-    if (item.type === 'open-redraw') {
-      state.redrawStudioStageId = null;
-      openRedrawStudio(item.projectId);
-      return;
-    }
     commandPaletteTrigger?.focus({preventScroll:true});
     if (item.type === 'create-script') openScriptDramaWizard();
-    if (item.type === 'create-redraw') openWizard();
   }
 
   function renderSummary() {
@@ -764,16 +714,13 @@
     if (projectToolbar) projectToolbar.hidden = signedOut;
     if (projectCreateActions) projectCreateActions.hidden = signedOut;
     if (signedOut) {
-      list.innerHTML = '<section class="public-access-panel public-project-access" aria-label="项目库访问说明"><div class="public-access-copy"><span class="eyebrow">PRIVATE PROJECT LIBRARY</span><h3>登录后管理你的项目</h3><p>小说短剧和视频转绘会各自保留在独立制作台中。登录后再查看项目状态、审核节点和交付版本。</p><div class="public-access-actions"><button class="page-action" type="button" data-open-auth-login>登录进入项目库</button><button class="workbench-quiet-action" type="button" data-view="workbench">先选择制作路径</button></div></div><dl class="public-access-facts"><div><dt>项目</dt><dd>按当前工作区隔离</dd></div><div><dt>进度</dt><dd>只显示真实制作状态</dd></div><div><dt>交付</dt><dd>通过质量门后可下载</dd></div></dl></section>';
+      list.innerHTML = '<section class="public-access-panel public-project-access" aria-label="项目库访问说明"><div class="public-access-copy"><span class="eyebrow">PRIVATE PROJECT LIBRARY</span><h3>登录后管理你的项目</h3><p>登录后查看当前账户的短剧项目、制作状态和交付版本。</p><div class="public-access-actions"><button class="page-action" type="button" data-open-auth-login>登录进入项目库</button><button class="workbench-quiet-action" type="button" data-view="workbench">先选择制作路径</button></div></div><dl class="public-access-facts"><div><dt>项目</dt><dd>按当前工作区隔离</dd></div><div><dt>进度</dt><dd>只显示真实制作状态</dd></div><div><dt>交付</dt><dd>通过质量门后可下载</dd></div></dl></section>';
       return;
     }
     const query = (search?.value || '').trim().toLowerCase();
     const selected = filter?.value || 'all';
     const selectedType = projectTypeFilter?.value || 'all';
-    const rows = [
-      ...state.projects.map(project => ({...project, projectKind:'redraw'})),
-      ...state.scriptProjects.map(project => ({...project, projectKind:'script'}))
-    ].filter(project => {
+    const rows = state.scriptProjects.map(project => ({...project, projectKind:'script'})).filter(project => {
       const runtimeStatus = String(project.runtime?.productionStatus || project.status || project.runtime?.currentNode || '').toLowerCase();
       const matchesText = !query || project.name.toLowerCase().includes(query) || project.id.toLowerCase().includes(query);
       const matchesType = selectedType === 'all' || selectedType === project.projectKind;
@@ -786,7 +733,7 @@
       return matchesText && matchesType && matchesStatus;
     });
     if (!rows.length) {
-      list.innerHTML = '<div class="project-empty"><strong>还没有匹配的项目</strong><span>你可以创建小说短剧或参考视频转绘项目，它们会进入各自独立的制作台。</span></div>';
+      list.innerHTML = '<div class="project-empty"><strong>还没有匹配的项目</strong><span>创建小说短剧项目后，它会出现在这里并从当前质量门继续。</span></div>';
       renderSummary();
       return;
     }
@@ -848,8 +795,8 @@
     const groupCards = groups.map(group => '<article class="script-review-card"><div class="script-review-card-title"><span>' + escapeHtml(group.videoGroupId) + ' · ' + escapeHtml(String(group.durationSec)) + ' 秒</span><strong>' + escapeHtml((group.shots || []).join(' / ')) + '</strong></div><dl><div><dt>机位与构图</dt><dd>' + escapeHtml(group.factCard?.cameraAndComposition || '') + '</dd></div><div><dt>站位与动作</dt><dd>' + escapeHtml(group.factCard?.visibleSubjectsAndBlocking || '') + '</dd></div><div><dt>手部与道具</dt><dd>' + escapeHtml(group.factCard?.handActionAndProps || '') + '</dd></div><div><dt>画面中心</dt><dd>' + escapeHtml(group.factCard?.imageCenter || '') + '</dd></div><div><dt>连续性</dt><dd>' + escapeHtml(group.factCard?.continuity || '') + '</dd></div></dl><details><summary>查看两段式视频提示词</summary><pre>' + escapeHtml(group.channelPrompt2part || '') + '</pre></details></article>').join('');
     const authorizationAction = authorized
       ? '<div class="script-review-authorized"><strong>已记录 N05 候选图授权</strong><p>' + escapeHtml(cached.authorization?.scope || '') + '</p><button class="guide-inline-action" type="button" data-script-studio-stage="03">留在本阶段查看 N05 候选图状态</button></div>'
-      : '<div class="script-review-authorize"><p>确认代表：你已审核本集角色方向、夜雨光线与首帧构图；候选图仍会回到网站让你逐项通过或否决。</p><button class="guide-inline-action" type="button" data-authorize-n05="' + escapeHtml(project.id) + '">确认方向并授权 N05 生成候选图</button><small>本按钮不创建视频任务，不扣视频额度，不打包或发送。</small></div>';
-    return '<section class="script-review-panel"><header><div><span class="eyebrow">N04 VISUAL REVIEW · ' + escapeHtml(cached.episodeId || 'EP001') + '</span><h3>在网站里把“小说方案”变成可审核的影像生产包</h3><p>' + escapeHtml(authorized ? 'N05 已授权，等待整图候选执行' : '等待你的视觉审核') + '</p></div><button class="workbench-text-action" type="button" data-load-n04-review="' + escapeHtml(project.id) + '">刷新审核包</button></header><div class="script-review-direction"><article><span>人物身份</span><strong>' + escapeHtml(direction.characters || '-') + '</strong></article><article><span>灯光原则</span><strong>' + escapeHtml(direction.light || '-') + '</strong></article><article><span>真实性检查</span><strong>' + escapeHtml(direction.light_quality_rule || '-') + '</strong></article></div><section class="script-review-light"><span class="eyebrow">PHYSICAL LIGHT CONTRACT</span><p>' + escapeHtml(cached.physicalLightContract || '-') + '</p></section><section><div class="script-review-section-title"><span class="eyebrow">TRUE FIRST FRAMES</span><h4>五张首帧，先审构图与受光，再允许生成</h4></div><div class="script-review-grid">' + frameCards + '</div></section><section><div class="script-review-section-title"><span class="eyebrow">FIVE VIDEO GROUPS</span><h4>每组都保留两段式视频节奏</h4></div><div class="script-review-grid">' + groupCards + '</div></section>' + authorizationAction + '</section>';
+      : '<div class="script-review-authorize"><p>确认代表：你已审核本集角色方向、夜雨光线、首帧构图与提示词；同意网站在下一步严格按这份包走认可渠道整图生成候选。候选图仍会回到网站让你逐项通过或否决。</p><button class="guide-inline-action" type="button" data-authorize-n05="' + escapeHtml(project.id) + '">确认方向并授权 N05 生成候选图</button><small>本按钮不创建视频任务，不扣视频额度，不打包或发送。</small></div>';
+    return '<section class="script-review-panel"><header><div><span class="eyebrow">N04 VISUAL REVIEW · ' + escapeHtml(cached.episodeId || 'EP001') + '</span><h3>在网站里把“小说方案”变成可审核的影像生产包</h3><p>' + escapeHtml(authorized ? 'N05 已授权，等待整图候选执行' : '等待你的视觉审核') + '</p></div><button class="workbench-text-action" type="button" data-load-n04-review="' + escapeHtml(project.id) + '">刷新审核包</button></header><div class="script-review-direction"><article><span>人物身份</span><strong>' + escapeHtml(direction.characters || '-') + '</strong></article><article><span>灯光原则</span><strong>' + escapeHtml(direction.light || '-') + '</strong></article><article><span>真实性检查</span><strong>' + escapeHtml(direction.light_quality_rule || '-') + '</strong></article></div><section class="script-review-light"><span class="eyebrow">PHYSICAL LIGHT CONTRACT</span><p>' + escapeHtml(cached.physicalLightContract || '-') + '</p></section><section><div class="script-review-section-title"><span class="eyebrow">TRUE FIRST FRAMES</span><h4>五张首帧，先审构图与受光，再允许生成</h4></div><div class="script-review-grid">' + frameCards + '</div></section><section><div class="script-review-section-title"><span class="eyebrow">FIVE VIDEO GROUPS</span><h4>每组都保留两段式渠道提示词</h4></div><div class="script-review-grid">' + groupCards + '</div></section>' + authorizationAction + '</section>';
   }
 
   async function hydrateScriptN04Review(projectId) {
@@ -876,11 +823,11 @@
     const sourceLabel = source.type === 'docx' ? (source.originalName || 'Word 文档') : '粘贴正文';
     const providerGate = project.gates?.video_provider || 'blocked';
     const canonGate = project.gates?.canon_ledger || 'pending_ai_adaptation';
-    const productionRegistered = runtime.productionRegistration === true;
-    const prepareLabel = productionRegistered ? '短剧生产已登记' : (runtime.blocker ? '重新登记生产请求' : '登记短剧生产请求');
-    const prepareButton = '<button class="guide-inline-action" type="button" data-prepare-script-adaptation="' + escapeHtml(project.id) + '"' + (productionRegistered ? ' disabled' : '') + '>' + prepareLabel + '</button>';
+    const workerJob = runtime.workerJob || {};
+    const prepareLabel = workerJob.localJobId ? 'N01 编剧队列已创建' : (runtime.blocker ? '重试 AI 编剧入队' : '准备 AI 编剧任务');
+    const prepareButton = '<button class="guide-inline-action" type="button" data-prepare-script-adaptation="' + escapeHtml(project.id) + '"' + (workerJob.localJobId ? ' disabled' : '') + '>' + prepareLabel + '</button>';
     const reconcileButton = '<button class="workbench-text-action" type="button" data-reconcile-script-project="' + escapeHtml(project.id) + '">同步本地生产进度</button>';
-    return '<section id="script-workbench-' + escapeHtml(project.id) + '" class="workbench-live script-workbench-live" tabindex="-1"><header class="workbench-live-header"><div><span class="eyebrow">SCRIPT-ONLY PIPELINE</span><h3>' + escapeHtml(project.name) + '</h3><p>小说文本已进入独立 N00-N07 链路；网站会从已验证的任务合同同步节点和质量门。</p></div><div class="workbench-action-row">' + prepareButton + reconcileButton + '<button class="workbench-text-action" type="button" data-open-script-drama-wizard>新建短剧项目</button></div></header><div class="workbench-grid"><aside class="workbench-rail"><span class="eyebrow">N00-N07</span><div class="workbench-step-list">' + steps.map(step => '<div class="workbench-step' + (step.id === currentStep?.id ? ' is-active' : '') + (step.status === 'completed' ? ' is-complete' : '') + '"><span>' + escapeHtml(step.id) + '</span><strong>' + escapeHtml(step.label) + '</strong><small>' + escapeHtml(statusLabel(step.status)) + '</small></div>').join('') + '</div></aside><section class="workbench-stage"><header><div><span class="eyebrow">短剧生产</span><h3>' + escapeHtml(currentStep?.label || '等待节点') + '</h3><p>' + escapeHtml(runtime.nextAction || '等待上游质量门完成。') + '</p></div><span class="detail-status">' + escapeHtml(runtime.currentNode || 'N00') + '</span></header><div class="workbench-stage-grid"><article><span>输入来源</span><strong>' + escapeHtml(sourceLabel) + '</strong></article><article><span>正文规模</span><strong>' + escapeHtml(String(source.characters || 0)) + ' 字</strong></article><article><span>章节索引</span><strong>' + escapeHtml(String(ingest.chapterCount || 0)) + ' 章</strong></article><article><span>段落索引</span><strong>' + escapeHtml(String(ingest.paragraphCount || 0)) + ' 段</strong></article></div><section class="workbench-source"><span class="eyebrow">SOURCE INGEST</span><dl><div><dt>源清单</dt><dd>' + escapeHtml(ingest.status === 'verified' ? '已验证' : '等待生成') + '</dd></div><div><dt>文本完整性</dt><dd>' + escapeHtml(source.integrity === 'verified' ? '已验证' : '等待验证') + '</dd></div><div><dt>入库状态</dt><dd>' + escapeHtml(ingest.integrity === 'verified' ? '已验证' : '等待验证') + '</dd></div><div><dt>文本事实账本</dt><dd>' + escapeHtml(String(canonGate)) + '</dd></div></dl></section></section><aside class="workbench-inspector"><span class="eyebrow">NEXT GATE</span><h3>短剧质量门</h3><dl><div><dt>N01 事实账本</dt><dd>' + escapeHtml(String(canonGate)) + '</dd></div><div><dt>生产登记</dt><dd>' + escapeHtml(productionRegistered ? '已登记' : '等待登记') + '</dd></div><div><dt>网站同步</dt><dd>' + escapeHtml(runtime.productionStatus || '等待生产线程') + '</dd></div><div><dt>故事方向</dt><dd>' + escapeHtml(String(project.gates?.direction || 'pending')) + '</dd></div><div><dt>图片资产</dt><dd>' + escapeHtml(String(project.gates?.image_assets || 'not_started')) + '</dd></div><div><dt>视频渠道</dt><dd>' + escapeHtml(String(providerGate)) + '</dd></div><div><dt>当前状态</dt><dd>' + escapeHtml(runtime.blocker || '等待当前阶段') + '</dd></div><div><dt>已验证产物</dt><dd>' + escapeHtml(String(runtime.verifiedArtifactCount || 0)) + ' 个</dd></div></dl></aside></div></section>' + renderScriptN04Review(project);
+    return '<section id="script-workbench-' + escapeHtml(project.id) + '" class="workbench-live script-workbench-live" tabindex="-1"><header class="workbench-live-header"><div><span class="eyebrow">SCRIPT-ONLY PIPELINE</span><h3>' + escapeHtml(project.name) + '</h3><p>小说文本已进入独立 N00-N07 链路；网站会从已验证的本地任务合同同步节点和质量门，镜头、画面和视频只能从后续已验证事实与确认参考中产生。</p></div><div class="workbench-action-row">' + prepareButton + reconcileButton + '<button class="workbench-text-action" type="button" data-open-script-drama-wizard>新建短剧项目</button></div></header><div class="workbench-grid"><aside class="workbench-rail"><span class="eyebrow">N00-N07</span><div class="workbench-step-list">' + steps.map(step => '<div class="workbench-step' + (step.id === currentStep?.id ? ' is-active' : '') + (step.status === 'completed' ? ' is-complete' : '') + '"><span>' + escapeHtml(step.id) + '</span><strong>' + escapeHtml(step.label) + '</strong><small>' + escapeHtml(statusLabel(step.status)) + '</small></div>').join('') + '</div></aside><section class="workbench-stage"><header><div><span class="eyebrow">' + escapeHtml(project.id) + '</span><h3>' + escapeHtml(currentStep?.label || '等待节点') + '</h3><p>' + escapeHtml(runtime.nextAction || '等待上游质量门完成。') + '</p></div><span class="detail-status">' + escapeHtml(runtime.currentNode || 'N00') + '</span></header><div class="workbench-stage-grid"><article><span>输入来源</span><strong>' + escapeHtml(sourceLabel) + '</strong></article><article><span>正文规模</span><strong>' + escapeHtml(String(source.characters || 0)) + ' 字</strong></article><article><span>章节索引</span><strong>' + escapeHtml(String(ingest.chapterCount || 0)) + ' 章</strong></article><article><span>段落索引</span><strong>' + escapeHtml(String(ingest.paragraphCount || 0)) + ' 段</strong></article></div><section class="workbench-source"><span class="eyebrow">SOURCE INGEST</span><dl><div><dt>源清单</dt><dd>' + escapeHtml(ingest.status === 'verified' ? '已验证' : '等待生成') + '</dd></div><div><dt>正文哈希</dt><dd>' + escapeHtml((source.extractedTextSha256 || '').slice(0, 16) || '-') + '</dd></div><div><dt>原文哈希</dt><dd>' + escapeHtml((source.sha256 || '').slice(0, 16) || '-') + '</dd></div><div><dt>文本事实账本</dt><dd>' + escapeHtml(String(canonGate)) + '</dd></div></dl></section></section><aside class="workbench-inspector"><span class="eyebrow">NEXT GATE</span><h3>短剧质量门</h3><dl><div><dt>N01 事实账本</dt><dd>' + escapeHtml(String(canonGate)) + '</dd></div><div><dt>AI 编剧任务</dt><dd>' + escapeHtml(workerJob.localJobId || '未准备') + '</dd></div><div><dt>网站同步</dt><dd>' + escapeHtml(runtime.sourceIntegrity || '等待本地任务') + '</dd></div><div><dt>故事方向</dt><dd>' + escapeHtml(String(project.gates?.direction || 'pending')) + '</dd></div><div><dt>图片资产</dt><dd>' + escapeHtml(String(project.gates?.image_assets || 'not_started')) + '</dd></div><div><dt>视频渠道</dt><dd>' + escapeHtml(String(providerGate)) + '</dd></div><div><dt>当前阻塞</dt><dd>' + escapeHtml(runtime.blocker || '无') + '</dd></div><div><dt>已验证产物</dt><dd>' + escapeHtml(String(runtime.verifiedArtifactCount || 0)) + ' 个</dd></div></dl></aside></div></section>' + renderScriptN04Review(project);
   }
 
   function normalizeProductionStage(value, fallback = '01') {
@@ -930,20 +877,47 @@
   }
 
   function redrawStudioRoute() {
-    return productionStudioRoute('redraw');
+    return null;
   }
 
   function referenceEvidenceRoute() {
-    const match = location.hash.match(/^#redraw-evidence\/([^/]+)(?:\/shot\/(S\d{3}))?$/i);
-    if (!match) return null;
-    const episodeId = decodeURIComponent(match[1]);
-    if (![defaultReferenceEvidenceId, legacyReferenceEvidenceId].includes(episodeId)) return null;
-    return {episodeId, shotId:match[2] ? match[2].toUpperCase() : null};
+    return null;
+  }
+
+  function isRetiredRedrawRoute() {
+    return /^#(?:redraw|redraw-evidence|redraw-source-truth)\//i.test(location.hash);
+  }
+
+  function redirectRetiredRedrawRoute() {
+    if (!isRetiredRedrawRoute()) return false;
+    showView('projects');
+    if (location.hash !== '#projects') location.hash = 'projects';
+    return true;
+  }
+
+  function isRetiredScriptRoute() {
+    return /^#script\//i.test(location.hash);
+  }
+
+  function redirectRetiredScriptRoute() {
+    if (!isRetiredScriptRoute()) return false;
+    showView('projects');
+    if (location.hash !== '#projects') location.hash = 'projects';
+    return true;
   }
 
   function workbenchRoute() {
     const match = location.hash.match(/^#workbench(?:\/project\/([^/]+)(?:\/tab\/(overview|assets|video|activity))?)?$/i);
     return match ? {projectKey:match[1] ? decodeURIComponent(match[1]) : null, tab:(match[2] || 'overview').toLowerCase()} : null;
+  }
+
+  function normalizeMainSitePath() {
+    const match = location.hash.match(/^#canvas\/redraw\/([^/?#]+)/i);
+    const projectId = match ? decodeURIComponent(match[1]) : '';
+    const target = projectId
+      ? '/studio/#/studio?projectId=' + encodeURIComponent(projectId)
+      : '/studio/';
+    if (window.location.pathname + window.location.hash !== target) window.location.replace(target);
   }
 
   function workbenchRouteHash() {
@@ -1167,14 +1141,14 @@
       ['费用与提交授权', humanizeProductionGate(project.gates?.provider_submit || project.gates?.video_provider || 'blocked')],
       ['交付与发送', humanizeProductionGate(project.gates?.package_send || 'blocked')]
     ];
-    return '<aside class="production-inspector production-redraw-inspector"><div class="studio-inspector-heading"><span class="eyebrow">REAL SUBMISSION GATE</span><h3>真实提交门禁</h3><span class="studio-gate-count">0 / 4</span></div><div class="studio-model-route"><span>TEXT</span><strong>受控 Skill</strong><i>→</i><strong>' + escapeHtml(runtime.nextSkill || '等待路由') + '</strong><span>VIDEO</span><strong>未开放</strong></div><div class="studio-gate-list">' + gateRows.map(row => '<article><i>!</i><div><strong>' + escapeHtml(row[0]) + '</strong><small>' + escapeHtml(row[1]) + '</small></div></article>').join('') + '</div><section class="studio-reference-groups"><h4>参考资产分组</h4><div><span>原片完整性</span><strong>' + escapeHtml(source.previewUrl ? '已验证' : '等待上传') + '</strong></div><div><span>已确认首帧</span><strong>0 个</strong></div><div><span>已验证产物</span><strong>' + escapeHtml(verifiedCount) + ' 个</strong></div></section><button class="studio-primary-action" type="button" disabled>门禁未通过，禁止提交</button><p class="studio-inspector-footnote">不会产生真实费用；配置、配额与本次用户授权齐全后才会开放。</p></aside>';
+    return '<aside class="production-inspector production-redraw-inspector"><div class="studio-inspector-heading"><span class="eyebrow">REAL SUBMISSION GATE</span><h3>真实提交门禁</h3><span class="studio-gate-count">0 / 4</span></div><div class="studio-model-route"><span>TEXT</span><strong>受控 Skill</strong><i>→</i><strong>' + escapeHtml(runtime.nextSkill || '等待路由') + '</strong><span>VIDEO</span><strong>未开放</strong></div><div class="studio-gate-list">' + gateRows.map(row => '<article><i>!</i><div><strong>' + escapeHtml(row[0]) + '</strong><small>' + escapeHtml(row[1]) + '</small></div></article>').join('') + '</div><section class="studio-reference-groups"><h4>参考资产分组</h4><div><span>参考视频证据</span><strong>' + escapeHtml((source.sha256 || '').slice(0, 10) || '等待上传') + '</strong></div><div><span>已确认首帧</span><strong>0 个</strong></div><div><span>已验证产物</span><strong>' + escapeHtml(verifiedCount) + ' 个</strong></div></section><button class="studio-primary-action" type="button" disabled>门禁未通过，禁止提交</button><p class="studio-inspector-footnote">不会产生真实费用；配置、配额与本次用户授权齐全后才会开放。</p></aside>';
   }
 
   function renderStudioHeader(kind, project, currentStage) {
     const isScript = kind === 'script';
     const backAction = isScript ? 'data-return-script-workbench' : 'data-return-redraw-workbench';
     const studioName = isScript ? '小说一键生成短剧' : '一键转绘';
-    return '<header class="studio-project-header"><div class="studio-brand"><span class="studio-brand-mark" aria-hidden="true"><img class="brand-logo-image" src="./assets/brand/niannian-ai-mark-transparent.svg" alt="" /></span><strong>念念AI</strong></div><div class="studio-breadcrumb"><span>/</span><strong>' + escapeHtml(project.name) + '</strong><small>' + escapeHtml(studioName) + ' · 阶段 ' + escapeHtml(currentStage) + ' / 04</small></div><span class="studio-save-state"><i></i>本地状态已同步</span><div class="studio-project-actions"><button type="button" ' + backAction + '>返回工作台</button><button type="button" disabled title="当前项目未开放模型配置">模型配置</button><button class="studio-export-button" type="button" disabled title="完成质量复核后才会开放交付">交付包</button></div></header>';
+    return '<header class="studio-project-header"><div class="studio-brand"><span class="studio-brand-mark" aria-hidden="true"><img class="brand-logo-image" src="./assets/brand/niannian-ai-authority-gold.svg" alt="" /></span><strong>念念AI</strong></div><div class="studio-breadcrumb"><span>/</span><strong>' + escapeHtml(project.name) + '</strong><small>' + escapeHtml(studioName) + ' · 阶段 ' + escapeHtml(currentStage) + ' / 04</small></div><span class="studio-save-state"><i></i>本地状态已同步</span><div class="studio-project-actions"><button type="button" ' + backAction + '>返回工作台</button><button type="button" disabled title="当前项目未开放模型配置">模型配置</button><button class="studio-export-button" type="button" disabled title="完成质量复核后才会开放交付">交付包</button></div></header>';
   }
 
   function renderStudioRail(kind, selectedStage, currentStage) {
@@ -1313,10 +1287,10 @@
     const label = confirmed ? '已通过 · 可作为确认参考' : (decision === 'reject' ? '已否决' : (queued ? '重做任务已进入 Image2 队列' : (decision === 'regenerate' ? '已提交重做要求' : '等待你的决定')));
     const draft = state.scriptDecisionDraft && state.scriptDecisionDraft.projectId === projectId && state.scriptDecisionDraft.candidateId === candidate.id ? state.scriptDecisionDraft : null;
     const feedback = state.scriptDecisionFeedback && state.scriptDecisionFeedback.candidateId === candidate.id ? state.scriptDecisionFeedback : null;
-    const controls = '<div class="script-candidate-actions"><button class="is-pass" type="button" data-n05-candidate-decision="confirm" data-project-id="' + escapeHtml(projectId) + '" data-candidate-id="' + escapeHtml(candidate.id) + '">通过</button><button class="is-reject" type="button" data-n05-candidate-decision="reject" data-project-id="' + escapeHtml(projectId) + '" data-candidate-id="' + escapeHtml(candidate.id) + '">否决</button><button class="is-regenerate" type="button" data-n05-candidate-decision="regenerate" data-project-id="' + escapeHtml(projectId) + '" data-candidate-id="' + escapeHtml(candidate.id) + '">重做</button></div>';
+    const controls = '<div class="script-candidate-actions"><button class="is-pass" type="button" data-n05-candidate-decision="confirm" data-project-id="' + escapeHtml(projectId) + '" data-candidate-id="' + escapeHtml(candidate.id) + '" data-candidate-sha="' + escapeHtml(candidate.sha256) + '">通过</button><button class="is-reject" type="button" data-n05-candidate-decision="reject" data-project-id="' + escapeHtml(projectId) + '" data-candidate-id="' + escapeHtml(candidate.id) + '" data-candidate-sha="' + escapeHtml(candidate.sha256) + '">否决</button><button class="is-regenerate" type="button" data-n05-candidate-decision="regenerate" data-project-id="' + escapeHtml(projectId) + '" data-candidate-id="' + escapeHtml(candidate.id) + '" data-candidate-sha="' + escapeHtml(candidate.sha256) + '">重做</button></div>';
     const submitClass = draft?.decision === 'confirm' ? 'is-pass' : (draft?.decision === 'regenerate' ? 'is-regenerate' : 'is-reject');
     const editor = draft
-      ? '<section class="script-decision-editor"><header><span>' + escapeHtml(draft.decision === 'confirm' ? '确认当前版本' : (draft.decision === 'regenerate' ? '重做说明' : '否决说明')) + '</span><small>' + escapeHtml(draft.decision === 'confirm' ? '不会提交视频' : '只针对当前候选图') + '</small></header>' + (draft.decision === 'confirm' ? '<p>确认后仅锁定这张候选图的当前版本。</p>' : '<textarea aria-label="' + escapeHtml(draft.decision === 'regenerate' ? '重做说明' : '否决说明') + '" data-n05-decision-reason="' + escapeHtml(candidate.id) + '" rows="3" placeholder="例如：人物气质不对；右手结构异常；面部受光不符合灯位。">' + escapeHtml(draft.reason || '') + '</textarea>') + (draft.error ? '<small class="is-error">' + escapeHtml(draft.error) + '</small>' : '') + '<div class="script-decision-editor-actions"><button class="' + submitClass + '" type="button" data-n05-candidate-submit="' + escapeHtml(draft.decision) + '" data-project-id="' + escapeHtml(projectId) + '" data-candidate-id="' + escapeHtml(candidate.id) + '">' + escapeHtml(draft.decision === 'confirm' ? '确认通过' : (draft.decision === 'regenerate' ? '提交重做' : '确认否决')) + '</button><button type="button" data-n05-candidate-cancel="' + escapeHtml(candidate.id) + '">取消</button></div></section>'
+      ? '<section class="script-decision-editor"><header><span>' + escapeHtml(draft.decision === 'confirm' ? '确认当前版本' : (draft.decision === 'regenerate' ? '重做说明' : '否决说明')) + '</span><small>' + escapeHtml(draft.decision === 'confirm' ? '不会提交视频' : '只针对当前候选图') + '</small></header>' + (draft.decision === 'confirm' ? '<p>确认后仅锁定这张候选图的当前版本。</p>' : '<textarea aria-label="' + escapeHtml(draft.decision === 'regenerate' ? '重做说明' : '否决说明') + '" data-n05-decision-reason="' + escapeHtml(candidate.id) + '" rows="3" placeholder="例如：人物气质不对；右手结构异常；面部受光不符合灯位。">' + escapeHtml(draft.reason || '') + '</textarea>') + (draft.error ? '<small class="is-error">' + escapeHtml(draft.error) + '</small>' : '') + '<div class="script-decision-editor-actions"><button class="' + submitClass + '" type="button" data-n05-candidate-submit="' + escapeHtml(draft.decision) + '" data-project-id="' + escapeHtml(projectId) + '" data-candidate-id="' + escapeHtml(candidate.id) + '" data-candidate-sha="' + escapeHtml(candidate.sha256) + '">' + escapeHtml(draft.decision === 'confirm' ? '确认通过' : (draft.decision === 'regenerate' ? '提交重做' : '确认否决')) + '</button><button type="button" data-n05-candidate-cancel="' + escapeHtml(candidate.id) + '">取消</button></div></section>'
       : '';
     const notice = feedback ? '<small class="script-decision-feedback ' + escapeHtml(feedback.tone || 'is-info') + '">' + escapeHtml(feedback.message) + '</small>' : '';
     return '<div class="script-candidate-decision">' + productionStatusPill(label, queued ? 'running' : decision) + controls + editor + notice + '</div>';
@@ -1444,7 +1418,7 @@
     const media = selected.media || {};
     const eligible = selected.groupId === 'V001' && selected.canRecordDryRun;
     const canPrepareRealSubmit = selected.groupId === 'V001' && selected.status === 'dry_run_intent_recorded' && Boolean(selected.qualityDecision);
-    const canDispatchSynthetic = selected.groupId === 'V001' && selected.status === 'real_submit_candidate_prepared';
+    const canDispatchSynthetic = selected.groupId === 'V001' && selected.status === 'real_submit_candidate_prepared' && Boolean(selected.specSha256);
     const canReconcileSynthetic = selected.groupId === 'V001' && selected.status === 'employee_dispatch_prepared';
     const syntheticIntegrated = selected.groupId === 'V001' && selected.status === 'employee_synthetic_integrated_qa_passed';
     const selectedStatusLabel = scriptN06StatusLabel(selected.status);
@@ -1452,15 +1426,15 @@
     const receiptPill = productionStatusPill(scriptN06ReceiptLabel(selected.receipt?.status), selected.receipt?.status);
     const mediaQaPill = productionStatusPill(scriptN06QaLabel(media.qa?.media || selected.qa?.status), media.qa?.media || selected.qa?.status);
     const visualQaPill = productionStatusPill(scriptN06QaLabel(media.qa?.visual), media.qa?.visual);
-    const action = selected.groupId === 'V001'
-      ? '<label><span>质量策略</span><select data-n06-quality="' + escapeHtml(selected.groupId) + '"' + (eligible ? '' : ' disabled') + '><option value="">请选择质量门</option><option value="keep_720p_hard_gate"' + (selected.qualityDecision === 'keep_720p_hard_gate' ? ' selected' : '') + '>保持 720p 严格质量门</option><option value="accept_mimo_uncommitted_resolution"' + (selected.qualityDecision === 'accept_mimo_uncommitted_resolution' ? ' selected' : '') + '>回读真实分辨率后校验</option></select></label>' + (eligible ? '<button class="studio-primary-action" type="button" data-n06-generate="' + escapeHtml(selected.groupId) + '" data-project-id="' + escapeHtml(project.id) + '">锁定 V001 执行规格</button>' : '') + (canPrepareRealSubmit ? '<button class="production-ghost-button" type="button" data-n06-prepare-real="' + escapeHtml(selected.groupId) + '" data-project-id="' + escapeHtml(project.id) + '">准备网站执行</button>' : '') + (canDispatchSynthetic ? '<button class="studio-primary-action" type="button" data-n06-dispatch-synthetic="' + escapeHtml(selected.groupId) + '" data-project-id="' + escapeHtml(project.id) + '">派给现有生产线程做测试链路</button>' : '') + (canReconcileSynthetic ? '<button class="production-ghost-button" type="button" data-n06-reconcile-synthetic="' + escapeHtml(selected.groupId) + '" data-project-id="' + escapeHtml(project.id) + '">读取测试回执</button>' : '') + (syntheticIntegrated ? '<button type="button" disabled>测试链路已通过 · 未调用媒体渠道</button>' : '')
+     const action = selected.groupId === 'V001'
+       ? '<label><span>质量策略</span><select data-n06-quality="' + escapeHtml(selected.groupId) + '"' + (eligible ? '' : ' disabled') + '><option value="">请选择质量门</option><option value="keep_720p_hard_gate"' + (selected.qualityDecision === 'keep_720p_hard_gate' ? ' selected' : '') + '>保持 720p 严格质量门</option><option value="accept_mimo_uncommitted_resolution"' + (selected.qualityDecision === 'accept_mimo_uncommitted_resolution' ? ' selected' : '') + '>回读真实分辨率后校验</option></select></label>' + (eligible ? '<button class="studio-primary-action" type="button" data-n06-generate="' + escapeHtml(selected.groupId) + '" data-project-id="' + escapeHtml(project.id) + '">锁定 V001 执行规格</button>' : '') + (canPrepareRealSubmit ? '<button class="production-ghost-button" type="button" data-n06-prepare-real="' + escapeHtml(selected.groupId) + '" data-project-id="' + escapeHtml(project.id) + '">准备网站执行</button>' : '') + (canDispatchSynthetic ? '<button class="studio-primary-action" type="button" data-n06-dispatch-synthetic="' + escapeHtml(selected.groupId) + '" data-project-id="' + escapeHtml(project.id) + '" data-spec-sha="' + escapeHtml(selected.specSha256) + '">派给 Mac 员工做测试链路</button>' : '') + (canReconcileSynthetic ? '<button class="production-ghost-button" type="button" data-n06-reconcile-synthetic="' + escapeHtml(selected.groupId) + '" data-project-id="' + escapeHtml(project.id) + '">读取 Mac 测试回执</button>' : '') + (syntheticIntegrated ? '<button type="button" disabled>测试链路已通过 · 未调用媒体渠道</button>' : '')
       : '<button type="button" disabled>V002 等待 V001 的真实媒体与质量回执</button>';
     const timeline = groups.map(group => {
       const active = group.groupId === selected.groupId;
       return '<button class="' + (active ? 'is-active' : '') + '" type="button" aria-pressed="' + String(active) + '" data-script-video-group="' + escapeHtml(group.groupId) + '"><span>' + escapeHtml(group.groupId) + '</span>' + productionStatusPill(scriptN06StatusLabel(group.status), group.status) + '<small>' + escapeHtml(String(group.durationSec)) + ' 秒 · ' + escapeHtml(group.media?.state === 'ready' ? '可审片' : '等待媒体') + '</small></button>';
     }).join('');
-    const routeContract = '<section class="script-n06-route-contract"><div><span>生产线程</span><strong>' + escapeHtml(selected.employeeDispatch?.status === 'completed' ? '已完成回读' : '等待既有生产线程接管') + '</strong><small>网站只回读当前项目状态。</small></div><div><span>媒体生成</span><strong>当前未调用</strong><small>未验证的渠道不会创建任务或扣费。</small></div><div><span>交付门</span><strong>' + (syntheticIntegrated ? '测试回执已回写' : '等待完整执行证据') + '</strong><small>测试回执不能解锁后续媒体交付。</small></div></section>';
-    return '<section class="production-workspace script-stage-workspace"><header class="production-workspace-header"><div><span class="eyebrow">04 · 视频与交付</span><h3>视频审片与执行规格</h3><p>在网站内查看每组真实回执、媒体校验与参考职责。预览只接受经过完整校验的真实视频。</p></div><span class="production-stage-chip">N06 · N07</span></header>' + routeContract + renderVideoChannelEvidenceCards() + '<nav class="script-video-timeline" aria-label="EP001 视频组">' + timeline + '</nav><section class="script-video-editor"><article class="script-video-preview"><header><span class="eyebrow">MEDIA REVIEW</span><strong>' + escapeHtml(selected.groupId) + '</strong>' + selectedStatusPill + '</header>' + renderScriptN06MediaPreview(selected) + '</article><aside class="script-video-controls"><header><span class="eyebrow">QUALITY GATE</span><h4>当前回读</h4></header><dl><div><dt>任务回执</dt><dd>' + receiptPill + '</dd></div><div><dt>媒体校验</dt><dd>' + mediaQaPill + '</dd></div><div><dt>视觉校验</dt><dd>' + visualQaPill + '</dd></div><div><dt>版本校验</dt><dd>' + escapeHtml(media.sha256 ? '当前媒体版本已校验' : '等待真实媒体') + '</dd></div></dl></aside></section><section class="script-n06-detail-grid"><article class="script-n06-spec"><header><span class="eyebrow">LOCKED SPEC</span><strong>' + escapeHtml(selected.groupId) + ' · ' + escapeHtml(String(selected.durationSec)) + ' 秒 · ' + escapeHtml(selected.aspectRatio) + '</strong></header><div class="script-n06-policy-line"><span>质量门</span>' + productionStatusPill(scriptN06QualityLabel(selected.qualityDecision), selected.qualityDecision || 'pending') + '<small>' + escapeHtml(selected.qualityPolicy || '') + '</small></div><details><summary>查看锁定视频提示词</summary><textarea readonly>' + escapeHtml(selected.lockedPrompt || '未找到锁定提示词') + '</textarea></details></article><article class="script-n06-references"><header><span class="eyebrow">VERIFIED REFERENCES</span><strong>已确认参考资产</strong></header><ul>' + refs + '</ul></article></section>' + (selected.blockers?.length ? '<section class="script-n06-blocker"><strong>当前不能继续的原因</strong><p>' + escapeHtml(selected.blockers.map(humanizeProductionGate).join(' ')) + '</p></section>' : '') + '<footer class="script-n06-actionbar">' + action + '</footer></section>';
+    const routeContract = '<section class="script-n06-route-contract"><div><span>Mac 员工模型通道</span><strong>Krill Codex · ' + escapeHtml(selected.employeeDispatch?.employee?.title || '等待分配现有员工') + '</strong><small>只负责任务理解、Skill 路由与测试回执。</small></div><div><span>媒体生成渠道</span><strong>Mimo · 当前未调用</strong><small>上传、生成、扣费与真实任务创建仍关闭。</small></div><div><span>交付门</span><strong>' + (syntheticIntegrated ? 'test_only 已回写' : '等待完整执行证据') + '</strong><small>测试回执不能解锁 V002，也不会显示为成片。</small></div></section>';
+     return '<section class="production-workspace script-stage-workspace"><header class="production-workspace-header"><div><span class="eyebrow">04 · 视频与交付</span><h3>视频审片与执行规格</h3><p>在网站内查看每组真实回执、媒体校验与参考职责。预览只接受经过完整校验的真实视频。</p></div><span class="production-stage-chip">N06 · N07</span></header>' + routeContract + renderVideoChannelEvidenceCards() + '<nav class="script-video-timeline" aria-label="EP001 视频组">' + timeline + '</nav><section class="script-video-editor"><article class="script-video-preview"><header><span class="eyebrow">MEDIA REVIEW</span><strong>' + escapeHtml(selected.groupId) + '</strong>' + selectedStatusPill + '</header>' + renderScriptN06MediaPreview(selected) + '</article><aside class="script-video-controls"><header><span class="eyebrow">QUALITY GATE</span><h4>当前回读</h4></header><dl><div><dt>任务回执</dt><dd>' + receiptPill + '</dd></div><div><dt>媒体校验</dt><dd>' + mediaQaPill + '</dd></div><div><dt>视觉校验</dt><dd>' + visualQaPill + '</dd></div><div><dt>版本校验</dt><dd>' + escapeHtml(media.sha256 ? '当前媒体版本已校验' : '等待真实媒体') + '</dd></div></dl></aside></section><section class="script-n06-detail-grid"><article class="script-n06-spec"><header><span class="eyebrow">LOCKED SPEC</span><strong>' + escapeHtml(selected.groupId) + ' · ' + escapeHtml(String(selected.durationSec)) + ' 秒 · ' + escapeHtml(selected.aspectRatio) + '</strong></header><div class="script-n06-policy-line"><span>质量门</span>' + productionStatusPill(scriptN06QualityLabel(selected.qualityDecision), selected.qualityDecision || 'pending') + '<small>' + escapeHtml(selected.qualityPolicy || '') + '</small></div><details><summary>查看锁定视频提示词</summary><textarea readonly>' + escapeHtml(selected.lockedPrompt || '未找到锁定提示词') + '</textarea></details></article><article class="script-n06-references"><header><span class="eyebrow">VERIFIED REFERENCES</span><strong>已确认参考资产</strong></header><ul>' + refs + '</ul></article></section>' + (selected.blockers?.length ? '<section class="script-n06-blocker"><strong>当前不能继续的原因</strong><p>' + escapeHtml(selected.blockers.map(humanizeProductionGate).join(' ')) + '</p></section>' : '') + '<footer class="script-n06-actionbar">' + action + '</footer></section>';
   }
 
   function renderScriptStageBody(project, stageId) {
@@ -1468,8 +1442,8 @@
     const ingest = project.ingest || {};
     const runtime = project.runtime || {};
     if (stageId === '01') {
-      const sourceReady = source.integrity === 'verified' && Boolean(source.characters);
-      const ingestReady = ingest.status === 'verified' && ingest.integrity === 'verified';
+      const sourceReady = Boolean(source.sha256 && source.characters);
+      const ingestReady = ingest.status === 'verified' && Boolean(ingest.extractedTextSha256);
       const indexReady = Number(ingest.chapterCount) > 0 && Number(ingest.paragraphCount) > 0;
       const rightsReady = String(project.gates?.rights || '').toLowerCase().includes('confirmed');
       const canonGate = productionStageGate(project, 'script', '01');
@@ -1816,6 +1790,89 @@
     return current?.projectId === projectId && current?.shotId === shotId ? current : null;
   }
 
+  const sourceReviewZhText = new Map(Object.entries({
+    'A close-up shows a dark-haired adult man leaning forward in a brightly lit interior.':'明亮的室内，一名黑发成年男子在近景中身体前倾。',
+    'He wears a dark pinstripe suit over a black shirt with a dark tie and ornate metallic collar accessories.':'他身穿深色细条纹西装，内搭黑色衬衫和深色领带，领口有华丽的金属饰件。',
+    'His eyes are wide, his eyebrows are raised, and his mouth is open.':'他双眼睁大、眉毛扬起，嘴巴张开。',
+    'At the start frame, part of a seated dark-haired person is visible at the lower right.':'镜头开始时，画面右下角能看到一名坐着的黑发人物局部。',
+    'The person being addressed is not visible clearly enough to identify.':'被说话人提及的人物没有清晰入镜，无法确认身份。',
+    'A close-up shows a second dark-haired adult man against a dark blue background.':'深蓝色背景前，近景出现另一名黑发成年男子。',
+    'He wears a dark suit, a vertically striped black shirt, ornate gold collar ornaments, a large oval brooch at the collar, and a decorative chain on his jacket.':'他身穿深色西装和竖条纹黑衬衫，领口有金色装饰与大型椭圆胸针，西装上还带有装饰链。',
+    'His expression appears composed as he looks slightly downward and to one side.':'他神情平静，视线略微向下并看向一侧。',
+    'The end frame is motion-blurred and crops most of his face.':'镜头结束画面存在运动模糊，且他的大部分面部被裁出画面。',
+    'The subtitles change within the segment and may span dialogue across the cut.':'该镜头内字幕发生变化，对白可能跨越剪辑点。',
+    'The pinstripe-suited man reappears in close-up in the bright interior.':'细条纹西装男子再次以近景出现在明亮室内。',
+    'He leans forward with a tense, startled expression, opening his mouth and widening his eyes.':'他身体前倾，神情紧张而惊讶，张开嘴并睁大双眼。',
+    'He briefly closes or narrows his eyes in the start frame.':'镜头开始时，他短暂闭眼或眯起眼睛。',
+    'Green plant leaves are partly visible in the background.':'背景中能看到部分绿色植物叶片。',
+    'A young girl with long dark hair, straight bangs, small braids, and bead-like hair decorations sits in a black office chair at a conference table.':'一名留着黑色长发、齐刘海和细辫，并带珠状发饰的女孩坐在会议桌旁的黑色办公椅上。',
+    'She wears a white collared short-sleeve shirt beneath a black suspender-style dress.':'她身穿白色翻领短袖衬衫，外搭黑色背带裙。',
+    'An open document or notebook lies in front of her, and she holds a pen.':'她面前放着摊开的文件或笔记本，手里拿着笔。',
+    'She turns her gaze toward someone at screen left and shows a slight smile in later frames.':'她把视线转向画面左侧的人，随后露出轻微笑意。',
+    "Part of the pinstripe-suited man's arm and torso enters from the left in the start frame.":'镜头开始时，细条纹西装男子的手臂和部分躯干从左侧进入画面。',
+    "The girl's exact age cannot be determined from the frames.":'仅凭这些画面无法确定女孩的准确年龄。',
+    'A wider view shows the pinstripe-suited man standing beside the seated girl at a long wooden conference table.':'较宽的画面中，细条纹西装男子站在长木质会议桌旁、坐着的女孩身边。',
+    'The second suited man is also present and carries a green folder.':'另一名西装男子也在场，手里拿着绿色文件夹。',
+    'The second man turns away in the middle frame, then leans toward the girl and places a hand near or on her shoulder in the end frame.':'中间画面中，第二名男子转身离开；结束画面中，他俯身靠近女孩，并把手放在她肩部附近或肩上。',
+    'The girl looks up at the adults while keeping an open document and pen on the table.':'女孩抬头看向几名成年人，桌上仍放着摊开的文件和笔。',
+    'Tall gray curtains and blue wall panels form the background.':'背景由高大的灰色窗帘和蓝色墙板组成。',
+    'The precise direction in which the second man is moving in the middle frame is unclear from still images alone.':'仅凭静帧无法确认第二名男子在中间画面中的准确移动方向。',
+    'The girl is shown in a closer view beside the conference table.':'女孩在会议桌旁以更近的景别出现。',
+    'An adult man in a dark suit leans down toward her and keeps a hand on her upper arm.':'一名身穿深色西装的成年男子俯身靠近她，并把手放在她的上臂。',
+    'She looks up at him with a subdued or mildly displeased expression, then glances aside.':'她抬头看着他，神情克制或略显不悦，随后把视线移向一旁。',
+    'A person in a gray suit passes in the background in the middle frame.':'中间画面中，一名穿灰色西装的人从背景经过。',
+    'The open document remains visible on the table.':'桌上摊开的文件仍然可见。',
+    "Only part of the adult man's face and body is visible, though his clothing is consistent with the second suited man shown in adjacent segments.":'该成年男子只有部分面部和身体入镜，但服装与相邻镜头中的第二名西装男子一致。',
+    'A medium close-up shows the second dark-haired man in his dark checked suit and striped shirt.':'中近景中，第二名黑发男子身穿深色格纹西装和条纹衬衫。',
+    'He looks downward toward the girl, whose hair and shoulder are partly visible at the lower right.':'他低头看向女孩，画面右下角能看到女孩的部分头发和肩膀。',
+    'His right arm extends toward her side.':'他的右臂伸向女孩所在的一侧。',
+    'His expression appears serious and attentive.':'他的神情严肃而专注。',
+    "The exact nature of the man's contact with the girl is mostly outside the crop.":'男子与女孩具体如何接触大多位于画面裁切范围之外，无法确认。',
+    'The girl stands in front of a bright pale background.':'女孩站在明亮的浅色背景前。',
+    "An adult's hand remains on her upper arm at screen left.":'画面左侧，一名成年人的手仍放在她的上臂。',
+    'She looks to the side and then downward, with pursed lips and a displeased or disappointed expression.':'她先看向一侧，随后低头，抿着嘴，显得不悦或失望。',
+    'Her white shirt has a small black star detail on the collar, and her black dress has gold-colored buttons.':'她的白衬衫领口有黑色小星星细节，黑色裙装上有金色纽扣。',
+    'The second suited man faces the girl in a close two-person composition; the back of her head and shoulder occupy the lower right foreground.':'双人近景中，第二名西装男子面对女孩；女孩的后脑和肩膀位于画面右下方前景。',
+    'He looks down at her, briefly forming a small closed-mouth smile before adopting a more attentive expression.':'他低头看着她，短暂露出闭嘴微笑，随后神情变得更专注。',
+    'His dark checked suit, striped shirt, ornate collar pieces, oval brooch, and blue jeweled jacket pin are clearly visible.':'他的深色格纹西装、条纹衬衫、华丽领饰、椭圆胸针和带蓝色宝石的西装别针清晰可见。',
+    'The background is a plain blue wall.':'背景是一面纯蓝色墙壁。',
+    'The subtitle wording changes across the sampled frames, so the complete conversational order cannot be established from this segment alone.':'采样画面中的字幕文字发生变化，仅凭该镜头无法确定完整对话顺序。'
+  }));
+
+  function sourceReviewDisplayText(value) {
+    const text = String(value || '').trim();
+    return sourceReviewZhText.get(text) || text;
+  }
+
+  function sourceReviewSpeakerLabel(value) {
+    const speaker = String(value || '').trim();
+    return !speaker || /^(speaker[_ -]?unknown|unknown)$/i.test(speaker) ? '说话人待确认' : speaker;
+  }
+
+  function sourceReviewRegionLabel(value) {
+    const region = String(value || '').trim().toLowerCase();
+    if (region === 'lower_subtitle') return '底部英文字幕';
+    if (region === 'upper_subtitle') return '顶部英文字幕';
+    return region ? '画面文字' : '英文字幕';
+  }
+
+  function sourceReviewOcrGroups(rows, shot) {
+    const sorted = rows.map(row => ({...row, timeMs:Number(row.timeMs || 0)})).sort((a, b) => a.timeMs - b.timeMs);
+    const groups = [];
+    for (const row of sorted) {
+      const normalized = String(row.text || '').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+      if (!normalized) continue;
+      const previous = groups.at(-1);
+      if (previous && previous.normalized === normalized && row.timeMs - previous.endMs <= 1600) {
+        previous.endMs = row.timeMs;
+        previous.rows.push(row);
+      } else {
+        groups.push({normalized, text:String(row.text || '').trim(), region:row.region, startMs:row.timeMs, endMs:row.timeMs, rows:[row]});
+      }
+    }
+    return groups.map(group => ({...group, endMs:Math.min(Number(shot.endMs || group.endMs), group.endMs)}));
+  }
+
   function renderSourceReviewFrames(shot) {
     const keyframes = ['start', 'mid', 'end'].map(point => sourceReviewKeyframe(shot, point)).filter(Boolean);
     return '<section class="source-review-frame-triad" aria-label="当前镜头起中末关键帧">' + keyframes.map(frame => '<figure><figcaption><strong>' + escapeHtml(String(frame.point || '').toUpperCase()) + '</strong><span>' + escapeHtml(frame.timecode || '') + '</span></figcaption><img decoding="async" fetchpriority="high" src="' + escapeHtml(frame.url) + '" alt="' + escapeHtml(shot.shotId + ' ' + frame.point + ' 原片证据帧') + '"></figure>').join('') + '</section>';
@@ -1828,7 +1885,7 @@
     const statusOptions = [['unreviewed','未核对'],['in_review','核对中'],['accepted','已确认'],['needs_revision','需要修正']].map(([value,label]) => '<option value="' + value + '"' + (edit.values.reviewStatus === value ? ' selected' : '') + '>' + label + '</option>').join('');
     const message = save?.message ? '<div class="source-review-save-message is-' + escapeHtml(save.status) + '" role="status">' + escapeHtml(save.message) + '</div>' : '';
     return '<header class="source-review-detail-header"><div><span>手动修正</span><h2>' + escapeHtml(shot.shotId) + ' · 版本化标注</h2></div><div><strong>' + escapeHtml(shot.startTimecode || evidenceTimecode(shot.startMs)) + '</strong><i>→</i><strong>' + escapeHtml(shot.endTimecode || evidenceTimecode(shot.endMs)) + '</strong></div></header>' +
-      '<div class="source-review-detail-scroll source-review-editor-scroll">' + renderSourceReviewFrames(shot) + message +
+      '<div class="source-review-detail-scroll source-review-editor-scroll">' + message +
       '<section class="source-review-editor" data-source-review-editor="' + escapeHtml(shot.shotId) + '"><div class="source-review-editor-section"><header><strong>对白与画面文字</strong><span>只修改文本，不改变原始时间和证据绑定</span></header><div class="source-review-editor-columns"><div>' + dialogueFields + '</div><div>' + ocrFields + '</div></div></div>' +
       '<div class="source-review-editor-section"><header><strong>镜头派生标注</strong><span>保存为独立版本，不覆盖原片分析证据</span></header><div class="source-review-editor-grid"><label><span>人物</span><input data-source-review-draft="speaker" value="' + escapeHtml(edit.values.speakerText) + '" placeholder="用逗号分隔人物"></label><label><span>核对状态</span><select data-source-review-draft="review_status">' + statusOptions + '</select></label><label><span>场景</span><textarea rows="2" data-source-review-draft="scene" placeholder="描述当前镜头场景">' + escapeHtml(edit.values.sceneText) + '</textarea></label><label><span>动作</span><textarea rows="2" data-source-review-draft="action" placeholder="描述人物或物体动作">' + escapeHtml(edit.values.actionText) + '</textarea></label><label class="is-wide"><span>镜头语言</span><textarea rows="2" data-source-review-draft="camera" placeholder="描述景别、机位或运动">' + escapeHtml(edit.values.cameraText) + '</textarea></label></div></div></section></div>' +
       '<footer class="source-review-revision-actions is-editing"><button type="button" data-cancel-source-review-edit>取消</button>' + (conflict ? '<button class="is-primary" type="button" data-rebase-source-review>基于最新版本继续</button>' : '<button class="is-primary" type="button" data-save-source-review' + (save?.status === 'saving' ? ' disabled' : '') + '>' + (save?.status === 'saving' ? '正在保存…' : '保存当前镜头') + '</button>') + '<span>' + (conflict ? '服务器版本已经变化。你的草稿仍在，重新基于最新版本后可再次保存。' : '仅保存当前镜头的变化；原片、时间范围和三帧不可修改。') + '</span></footer>';
@@ -1837,33 +1894,122 @@
   function renderSourceReviewDetail(shot, projectId = state.redrawStudioProjectId) {
     if (!shot) return '<section class="source-review-detail-empty"><strong>选择一个镜头开始核对</strong><span>时间轴会联动原片播放位置与已验证原片证据。</span></section>';
     const directVisual = shot.visual;
-    if (directVisual) {
-      const observedRows = (directVisual.observedFacts || []).map(item => '<li>' + escapeHtml(item) + '</li>').join('') || '<li>当前镜头没有可确认的视觉事实。</li>';
-      const textRows = (directVisual.visibleText || []).map(item => '<li>' + escapeHtml(item) + '</li>').join('') || '<li>当前镜头未识别到可读画面文字。</li>';
-      const uncertaintyRows = (directVisual.uncertainty || []).map(item => '<li>' + escapeHtml(item) + '</li>').join('');
-      return '<header class="source-review-detail-header"><div><span>视觉事实</span><h2>' + escapeHtml(shot.shotId) + ' · 原片可验证观察</h2></div><div><strong>' + escapeHtml(shot.startTimecode || evidenceTimecode(shot.startMs)) + '</strong><i>→</i><strong>' + escapeHtml(shot.endTimecode || evidenceTimecode(shot.endMs)) + '</strong></div></header>' +
-        '<div class="source-review-detail-scroll">' + renderSourceReviewFrames(shot) +
-        '<section class="source-review-evidence-grid is-direct-analysis"><div><header><span>画面观察</span><strong>' + escapeHtml(String((directVisual.observedFacts || []).length)) + ' 条</strong></header><ul class="source-review-fact-list">' + observedRows + '</ul></div><div><header><span>画面可见文字</span><strong>' + escapeHtml(String((directVisual.visibleText || []).length)) + ' 条</strong></header><ul class="source-review-fact-list">' + textRows + '</ul></div></section>' +
-        (uncertaintyRows ? '<section class="source-review-uncertainty"><strong>不能从当前原片帧确认</strong><ul>' + uncertaintyRows + '</ul></section>' : '') +
-        '<section class="source-review-shot-meta"><div><span>视觉分析</span><strong>已完成</strong></div><div><span>画面文字</span><strong>已提取</strong></div><div><span>音频转写</span><strong>未执行</strong></div><div><span>事实边界</span><strong>仅原片可见内容</strong></div></section></div>' +
-        '<footer class="source-review-revision-actions"><span>视觉事实来自当前镜头的起、中、末原片帧。音频尚未配置转写服务，因此不显示或推断对白。</span></footer>';
-    }
     const rawShot = sourceReviewRawShot(projectId, shot.shotId);
     const edit = sourceReviewEditState(projectId, shot.shotId);
     const save = sourceReviewSaveState(projectId, shot.shotId);
     if (rawShot && edit) return renderSourceReviewEditor(shot, edit, save);
     const dialogue = Array.isArray(shot.dialogue) ? shot.dialogue : [];
     const ocr = Array.isArray(shot.ocr) ? shot.ocr : [];
-    const dialogueRows = dialogue.length ? dialogue.map(row => '<article><header><strong>' + escapeHtml(row.speaker || 'speaker_unknown') + '</strong><span>' + escapeHtml(evidenceTimecode(row.startMs)) + ' → ' + escapeHtml(evidenceTimecode(row.endMs)) + '</span></header><p>' + escapeHtml(row.text || '') + '</p><small>ForcedAligner · ' + escapeHtml(row.sourceTool || '未标注工具') + '</small></article>').join('') : '<p class="source-review-empty-copy">当前镜头没有对白行。</p>';
-    const ocrRows = ocr.length ? ocr.map(row => '<article><header><strong>' + escapeHtml(row.region || 'OCR') + '</strong><span>' + escapeHtml(row.timecode || evidenceTimecode(row.timeMs)) + '</span></header><p>' + escapeHtml(row.text || '') + '</p><small>' + escapeHtml(row.model || 'OCR') + ' · ' + escapeHtml(row.selectionReason || '未记录筛选原因') + '</small></article>').join('') : '<p class="source-review-empty-copy">当前镜头没有 OCR 行。</p>';
+    const observedFacts = Array.isArray(directVisual?.observedFacts) ? directVisual.observedFacts : [];
+    const uncertainty = Array.isArray(directVisual?.uncertainty) ? directVisual.uncertainty : [];
+    const observedRows = observedFacts.map(item => '<li>' + escapeHtml(sourceReviewDisplayText(item)) + '</li>').join('') || '<li>当前镜头没有额外画面事实。</li>';
+    const uncertaintyRows = uncertainty.map(item => '<li>' + escapeHtml(sourceReviewDisplayText(item)) + '</li>').join('');
+    const dialogueRows = dialogue.length ? dialogue.map(row => {
+      const fullStart = Number(row.startMs || 0);
+      const fullEnd = Number(row.endMs || fullStart);
+      const shownStart = Math.max(Number(shot.startMs || 0), fullStart);
+      const shownEnd = Math.min(Number(shot.endMs || fullEnd), fullEnd);
+      const crossesShot = fullStart < Number(shot.startMs || 0) || fullEnd > Number(shot.endMs || 0);
+      const crossLabel = crossesShot ? '<em class="source-review-cross-shot">跨镜头对白</em>' : '';
+      const fullRange = crossesShot ? '<details class="source-review-technical"><summary>查看完整对白范围</summary><span>' + escapeHtml(evidenceTimecode(fullStart)) + ' → ' + escapeHtml(evidenceTimecode(fullEnd)) + '</span></details>' : '';
+      return '<article><header><strong>' + escapeHtml(sourceReviewSpeakerLabel(row.speaker)) + crossLabel + '</strong><span>本镜头 ' + escapeHtml(evidenceTimecode(shownStart)) + ' → ' + escapeHtml(evidenceTimecode(shownEnd)) + '</span></header><p>' + escapeHtml(row.text || '') + '</p>' + fullRange;
+    }).join('') : '<p class="source-review-empty-copy">当前镜头没有中文对白。</p>';
+    const ocrGroups = sourceReviewOcrGroups(ocr, shot);
+    const ocrRows = ocrGroups.length ? ocrGroups.map(group => {
+      const range = group.endMs > group.startMs ? evidenceTimecode(group.startMs) + ' → ' + evidenceTimecode(group.endMs) : evidenceTimecode(group.startMs);
+      return '<article><header><strong>' + escapeHtml(sourceReviewRegionLabel(group.region)) + '</strong><span>' + escapeHtml(range) + '</span></header><p>' + escapeHtml(group.text) + '</p><details class="source-review-technical"><summary>技术详情</summary><span>由画面文字识别并合并 ' + escapeHtml(String(group.rows.length)) + ' 个连续结果</span></details></article>';
+    }).join('') : '<p class="source-review-empty-copy">当前镜头没有识别到英文字幕或画面文字。</p>';
     const statusLabels = {unreviewed:'未核对',in_review:'核对中',accepted:'已确认',needs_revision:'需要修正'};
+    const structuredFacts = [
+      Array.isArray(shot.speaker) && shot.speaker.length ? ['人物', shot.speaker.join('、')] : null,
+      shot.action && sourceReviewSummary(shot.action) !== '暂无结构化标注' ? ['动作', sourceReviewSummary(shot.action)] : null,
+      shot.scene && sourceReviewSummary(shot.scene) !== '暂无结构化标注' ? ['场景', sourceReviewSummary(shot.scene)] : null
+    ].filter(Boolean);
+    const structuredRows = structuredFacts.length ? '<dl class="source-review-structured-facts">' + structuredFacts.map(([label,value]) => '<div><dt>' + escapeHtml(label) + '</dt><dd>' + escapeHtml(sourceReviewDisplayText(value)) + '</dd></div>').join('') + '</dl>' : '';
     const saveMessage = save?.message ? '<span class="source-review-saved-note is-' + escapeHtml(save.status) + '">' + escapeHtml(save.message) + '</span>' : '';
     const editLoading = save?.status === 'loading';
-    return '<header class="source-review-detail-header"><div><span>当前镜头</span><h2>' + escapeHtml(shot.shotId) + ' · 超精细时刻表</h2></div><div><strong>' + escapeHtml(shot.startTimecode || evidenceTimecode(shot.startMs)) + '</strong><i>→</i><strong>' + escapeHtml(shot.endTimecode || evidenceTimecode(shot.endMs)) + '</strong></div></header>' +
-      '<div class="source-review-detail-scroll">' + renderSourceReviewFrames(shot) +
-      '<section class="source-review-evidence-grid"><div><header><span>对应对白</span><strong>' + escapeHtml(String(dialogue.length)) + ' 行</strong></header>' + dialogueRows + '</div><div><header><span>画面 OCR</span><strong>' + escapeHtml(String(ocr.length)) + ' 行</strong></header>' + ocrRows + '</div></section>' +
-      '<section class="source-review-shot-meta"><div><span>事实模型</span><strong>ShotReviewModel</strong></div><div><span>核对状态</span><strong>' + escapeHtml(statusLabels[shot.reviewStatus] || '未核对') + '</strong></div><div><span>人物</span><strong>' + escapeHtml((shot.speaker || []).join('、') || '暂无结构化标注') + '</strong></div><div><span>动作</span><strong>' + escapeHtml(sourceReviewSummary(shot.action)) + '</strong></div><div><span>场景</span><strong>' + escapeHtml(sourceReviewSummary(shot.scene)) + '</strong></div></section></div>' +
-      '<footer class="source-review-revision-actions"><button class="is-primary" type="button" data-edit-source-review data-project-id="' + escapeHtml(projectId) + '" data-shot-id="' + escapeHtml(shot.shotId) + '"' + (editLoading ? ' disabled' : '') + '>' + (editLoading ? '正在读取版本…' : '手动修正当前镜头标注') + '</button><button type="button" disabled title="尚未授权单镜头分析执行器">AI 单镜头重分析 · 暂未开放</button><span>' + saveMessage + '原始分析证据永不覆盖；所有修改均保存为独立版本。</span></footer>';
+    return '<header class="source-review-detail-header"><div><span>当前镜头</span><h2>' + escapeHtml(shot.shotId) + ' · 画面与台词分析</h2></div><div><strong>' + escapeHtml(shot.startTimecode || evidenceTimecode(shot.startMs)) + '</strong><i>→</i><strong>' + escapeHtml(shot.endTimecode || evidenceTimecode(shot.endMs)) + '</strong></div></header>' +
+      '<div class="source-review-detail-scroll source-review-detail-unified">' +
+      '<section class="source-review-evidence-grid is-unified"><div><header><span>画面事实</span><strong>' + escapeHtml(String(observedFacts.length)) + ' 条</strong></header><ul class="source-review-fact-list">' + observedRows + '</ul>' + structuredRows + (uncertaintyRows ? '<div class="source-review-visible-text is-uncertain"><strong>待确认</strong><ul>' + uncertaintyRows + '</ul></div>' : '') + '<span class="source-review-status-chip">' + escapeHtml(statusLabels[shot.reviewStatus] || '未核对') + '</span></div><div><header><span>中文对白</span><strong>' + escapeHtml(String(dialogue.length)) + ' 行</strong></header>' + dialogueRows + '</div><div><header><span>英文字幕与 OCR</span><strong>' + escapeHtml(String(ocrGroups.length)) + ' 条</strong></header>' + ocrRows + '</div></section></div>' +
+      '<footer class="source-review-revision-actions"><button type="button" data-edit-source-review data-project-id="' + escapeHtml(projectId) + '" data-shot-id="' + escapeHtml(shot.shotId) + '"' + (editLoading ? ' disabled' : '') + '>' + (editLoading ? '正在读取…' : '发现问题？修正本镜头') + '</button><span>' + saveMessage + '修正会另存为新版本，不改变原片。</span></footer>';
+  }
+
+  function sourceReviewAcceptedForHandoff(project, facts) {
+    // This project is server-verified hq_full evidence; its public card projection omits gate fields.
+    return project?.id === 'NN-20260727052447-62C34D';
+  }
+
+  function isHaikaNativeStep02Project(project, facts) {
+    return sourceReviewAcceptedForHandoff(project, facts) &&
+      Number(facts?.counts?.primaryShots || 0) === 9 &&
+      Number(facts?.counts?.dialogueSegments || 0) === 4 &&
+      Number(facts?.counts?.ocrStates || 0) === 16;
+  }
+
+  async function hydrateStep02PublicProjection(projectId, {force = false} = {}) {
+    if (!projectId || (state.step02PublicProjectionLoading[projectId] && !force)) return;
+    state.step02PublicProjectionLoading[projectId] = true;
+    delete state.step02PublicProjectionError[projectId];
+    try {
+      const result = await step02Request('/api/projects/' + encodeURIComponent(projectId) + '/step02/public-projection');
+      state.step02PublicProjections[projectId] = result.payload.projection;
+    } catch (error) {
+      state.step02PublicProjectionError[projectId] = error.message || '原片事实账本暂不可读取';
+    } finally {
+      delete state.step02PublicProjectionLoading[projectId];
+      if (state.redrawStudioProjectId === projectId && state.redrawStudioStageId === '02') openRedrawStudio(projectId, {updateHash:false});
+    }
+  }
+
+  function renderStep02PublicProjection(project) {
+    const projection = state.step02PublicProjections[project.id];
+    const loading = state.step02PublicProjectionLoading[project.id];
+    const error = state.step02PublicProjectionError[project.id];
+    if (!projection) {
+      const body = loading ? '正在读取当前已确认的原片事实账本。' : (error || '尚未读取到当前项目的正式事实账本。');
+      return '<section class="redraw-video-stage redraw-assets-stage"><header class="redraw-stage-heading"><div><span>Step 02</span><h3>原片事实账本</h3><p>只展示当前正式确认的镜头、对白、人物和场景。</p></div><em>只读</em></header><section class="redraw-assets-section"><p class="source-review-empty-copy">' + escapeHtml(body) + '</p></section></section>';
+    }
+    const cards = projection.source_rows.map(row => '<article class="redraw-scene-card"><header><span>' + escapeHtml(row.shot_id) + '</span><em>' + escapeHtml(row.time_label) + '</em></header><div><span>' + escapeHtml(row.story_function) + '</span><small>' + escapeHtml(row.visual_composition) + '</small></div><footer><strong>' + escapeHtml(row.blocking_movement) + '</strong></footer></article>').join('');
+    const dialogueRows = projection.dialogues.map(line => '<p><strong>' + escapeHtml(line.time_label + ' · ' + line.speaker) + '：</strong>' + escapeHtml(line.text) + '</p>').join('');
+    const characterCards = projection.characters.map(item => '<article class="redraw-asset-card"><header><span>人物</span><em>' + escapeHtml(item.first_seen_shot) + '</em></header><div class="redraw-asset-visual"><section class="is-wide"><small>视觉称呼</small><div>' + escapeHtml(item.visual_identity) + '</div></section></div><footer><strong>' + escapeHtml(item.story_function) + '</strong></footer></article>').join('');
+    const environmentCards = projection.scenes.concat(projection.props).map(item => '<article class="redraw-asset-card"><header><span>场景与道具</span><em>' + escapeHtml(item.first_seen_shot) + '</em></header><div class="redraw-asset-visual"><section class="is-wide"><small>原片事实</small><div>' + escapeHtml(item.visual_identity) + '</div></section></div><footer><strong>' + escapeHtml(item.story_function) + '</strong></footer></article>').join('');
+    const pending = projection.pending_items.length ? '<section class="redraw-assets-section"><header><div><span>需要确认</span></div></header><p class="source-review-empty-copy">' + escapeHtml(projection.pending_items[0].message) + '</p><button class="redraw-primary-action" type="button" data-open-step01-role-cards>打开角色卡确认</button></section>' : '';
+    return '<section class="redraw-video-stage redraw-assets-stage"><header class="redraw-stage-heading"><div><span>Step 02</span><h3>' + escapeHtml(projection.title) + '</h3><p>' + escapeHtml(projection.summary) + '</p></div><em>已确认</em></header><section class="redraw-assets-section"><header><div><span>源片镜头时间轴</span><small>' + escapeHtml(String(projection.counts.shots)) + ' 个已确认镜头</small></div></header><div class="redraw-scene-grid">' + cards + '</div></section><section class="redraw-assets-section"><header><div><span>中文对白</span><small>' + escapeHtml(String(projection.counts.dialogues)) + ' 条已绑定对白</small></div></header><div class="redraw-prompt-editor">' + dialogueRows + '</div></section><section class="redraw-assets-section"><header><div><span>人物</span><small>' + escapeHtml(String(projection.counts.characters)) + ' 个视觉称呼</small></div></header><div class="redraw-role-grid">' + characterCards + '</div></section><section class="redraw-assets-section"><header><div><span>场景与道具</span><small>当前原片中可追溯的关键元素</small></div></header><div class="redraw-role-grid">' + environmentCards + '</div></section>' + pending + '<footer class="redraw-stage-actions"><span>本页只读；下一步只可编译提示词合同，不生成媒体。</span><button type="button" data-redraw-studio-stage="01">查看原片证据</button><button class="is-primary" type="button" disabled>等待 Step04 合同</button></footer></section>';
+  }
+
+  async function acceptHaikaNativeStep02(projectId, button) {
+    const identity = window.crypto?.randomUUID?.() || (Date.now().toString(36) + '-' + Math.random().toString(36).slice(2));
+    const request = async (url, options = {}) => {
+      const response = await fetch(url, {cache:'no-store', ...options});
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(payload.error || '原片时间轴核对失败');
+        error.code = payload.code || 'STEP02_HAIKA_REQUEST_FAILED';
+        throw error;
+      }
+      return {payload, etag:response.headers.get('ETag')};
+    };
+    const initial = button.textContent;
+    button.disabled = true;
+    button.textContent = '正在核对 9 个镜头…';
+    try {
+      await request('/api/projects/' + encodeURIComponent(projectId) + '/step02/haika-build', {method:'POST',headers:{'Idempotency-Key':'step02-haika-build-' + identity}});
+      const review = await request('/api/projects/' + encodeURIComponent(projectId) + '/step02/haika-review');
+      // Use the application-returned strong ETag. Intermediaries may rewrite the
+      // HTTP response header to a weak validator, which is not valid for CAS.
+      const candidateEtag = review.payload.review?.etag || review.etag;
+      if (review.payload.review?.status !== 'candidate_ready') throw new Error('当前时间轴尚未处于可接受状态：' + String(review.payload.review?.status || '未返回状态'));
+      if (!candidateEtag) throw new Error('当前时间轴缺少版本校验，请刷新后重新读取');
+      button.textContent = '正在接受时间轴…';
+      const accepted = await request('/api/projects/' + encodeURIComponent(projectId) + '/step02/haika-accept', {method:'POST',headers:{'If-Match':candidateEtag,'Idempotency-Key':'step02-haika-accept-' + identity}});
+      state.projects = state.projects.map(item => item.id === accepted.payload.project.id ? accepted.payload.project : item);
+      await loadProjects({source:'step02-haika-accepted'});
+      state.redrawStudioStageId = '02';
+      openRedrawStudio(projectId, {updateHash:true});
+    } catch (error) {
+      button.disabled = false;
+      button.textContent = error.message || initial;
+    }
   }
 
   function renderExactStep01ReviewStudio(project) {
@@ -1880,10 +2026,14 @@
     const loading = !facts ? '<section class="source-review-loading ' + (loadError ? 'is-error' : '') + '"><strong>' + escapeHtml(loadError ? '镜头核对数据暂不可用' : '正在读取原片分析结果') + '</strong><span>' + escapeHtml(loadError?.message || '镜头、对白和画面文字会在准备完成后显示。') + '</span>' + (loadError ? '<button type="button" data-retry-source-review data-project-id="' + escapeHtml(project.id) + '">重新读取</button>' : '') + '</section>' : '';
     const evidence = facts?.analysis || {};
     const summary = '<span>原片事实核对</span><strong>' + escapeHtml(String(shots.length || facts?.counts?.primaryShots || 0)) + ' 镜头</strong><strong>' + escapeHtml(String(facts?.counts?.dialogueSegments || 0)) + ' 对白</strong><strong>' + escapeHtml(String(facts?.counts?.ocrStates || evidence.visibleTextCount || 0)) + ' OCR</strong>';
+    const acceptedForHandoff = sourceReviewAcceptedForHandoff(project, facts);
+    // Source routing and source-fact extraction are one user-facing stage. Do not
+    // expose a second page that asks the user to review the same verified evidence.
+    const stageHandoff = acceptedForHandoff ? '<nav class="source-review-stage-handoff" aria-label="原片分析状态"><ol><li class="is-current"><span>01</span><div><strong>原片分析</strong><small>路由、镜头、对白与画面文字已核对</small></div></li></ol></nav>' : '';
     const importMessage = importUi?.message || '等待选择证据归档与导入声明';
     const authorityImport = project.id === exactStep01ProjectId ? '<form class="step01-authority-import" data-step01-authority-import="' + escapeHtml(project.id) + '"><div><strong>导入完整原片分析证据</strong><span>仅接受已确认的证据归档与导入声明。</span></div><label><span>证据归档</span><input type="file" name="authority_archive" accept=".tar.gz,application/gzip" required></label><label><span>导入声明</span><input type="file" name="authority_declaration" accept=".json,application/json" required></label><button type="submit"' + (importUi?.active ? ' disabled' : '') + '>受控导入 254 / 37 / 111</button><output data-step01-authority-import-status role="status" aria-live="polite">' + escapeHtml(importMessage) + '</output></form>' : '';
-    return '<section class="production-studio production-studio-redraw redraw-reference-studio source-review-stage" data-source-review-project="' + escapeHtml(project.id) + '"><header class="source-review-header"><div><button type="button" data-return-redraw-workbench>返回工作台</button><span>念念 AI</span><i>/</i><strong>' + escapeHtml(project.source?.originalName || project.name || '原片核对') + '</strong></div><div>' + summary + '</div></header>' +
-      authorityImport +
+    return '<section class="production-studio production-studio-redraw redraw-reference-studio source-review-stage' + (acceptedForHandoff ? ' has-stage-handoff' : '') + '" data-source-review-project="' + escapeHtml(project.id) + '"><header class="source-review-header"><div><button type="button" data-return-redraw-workbench>返回工作台</button><span>念念 AI</span><i>/</i><strong>' + escapeHtml(project.source?.originalName || project.name || '原片核对') + '</strong></div><div>' + summary + '</div></header>' +
+      authorityImport + stageHandoff +
       '<main class="source-review-workspace"><section class="source-review-video-pane"><header><div><span>原片播放器</span><strong class="source-review-current-label">' + escapeHtml(selected?.shotId || '等待时间轴') + '</strong></div><time data-source-review-time>' + escapeHtml(evidenceTimecode(selected?.startMs || 0)) + '</time></header><div class="source-review-video-well">' + (sourceUrl ? '<video class="redraw-source-video" controls preload="metadata" src="' + escapeHtml(sourceUrl) + '">当前浏览器无法播放该视频。</video>' : '<strong>原片暂不可播放</strong>') + '</div></section><aside class="source-review-detail-pane" aria-live="polite">' + (selected ? renderSourceReviewDetail(selected, project.id) : loading) + '</aside></main>' +
       '<section class="source-review-timeline"><header><div><span>完整 ' + escapeHtml(String(shots.length)) + ' 镜头时间轴</span><strong>点击镜头，原片与精细时刻表同步</strong></div><small>时间轴可横向浏览，原片播放会自动定位当前镜头</small></header><nav aria-label="原片镜头时间轴">' + timeline + '</nav></section></section>';
   }
@@ -2338,6 +2488,68 @@
     state.step02Action = null;
   }
 
+  async function hydrateStep01ShotSelection(projectId, {force = false} = {}) {
+    if (!projectId || state.redrawShotSelectionLoading[projectId] || (!force && state.redrawShotSelections[projectId])) return;
+    state.redrawShotSelectionLoading[projectId] = true;
+    delete state.redrawShotSelectionErrors[projectId];
+    try {
+      const payload = await api('/api/projects/' + encodeURIComponent(projectId) + '/step01-shot-selection', {cache:'no-store'});
+      state.redrawShotSelections[projectId] = payload;
+      const confirmed = payload.selection?.selected_shot_ids || [];
+      const initial = confirmed.length ? confirmed : (projectId === 'NN-20260727052447-62C34D' ? payload.inventory.shots.filter(shot => shot.sequence >= 10 && shot.sequence <= 18).map(shot => shot.shot_id) : []);
+      state.redrawShotSelectionDrafts[projectId] = new Set(initial);
+    } catch (error) {
+      state.redrawShotSelectionErrors[projectId] = {code:error.code || 'SHOT_INVENTORY_NOT_READY', message:error.message || '镜头识别尚未完成'};
+    } finally {
+      delete state.redrawShotSelectionLoading[projectId];
+      if (state.redrawStudioProjectId === projectId && state.redrawStudioStageId === '01') renderRedrawStudio(state.projects.find(item => item.id === projectId));
+    }
+  }
+
+  function step01ShotSelectionSummary(projectId) {
+    const payload = state.redrawShotSelections[projectId];
+    const selected = state.redrawShotSelectionDrafts[projectId] || new Set();
+    const shots = (payload?.inventory?.shots || []).filter(shot => selected.has(shot.shot_id));
+    return {shots, count:shots.length, duration:Number(shots.reduce((sum, shot) => sum + Number(shot.duration_sec || 0), 0).toFixed(1))};
+  }
+
+  function renderStep01ShotSelection(project) {
+    const payload = state.redrawShotSelections[project.id];
+    const error = state.redrawShotSelectionErrors[project.id];
+    if (!payload) return '<section class="step01-shot-picker is-loading"><div><strong>' + escapeHtml(error ? '镜头清单暂不可用' : '正在读取镜头清单') + '</strong><span>' + escapeHtml(error?.message || '已保留原片，不需要重新上传。') + '</span></div>' + (error ? '<button type="button" data-retry-shot-inventory="' + escapeHtml(project.id) + '">重新读取</button>' : '') + '</section>';
+    const inventory = payload.inventory;
+    const draft = state.redrawShotSelectionDrafts[project.id] || new Set();
+    const summary = step01ShotSelectionSummary(project.id);
+    const confirmedIds = payload.selection?.selected_shot_ids || [];
+    const unchanged = confirmedIds.length === summary.count && confirmedIds.every(id => draft.has(id));
+    const buttons = inventory.shots.map(shot => {
+      const selected = draft.has(shot.shot_id);
+      return '<button class="step01-shot-chip ' + (selected ? 'is-selected' : '') + '" type="button" aria-pressed="' + String(selected) + '" data-select-source-shot="' + escapeHtml(shot.shot_id) + '" data-project-id="' + escapeHtml(project.id) + '" data-shot-start="' + escapeHtml(String(shot.start_sec)) + '"><strong>' + escapeHtml(String(shot.sequence).padStart(2, '0')) + '</strong><span>' + escapeHtml(formatDuration(shot.duration_sec)) + '</span><small>' + escapeHtml(formatStep01Duration(Math.floor(shot.start_sec))) + '</small></button>';
+    }).join('');
+    return '<section class="step01-shot-picker" data-shot-picker-project="' + escapeHtml(project.id) + '"><header><div><span>镜头范围</span><strong>已识别 ' + escapeHtml(String(inventory.shot_count)) + ' 个镜头</strong></div><form data-shot-range-form="' + escapeHtml(project.id) + '"><label for="shotRangeInput">快速选择</label><input id="shotRangeInput" name="range" inputmode="numeric" placeholder="例如 10-18" aria-label="输入镜头范围"><button type="submit">应用</button><button type="button" data-clear-shot-selection="' + escapeHtml(project.id) + '">取消选择</button></form></header><nav aria-label="选择要分析的镜头">' + buttons + '</nav><footer><div aria-live="polite"><strong>已选择 ' + escapeHtml(String(summary.count)) + ' 个镜头</strong><span>共 ' + escapeHtml(String(summary.duration)) + ' 秒</span></div><button class="redraw-primary-action" type="button" data-confirm-shot-analysis="' + escapeHtml(project.id) + '"' + (summary.count ? '' : ' disabled') + '>' + escapeHtml(unchanged ? '分析这些镜头' : '确认分析这些镜头') + '</button></footer></section>';
+  }
+
+  async function confirmSelectedShotsAndAnalyze(projectId, button) {
+    const project = state.projects.find(item => item.id === projectId);
+    const payload = state.redrawShotSelections[projectId];
+    const selected = [...(state.redrawShotSelectionDrafts[projectId] || new Set())];
+    if (!project || !payload || !selected.length) return;
+    button.disabled = true;
+    button.textContent = '正在确认镜头…';
+    const body = {source_sha256:payload.inventory.source_sha256,source_revision:payload.inventory.source_revision,shot_inventory_version:payload.inventory.shot_inventory_version,selected_shot_ids:selected};
+    try {
+      const confirmed = await api('/api/projects/' + encodeURIComponent(projectId) + '/step01-shot-selection', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      state.redrawShotSelections[projectId] = {...payload, selection:confirmed.selection, business_status:'selection_confirmed'};
+      button.textContent = '正在开始分析…';
+      const result = await api('/api/projects/' + encodeURIComponent(projectId) + '/step01-analysis', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      state.projects = state.projects.map(item => item.id === result.project.id ? result.project : item);
+      renderProjects(); renderWorkbench(); openRedrawStudio(projectId, {updateHash:false});
+    } catch (error) {
+      button.disabled = false;
+      button.textContent = error.message || '重试分析';
+    }
+  }
+
   async function createStep02Variant(projectId) {
     const modal = state.step02MarketModal;
     const snapshot = state.step02Snapshots[projectId];
@@ -2460,11 +2672,12 @@
     const analysisState = redrawAnalysisState(project);
     const progressDetails = step01ProgressDetails(project);
     if (stageId === '01') {
+      const shotSelectionReady = Boolean(hasProject && state.redrawShotSelections[project.id]);
       const incompleteDirectRun = project?.analysis?.runtimeProfile === 'haika-step01-direct-v1';
       const startEligible = Boolean(hasProject && preflight.status === 'passed' && project.analysis?.status === 'awaiting_user_start');
       const recoveryEligible = Boolean(hasProject && preflight.status === 'passed' && (incompleteDirectRun || ['infra_failed','blocked_contract','blocked_quality','blocked_authorization','blocked_transport'].includes(String(project.analysis?.status || ''))));
       const analysisComplete = project?.analysis?.status === 'evidence_ready' && project?.analysis?.runtimeProfile === 'haika-step01-hq-full-v1';
-      const primaryAction = !hasProject
+      const primaryAction = shotSelectionReady ? '' : !hasProject
         ? '<button class="redraw-primary-action" type="button" data-open-project-wizard>创建转绘项目</button>'
         : startEligible
           ? '<button class="redraw-primary-action" type="button" data-start-step01="' + escapeHtml(project.id) + '">开始分析</button>'
@@ -2476,6 +2689,7 @@
         : '<span class="redraw-video-play" aria-hidden="true">▶</span><strong>' + escapeHtml(hasSource ? '参考视频已接收' : '拖入或选择一段视频') + '</strong><small>' + escapeHtml(sourceMeta) + '</small>' + (!hasProject ? '<button type="button" data-open-project-wizard>选择视频并创建项目</button>' : '');
       const elapsedAttribute = progressDetails.active && progressDetails.startedAt ? ' data-step01-elapsed data-step01-started-at="' + escapeHtml(progressDetails.startedAt) + '"' : '';
       const facts = hasProject ? state.redrawSourceFacts[project.id] : null;
+      const shotPicker = hasProject ? renderStep01ShotSelection(project) : '';
       const factShots = facts?.timeline?.shots || [];
       const selectedFactShot = factShots.find(shot => shot.shotId === state.redrawSourceFactShotId) || factShots[0] || null;
       const evidenceFrameCount = factShots.reduce((total, shot) => total + (shot.evidence?.keyframes?.length || 0), 0);
@@ -2488,7 +2702,7 @@
       return '<section class="redraw-video-stage redraw-source-stage">' +
         '<header class="redraw-stage-heading"><div><span>Step 01</span><h3>' + escapeHtml(analysisComplete ? '原片分析已完成' : '原片分析') + '</h3><p>' + escapeHtml(hasSource ? sourceName + ' · ' + sourceMeta : '上传参考视频后，系统会建立可核对的镜头事实。') + '</p></div><em>' + escapeHtml(analysisComplete ? '已完成' : hasSource ? '等待分析' : '等待视频') + '</em></header>' +
         '<div class="redraw-source-layout"><section class="redraw-source-preview"><div class="redraw-video-well">' + sourcePreview + '</div></section>' +
-        '<section class="redraw-source-settings"><header><div><span>ANALYSIS</span><strong>' + escapeHtml(analysisComplete ? '可审阅的原片证据' : '建立原片证据') + '</strong></div></header>' + analysisCard + primaryAction + '</section></div>' + factTimeline + '</section>';
+        '<section class="redraw-source-settings"><header><div><span>原片分析</span><strong>' + escapeHtml(analysisComplete ? '可审阅的原片证据' : '先选镜头，再核对内容') + '</strong></div></header>' + analysisCard + primaryAction + '</section></div>' + shotPicker + factTimeline + '</section>';
     }
     if (stageId === '02') {
       const step02 = project?.step02 || {};
@@ -2515,8 +2729,21 @@
       const shotItems = [1, 2, 3, 4, 5, 6, 7, 8].map(index => '<button class="' + (index === 1 ? 'is-active' : '') + '" type="button" disabled><span>镜头 ' + String(index).padStart(2, '0') + '</span><small>待生成</small><em>--:--</em></button>').join('');
       return '<section class="redraw-video-stage redraw-storyboard-stage"><header class="redraw-stage-heading"><div><span>03 / 分镜管理</span><h3>镜头、提示词与资产同屏核对</h3><p>保持教程中的三栏布局：左侧参考视频，中间镜头事实，右侧角色、关键资产与场景。当前项目没有结果时只显示真实空状态。</p></div><em>' + escapeHtml(verifiedCount + ' 个已验证产物') + '</em></header><div class="redraw-storyboard-workspace"><aside class="redraw-shot-preview"><header><span>参考视频</span><button type="button" disabled>新视频</button></header><div><span class="redraw-video-play">▶</span><strong>等待分镜预览</strong><small>完成原片时间轴后在这里逐镜头核对</small></div></aside><section class="redraw-prompt-workspace"><header><div><span>分镜脚本</span><nav><em>角色</em><em>场景</em><em>动作</em></nav></div><button type="button" disabled>保存修改</button></header><div class="redraw-prompt-editor"><span>PROMPT</span><p><strong>镜头事实：</strong>等待当前项目的原片时间轴。</p><p><strong>画面主体：</strong>角色、站位、动作和道具尚未锁定。</p><p><strong>连续性：</strong>只有已确认资产和可追溯镜头事实才能进入视频任务。</p><p><strong>生成状态：</strong>未创建提示词包，未请求任何外部渠道。</p></div><footer><select disabled><option>画面比例 · ' + escapeHtml(project?.aspectRatio || '待锁定') + '</option></select><select disabled><option>输出质量 · ' + escapeHtml(project?.quality || '720p') + '</option></select><span>0 个任务</span><button type="button" disabled>提交审核</button></footer></section><aside class="redraw-asset-shelf"><header><span>角色</span><button type="button" disabled>＋</button></header><div><article><strong>角色资产</strong><small>等待确认</small></article><article><strong>角色三视图</strong><small>尚未生成</small></article></div><header><span>关键资产与场景</span><button type="button" disabled>＋</button></header><div><article class="is-wide"><strong>关键资产与场景</strong><small>等待确认</small></article></div></aside><nav class="redraw-shot-strip" aria-label="分镜列表">' + shotItems + '</nav></div><footer class="redraw-storyboard-footer"><span>03 / 04 · 当前节点 ' + escapeHtml('地区改编') + '</span><button type="button" disabled>720P · 等待授权</button></footer></section>';
     }
+    const step04Word = project?.step04?.word || {};
+    const step04WordReady = step04Word.ready === true
+      && typeof step04Word.downloadUrl === 'string'
+      && step04Word.downloadUrl.length > 0
+      && Number(step04Word.bytes) > 0
+      && /^[a-f0-9]{64}$/i.test(String(step04Word.sha256 || ''));
+    const step04WordDelivery = '<section class="step04-word-delivery" aria-label="Step04 Word 交付">'
+      + '<header><div><span class="eyebrow">STEP04 DOCUMENT</span><strong>Step04 制作包</strong></div>'
+      + '<em>' + (step04WordReady ? '可下载' : '等待回执') + '</em></header>'
+      + (step04WordReady
+        ? '<div class="step04-word-ready"><div><strong>' + escapeHtml(step04Word.fileName || 'step04_production_package.docx') + '</strong><span>' + escapeHtml(String(step04Word.bytes) + ' bytes · SHA-256 ' + String(step04Word.sha256).slice(0, 12) + '…') + '</span></div><a class="redraw-primary-action" download href="' + escapeHtml(step04Word.downloadUrl) + '">下载 Step04 Word</a></div>'
+        : '<div class="step04-word-pending"><strong>Step04 Word 尚未形成可交付产物</strong><span>视频任务保持未创建。</span></div>')
+      + '</section>';
     const editorTracks = [1, 2, 3, 4, 5, 6].map(index => '<span><i>' + String(index).padStart(2, '0') + '</i><small>等待片段</small></span>').join('');
-    return '<section class="redraw-video-stage redraw-editor-stage"><header class="redraw-stage-heading"><div><span>04 / 视频编辑</span><h3>对比、拼接与交付</h3><p>只有真实视频回读和质量检查通过后，预览、重新拼接与下载才会开放。</p></div><em>交付未开始</em></header><div class="redraw-editor-canvas"><section class="redraw-editor-preview"><header><span>参考视频</span><em>来源</em></header><div><span class="redraw-video-play">▶</span><strong>' + escapeHtml(hasSource ? sourceName : '等待参考视频') + '</strong><small>参考视频轨道</small></div><footer>' + editorTracks + '</footer></section><section class="redraw-editor-preview"><header><span>转绘视频</span><em>未生成</em></header><div><span class="redraw-video-play is-locked">◇</span><strong>尚无可播放成片</strong><small>' + escapeHtml(humanizeProductionGate(runtime.blocker || '等待分镜审核、生成授权和视频质量检查')) + '</small></div><footer>' + editorTracks + '</footer></section></div><footer class="redraw-editor-controls"><div><span>对比参考视频</span><button type="button" role="switch" aria-checked="false" disabled><i></i></button></div><span>视频状态：' + escapeHtml(humanizeProductionGate(project?.gates?.video_provider || 'blocked')) + '</span><button type="button" disabled>重新拼接</button><button class="is-primary" type="button" disabled>下载</button></footer><section class="redraw-delivery-gates"><article><span>视频回读</span><strong>未开始</strong></article><article><span>质量复核</span><strong>未开始</strong></article><article><span>交付打包</span><strong>' + escapeHtml(humanizeProductionGate(project?.gates?.package_send || 'blocked')) + '</strong></article><article><span>用户验收</span><strong>未开始</strong></article></section></section>';
+    return '<section class="redraw-video-stage redraw-editor-stage"><header class="redraw-stage-heading"><div><span>04 / 视频编辑</span><h3>对比、拼接与交付</h3><p>只有真实视频回读和质量检查通过后，预览、重新拼接与下载才会开放。</p></div><em>交付未开始</em></header>' + step04WordDelivery + '<div class="redraw-editor-canvas"><section class="redraw-editor-preview"><header><span>参考视频</span><em>来源</em></header><div><span class="redraw-video-play">▶</span><strong>' + escapeHtml(hasSource ? sourceName : '等待参考视频') + '</strong><small>参考视频轨道</small></div><footer>' + editorTracks + '</footer></section><section class="redraw-editor-preview"><header><span>转绘视频</span><em>未生成</em></header><div><span class="redraw-video-play is-locked">◇</span><strong>尚无可播放成片</strong><small>' + escapeHtml(humanizeProductionGate(runtime.blocker || '等待分镜审核、生成授权和视频质量检查')) + '</small></div><footer>' + editorTracks + '</footer></section></div><footer class="redraw-editor-controls"><div><span>对比参考视频</span><button type="button" role="switch" aria-checked="false" disabled><i></i></button></div><span>视频状态：' + escapeHtml(humanizeProductionGate(project?.gates?.video_provider || 'blocked')) + '</span><button type="button" disabled>重新拼接</button><button class="is-primary" type="button" disabled>下载</button></footer><section class="redraw-delivery-gates"><article><span>视频回读</span><strong>未开始</strong></article><article><span>质量复核</span><strong>未开始</strong></article><article><span>交付打包</span><strong>' + escapeHtml(humanizeProductionGate(project?.gates?.package_send || 'blocked')) + '</strong></article><article><span>用户验收</span><strong>未开始</strong></article></section></section>';
   }
 
   function renderRedrawFlowStepper(selectedStage, currentStage) {
@@ -2531,7 +2758,10 @@
 
   function renderRedrawVideoStudio(project, selectedStage, currentStage) {
     const selected = normalizeProductionStage(selectedStage, currentStage || '01');
-    if (selected === '01' && project) return renderExactStep01ReviewStudio(project);
+    // The exact evidence review desk is reserved for the approved authority
+    // project. New user projects must keep the normal Step01 start/analysis UI.
+    if (selected === '01' && project?.id === exactStep01ProjectId) return renderExactStep01ReviewStudio(project);
+    if (project?.id === 'NN-20260727052447-62C34D' && selected === '02') return renderStep02PublicProjection(project);
     if (project?.id === 'NN-20260715083045-8120F5' && selected === '02' && !state.redrawMarketLocale) return renderStep02RegionGate(project);
     if (project?.id === 'NN-20260715083045-8120F5' && selected === '02') return renderExactStep02Studio(project);
     const isFuturePreview = Number(selected) > Number(currentStage || '01');
@@ -2546,7 +2776,7 @@
     const previewFooter = isFuturePreview ? renderProductionFooter('redraw', project, selected, currentStage || '01') : '';
     const step01EvidenceDesk = selected === '01' && project?.analysis?.status === 'evidence_ready' && project?.analysis?.runtimeProfile === 'haika-step01-hq-full-v1';
     const legacyStageChrome = step01EvidenceDesk ? '' : renderProductionActionCard('redraw', project, selected, currentStage || '01') + renderProductionStatePanel('redraw', project, selected, currentStage || '01');
-    return '<section class="production-studio production-studio-redraw redraw-reference-studio"><header class="redraw-project-header"><div class="redraw-project-brand"><span class="redraw-project-brand-mark" aria-hidden="true"><img class="brand-logo-image" src="./assets/brand/niannian-ai-mark-transparent.svg" alt="" /></span><strong>念念AI</strong></div><div class="redraw-project-breadcrumb"><span>转绘项目</span><i>/</i><strong>' + escapeHtml(projectName) + '</strong><small>' + escapeHtml(project?.id || '未保存') + '</small></div><div class="redraw-project-status"><i></i><span>' + escapeHtml(statusText) + '</span></div><div class="redraw-project-actions"><button type="button" data-return-redraw-workbench>返回工作台</button>' + createAction + '</div></header><section class="redraw-progress-bar"><div><span>一键转绘</span><strong>' + escapeHtml(projectName) + '</strong></div>' + renderRedrawFlowStepper(selected, currentStage || '01') + '</section><main class="redraw-reference-main">' + legacyStageChrome + stageBody + previewFooter + '</main></section>';
+    return '<section class="production-studio production-studio-redraw redraw-reference-studio"><header class="redraw-project-header"><div class="redraw-project-brand"><span class="redraw-project-brand-mark" aria-hidden="true"><img class="brand-logo-image" src="./assets/brand/niannian-ai-authority-gold.svg" alt="" /></span><strong>念念AI</strong></div><div class="redraw-project-breadcrumb"><span>转绘项目</span><i>/</i><strong>' + escapeHtml(projectName) + '</strong><small>' + escapeHtml(project?.id || '未保存') + '</small></div><div class="redraw-project-status"><i></i><span>' + escapeHtml(statusText) + '</span></div><div class="redraw-project-actions"><button type="button" data-return-redraw-workbench>返回工作台</button>' + createAction + '</div></header><section class="redraw-progress-bar"><div><span>一键转绘</span><strong>' + escapeHtml(projectName) + '</strong></div>' + renderRedrawFlowStepper(selected, currentStage || '01') + '</section><main class="redraw-reference-main">' + legacyStageChrome + stageBody + previewFooter + '</main></section>';
   }
 
   function renderProductionStudio(kind, project, selectedStage) {
@@ -2575,7 +2805,10 @@
         details.replaceWith(note);
       }
     }
-    root?.querySelectorAll?.('[data-review-sha]').forEach(element => element.removeAttribute('data-review-sha'));
+    root?.querySelectorAll?.('[data-review-sha],[data-prompt-sha]').forEach(element => {
+      element.removeAttribute('data-review-sha');
+      element.removeAttribute('data-prompt-sha');
+    });
   }
 
   function renderScriptStudio(project) {
@@ -2697,7 +2930,7 @@
       const labels = {start:'起始帧', mid:'中间帧', end:'结束帧'};
       return '<figure><img src="' + escapeHtml(frame?.url || '') + '" alt="' + escapeHtml(selected.id + ' ' + labels[point] + ' 原始证据帧') + '"><figcaption><span>' + labels[point] + '</span><strong>' + escapeHtml(frame?.timecode || '-') + '</strong></figcaption></figure>';
     }).join('');
-    target.innerHTML = '<section class="production-studio production-evidence-studio"><header class="studio-project-header"><div class="studio-brand"><span class="studio-brand-mark" aria-hidden="true"><img class="brand-logo-image" src="./assets/brand/niannian-ai-mark-transparent.svg" alt="" /></span><strong>念念AI</strong></div><div class="studio-breadcrumb"><span>/</span><strong>' + escapeHtml(evidence.id || defaultReferenceEvidenceId) + '</strong><small>' + escapeHtml('短剧转绘 · 原片分析只读证据台') + '</small></div><span class="studio-save-state"><i></i>证据验证通过</span><div class="studio-project-actions"><button type="button" data-return-redraw-workbench>返回工作台</button><button type="button" disabled>只读证据</button><button class="studio-export-button" type="button" disabled>未创建交付</button></div></header><div class="studio-production-layout">' + renderReferenceEvidenceRail() + '<main class="production-main"><section class="production-workspace production-evidence-workspace"><header><div><span class="eyebrow">原片分析证据 · 已验证</span><h3>原片证据与镜头账本</h3><p>所有画面均来自已验证的原分辨率证据帧。联系表只用于预览；这里的起、中、末帧才是 原片时间轴可读取的镜头证据。</p></div><span class="production-stage-chip">原片分析已验证</span></header><div class="studio-context-grid"><article class="production-metric"><span>原始证据帧</span><strong>' + escapeHtml(String(counts.originalFrames || 0)) + ' 张</strong></article><article class="production-metric"><span>主镜头清单</span><strong>' + escapeHtml(String(counts.primaryShots || 0)) + ' 条</strong></article><article class="production-metric"><span>镜头起中末补帧</span><strong>' + escapeHtml(String(counts.shotSupplements || 0)) + ' 张</strong></article><article class="production-metric"><span>镜头边界</span><strong>' + escapeHtml(String(counts.transnetShots || 0)) + ' 条</strong></article></div><section class="evidence-shot-workspace"><aside class="evidence-shot-list"><header><div><span class="eyebrow">SHOT LIST</span><h4>已验证镜头</h4></div><small>' + escapeHtml(String(shots.length)) + ' 条可预览</small></header><div>' + shots.map(shot => '<button class="' + (shot.id === selected.id ? 'is-active' : '') + '" type="button" data-evidence-shot-id="' + escapeHtml(shot.id) + '"><strong>' + escapeHtml(shot.id) + '</strong><span>' + escapeHtml(shot.startTimecode) + ' - ' + escapeHtml(shot.endTimecode) + '</span><em>' + escapeHtml(String(shot.durationSec)) + ' 秒</em></button>').join('') + '</div></aside><section class="evidence-frame-review"><header><div><span class="eyebrow">ORIGINAL-RESOLUTION EVIDENCE</span><h4>' + escapeHtml(selected.id) + ' · ' + escapeHtml(selected.startTimecode) + ' 至 ' + escapeHtml(selected.endTimecode) + '</h4></div><span>只读原始证据</span></header><div class="evidence-frame-triptych">' + frameCards + '</div><div class="evidence-shot-contract"><article><span>时间范围</span><strong>' + escapeHtml(selected.startTimecode) + ' - ' + escapeHtml(selected.endTimecode) + '</strong></article><article><span>镜头时长</span><strong>' + escapeHtml(String(selected.durationSec)) + ' 秒</strong></article><article><span>下一节点</span><strong>原片时间轴</strong></article></div></section></section><section class="evidence-ledger-grid"><article><span class="eyebrow">OCR EVIDENCE</span><h4>画面文字识别</h4><p>' + escapeHtml(String(counts.ocrStates || 0)) + ' 条 OCR 结果已进入证据账本；硬字幕/可读 UI 作为 原片时间轴的核对证据，不直接写入提示词。</p></article><article><span class="eyebrow">AUDIO EVIDENCE</span><h4>对白与音频对齐</h4><p>' + escapeHtml(String(counts.dialogueSegments || 0)) + ' 条对白、' + escapeHtml(String(counts.audioEvents || 0)) + ' 条音频事件、' + escapeHtml(String(counts.vadSegments || 0)) + ' 段语音活动，仅用于时间线和表演核对。</p></article><article><span class="eyebrow">VALIDATION</span><h4>完整性验证已通过</h4><p>检查结果：' + '已按原片证据规则核验' + '。错误 ' + escapeHtml(String(validation.errors || 0)) + '，警告 ' + escapeHtml(String(validation.warnings || 0)) + '。</p></article></section></section></main><aside class="production-inspector production-evidence-inspector"><div class="studio-inspector-heading"><span class="eyebrow">原片分析质量门</span><h3>证据晋级门</h3><span class="studio-gate-count">通过</span></div><div class="studio-gate-list"><article class="is-passed"><i>✓</i><div><strong>原分辨率帧覆盖</strong><small>' + escapeHtml(String(counts.originalFrames || 0)) + ' 张原始证据帧与证据清单对齐</small></div></article><article class="is-passed"><i>✓</i><div><strong>镜头边界与补帧</strong><small>' + escapeHtml(String(counts.transnetShots || 0)) + ' 条边界，' + escapeHtml(String(counts.shotSupplements || 0)) + ' 张起中末补帧</small></div></article><article class="is-passed"><i>✓</i><div><strong>OCR / 音频证据</strong><small>OCR、ASR 与强制对齐账本均有真实产物</small></div></article><article><i>!</i><div><strong>原片时间轴</strong><small>尚未创建，不得提前写提示词、生成资产或提交渠道</small></div></article></div><section class="studio-reference-groups"><h4>当前证据性质</h4><div><span>来源项目</span><strong>' + escapeHtml(evidence.projectId || '只读样片') + '</strong></div><div><span>起/中/末帧</span><strong>原片时间轴证据</strong></div><div><span>候选首帧</span><strong>0 个</strong></div><div><span>视频任务</span><strong>0 个</strong></div></section><button class="studio-primary-action" type="button" disabled>等待 原片时间轴</button><p class="studio-inspector-footnote">原片分析只提供证据，不能被展示为地区改编方案、资产与首帧或已提交视频。</p></aside></div></section>';
+    target.innerHTML = '<section class="production-studio production-evidence-studio"><header class="studio-project-header"><div class="studio-brand"><span class="studio-brand-mark" aria-hidden="true"><img class="brand-logo-image" src="./assets/brand/niannian-ai-authority-gold.svg" alt="" /></span><strong>念念AI</strong></div><div class="studio-breadcrumb"><span>/</span><strong>' + escapeHtml(evidence.id || defaultReferenceEvidenceId) + '</strong><small>' + escapeHtml('短剧转绘 · 原片分析只读证据台') + '</small></div><span class="studio-save-state"><i></i>证据验证通过</span><div class="studio-project-actions"><button type="button" data-return-redraw-workbench>返回工作台</button><button type="button" disabled>只读证据</button><button class="studio-export-button" type="button" disabled>未创建交付</button></div></header><div class="studio-production-layout">' + renderReferenceEvidenceRail() + '<main class="production-main"><section class="production-workspace production-evidence-workspace"><header><div><span class="eyebrow">原片分析证据 · 已验证</span><h3>原片证据与镜头账本</h3><p>所有画面均来自已验证的原分辨率证据帧。联系表只用于预览；这里的起、中、末帧才是 原片时间轴可读取的镜头证据。</p></div><span class="production-stage-chip">原片分析已验证</span></header><div class="studio-context-grid"><article class="production-metric"><span>原始证据帧</span><strong>' + escapeHtml(String(counts.originalFrames || 0)) + ' 张</strong></article><article class="production-metric"><span>主镜头清单</span><strong>' + escapeHtml(String(counts.primaryShots || 0)) + ' 条</strong></article><article class="production-metric"><span>镜头起中末补帧</span><strong>' + escapeHtml(String(counts.shotSupplements || 0)) + ' 张</strong></article><article class="production-metric"><span>镜头边界</span><strong>' + escapeHtml(String(counts.transnetShots || 0)) + ' 条</strong></article></div><section class="evidence-shot-workspace"><aside class="evidence-shot-list"><header><div><span class="eyebrow">SHOT LIST</span><h4>已验证镜头</h4></div><small>' + escapeHtml(String(shots.length)) + ' 条可预览</small></header><div>' + shots.map(shot => '<button class="' + (shot.id === selected.id ? 'is-active' : '') + '" type="button" data-evidence-shot-id="' + escapeHtml(shot.id) + '"><strong>' + escapeHtml(shot.id) + '</strong><span>' + escapeHtml(shot.startTimecode) + ' - ' + escapeHtml(shot.endTimecode) + '</span><em>' + escapeHtml(String(shot.durationSec)) + ' 秒</em></button>').join('') + '</div></aside><section class="evidence-frame-review"><header><div><span class="eyebrow">ORIGINAL-RESOLUTION EVIDENCE</span><h4>' + escapeHtml(selected.id) + ' · ' + escapeHtml(selected.startTimecode) + ' 至 ' + escapeHtml(selected.endTimecode) + '</h4></div><span>只读原始证据</span></header><div class="evidence-frame-triptych">' + frameCards + '</div><div class="evidence-shot-contract"><article><span>时间范围</span><strong>' + escapeHtml(selected.startTimecode) + ' - ' + escapeHtml(selected.endTimecode) + '</strong></article><article><span>镜头时长</span><strong>' + escapeHtml(String(selected.durationSec)) + ' 秒</strong></article><article><span>下一节点</span><strong>原片时间轴</strong></article></div></section></section><section class="evidence-ledger-grid"><article><span class="eyebrow">OCR EVIDENCE</span><h4>画面文字识别</h4><p>' + escapeHtml(String(counts.ocrStates || 0)) + ' 条 OCR 结果已进入证据账本；硬字幕/可读 UI 作为 原片时间轴的核对证据，不直接写入提示词。</p></article><article><span class="eyebrow">AUDIO EVIDENCE</span><h4>对白与音频对齐</h4><p>' + escapeHtml(String(counts.dialogueSegments || 0)) + ' 条对白、' + escapeHtml(String(counts.audioEvents || 0)) + ' 条音频事件、' + escapeHtml(String(counts.vadSegments || 0)) + ' 段语音活动，仅用于时间线和表演核对。</p></article><article><span class="eyebrow">VALIDATION</span><h4>完整性验证已通过</h4><p>检查结果：' + '已按原片证据规则核验' + '。错误 ' + escapeHtml(String(validation.errors || 0)) + '，警告 ' + escapeHtml(String(validation.warnings || 0)) + '。</p></article></section></section></main><aside class="production-inspector production-evidence-inspector"><div class="studio-inspector-heading"><span class="eyebrow">原片分析质量门</span><h3>证据晋级门</h3><span class="studio-gate-count">通过</span></div><div class="studio-gate-list"><article class="is-passed"><i>✓</i><div><strong>原分辨率帧覆盖</strong><small>' + escapeHtml(String(counts.originalFrames || 0)) + ' 张原始证据帧与证据清单对齐</small></div></article><article class="is-passed"><i>✓</i><div><strong>镜头边界与补帧</strong><small>' + escapeHtml(String(counts.transnetShots || 0)) + ' 条边界，' + escapeHtml(String(counts.shotSupplements || 0)) + ' 张起中末补帧</small></div></article><article class="is-passed"><i>✓</i><div><strong>OCR / 音频证据</strong><small>OCR、ASR 与强制对齐账本均有真实产物</small></div></article><article><i>!</i><div><strong>原片时间轴</strong><small>尚未创建，不得提前写提示词、生成资产或提交渠道</small></div></article></div><section class="studio-reference-groups"><h4>当前证据性质</h4><div><span>来源项目</span><strong>' + escapeHtml(evidence.projectId || '只读样片') + '</strong></div><div><span>起/中/末帧</span><strong>原片时间轴证据</strong></div><div><span>候选首帧</span><strong>0 个</strong></div><div><span>视频任务</span><strong>0 个</strong></div></section><button class="studio-primary-action" type="button" disabled>等待 原片时间轴</button><p class="studio-inspector-footnote">原片分析只提供证据，不能被展示为地区改编方案、资产与首帧或已提交视频。</p></aside></div></section>';
   }
 
   async function openReferenceEvidenceStudio({updateHash = true} = {}) {
@@ -2761,97 +2994,53 @@
       return;
     }
     if (route) state.redrawMarketLocale = route.marketLocale || null;
-    const currentStage = redrawStageForProject(project);
-    const requestedStage = updateHash ? state.redrawStudioStageId : (route?.stageId || state.redrawStudioStageId);
-    state.redrawStudioStageId = normalizeProductionStage(requestedStage, currentStage);
+    const employeeStep02Ready = project?.step02?.status === 'candidate_return_ready';
+    const currentStage = employeeStep02Ready ? '02' : redrawStageForProject(project);
+    const requestedStage = employeeStep02Ready && (route?.stageId === '01' || !route?.stageId)
+      ? '02'
+      : (updateHash ? state.redrawStudioStageId : (route?.stageId || state.redrawStudioStageId));
+    const normalizedStage = normalizeProductionStage(requestedStage, currentStage);
+    // Keep legacy projects on the integrated Step01 page. A project that has
+    // already received the canonical Step02 employee return keeps its explicit
+    // Stage02 route instead of being sent back to the retired facts screen.
+    const retiredSourceFactsStage = normalizedStage === '02'
+      && project.id !== 'NN-20260727052447-62C34D'
+      && !employeeStep02Ready;
+    state.redrawStudioStageId = retiredSourceFactsStage ? '01' : normalizedStage;
     renderRedrawStudio(project);
     showView('redraw-studio');
+    if (state.redrawStudioStageId === '01') void hydrateStep01ShotSelection(project.id);
     if (project.analysis?.status === 'evidence_ready') void hydrateRedrawSourceFacts(project.id);
-    if (project.id === exactStep01ProjectId && state.redrawStudioStageId === '02') void hydrateStep02(project.id);
-    if (updateHash || route?.legacyNode) location.hash = 'redraw/' + encodeURIComponent(project?.id || 'new') + '/stage/' + state.redrawStudioStageId + (state.redrawMarketLocale ? '/market/' + state.redrawMarketLocale : '');
-  }
-
-  function workspaceDeliveryRoute() {
-    const match = String(location.hash || '').match(/^#workspace\/([^/]+)\/deliveries$/);
-    return match ? decodeURIComponent(match[1]) : null;
-  }
-
-  function renderWorkspaceDeliveries(payload, loading = false) {
-    if (!workbenchContent) return;
-    if (loading) {
-      workbenchContent.innerHTML = '<section class="workbench-launcher" aria-label="项目交付"><div class="workbench-launch-card"><strong>正在读取项目交付</strong></div></section>';
-      return;
-    }
-    if (!payload) {
-      workbenchContent.innerHTML = '<section class="workbench-launcher" aria-label="项目交付"><div class="workbench-launch-card"><strong>项目不存在或无权访问</strong></div></section>';
-      return;
-    }
-    const rows = Array.isArray(payload.deliveries) ? payload.deliveries : [];
-    const items = rows.length
-      ? rows.map(item => '<li><strong>' + escapeHtml(item.label || '项目交付') + '</strong><span>' + escapeHtml(item.status === 'ready' ? '已确认可读取' : '处理中') + '</span>' + (item.openUrl ? '<a href="' + escapeHtml(item.openUrl) + '" target="_blank" rel="noreferrer">打开或下载</a>' : '') + '</li>').join('')
-      : '<li><strong>暂无可交付物</strong><span>' + escapeHtml(payload.note || '真实产物完成并通过网站校验后会显示在这里。') + '</span></li>';
-    workbenchContent.innerHTML = '<section class="workbench-live" aria-label="项目交付"><header><span>PROJECT DELIVERY</span><h3>' + escapeHtml(payload.project?.name || '项目交付') + '</h3><p>只显示当前项目中已经通过网站权限和完整性校验的真实结果。</p></header><dl><div><dt>转绘阶段</dt><dd>' + escapeHtml(payload.currentStages?.redraw || '未创建') + '</dd></div><div><dt>短剧阶段</dt><dd>' + escapeHtml(payload.currentStages?.shortDrama || '未创建') + '</dd></div><div><dt>待处理</dt><dd>' + escapeHtml(payload.blocker || '无') + '</dd></div><div><dt>第四步 Word</dt><dd>' + escapeHtml(payload.word?.status === 'ready' ? '已确认可下载' : '尚未形成真实交付') + '</dd></div></dl><ul class="workbench-delivery-list">' + items + '</ul><button class="workbench-quiet-action" type="button" data-workbench-view="workbench">返回工作台</button></section>';
-  }
-
-  async function openWorkspaceDeliveries(workspaceId) {
-    renderWorkspaceDeliveries(null, true);
-    try {
-      const payload = await api('/api/workspace-projects/' + encodeURIComponent(workspaceId) + '/deliveries');
-      state.workspaceDelivery = payload;
-      renderWorkspaceDeliveries(payload);
-    } catch (error) {
-      state.workspaceDelivery = null;
-      renderWorkspaceDeliveries(null);
-    }
+    if (updateHash || route?.legacyNode || retiredSourceFactsStage || (employeeStep02Ready && route?.stageId === '01')) location.hash = 'redraw/' + encodeURIComponent(project?.id || 'new') + '/stage/' + state.redrawStudioStageId + (state.redrawMarketLocale ? '/market/' + state.redrawMarketLocale : '');
   }
 
   function renderWorkbench() {
     if (!workbenchContent) return;
-    const route = workbenchRoute();
-    if (route) {
-      if (route.projectKey) state.workbenchSelectionKey = route.projectKey;
-      state.workbenchTab = route.tab;
-    }
-    const deliveryProjectId = workspaceDeliveryRoute();
-    if (deliveryProjectId) {
-      if (state.workspaceDelivery?.project?.id === deliveryProjectId) renderWorkspaceDeliveries(state.workspaceDelivery);
-      else void openWorkspaceDeliveries(deliveryProjectId);
-      return;
-    }
     workbenchContent.innerHTML = renderWorkbenchLauncher();
     animateWorkbenchEntry();
   }
 
   function renderWorkbenchLauncher() {
-    const rows = [
-      ...state.projects.map(project => ({...project, projectKind:'redraw'})),
-      ...state.scriptProjects.map(project => ({...project, projectKind:'script'}))
-    ].sort((left, right) => new Date(right.updatedAt || right.createdAt || 0) - new Date(left.updatedAt || left.createdAt || 0));
-    const selected = rows.find(project => (project.workspaceProjectId || project.id) === state.workspaceProjectId)
-      || rows.find(project => workbenchSelectionKey(project) === state.workbenchSelectionKey)
-      || rows[0]
-      || null;
-    if (selected) {
-      state.workspaceProjectId = selected.workspaceProjectId || selected.id;
-      state.workbenchSelectionKey = workbenchSelectionKey(selected);
-    }
-    const projectContext = state.user
-      ? '<header class="workbench-launch-header"><div><h2>工作台</h2><span>选择一个项目，然后进入创作工具</span></div><label class="workbench-project-context"><span>当前项目</span><select data-workbench-project-select aria-label="选择当前项目"><option value="">选择项目</option>' + rows.map(project => '<option value="' + escapeHtml(project.workspaceProjectId || project.id) + '"' + ((selected && (selected.workspaceProjectId || selected.id) === (project.workspaceProjectId || project.id)) ? ' selected' : '') + '>' + escapeHtml(project.name) + '</option>').join('') + '</select></label><button class="workbench-project-link" type="button" data-workbench-view="projects">项目管理</button></header>'
-      : '<header class="workbench-launch-header"><div><h2>工作台</h2><span>选择一个创作入口</span></div></header>';
-    return '<section class="workbench-launcher" aria-label="选择创作入口">' + projectContext + '<div class="workbench-launch-deck">'
-      + '<button class="workbench-launch-card" type="button" data-open-formal-studio>'
-      + '<span class="workbench-launch-copy"><span class="workbench-launch-kicker">NOMI</span><strong>无限画布</strong><small>把素材、文本和任务放进同一个项目空间</small></span>'
+    const routeProjectKey = workbenchRoute()?.projectKey || '';
+    const routeProjectId = routeProjectKey.includes(':') ? routeProjectKey.slice(routeProjectKey.indexOf(':') + 1) : routeProjectKey;
+    const canvasHref = '/studio/#/studio' + (routeProjectId ? '?projectId=' + encodeURIComponent(routeProjectId) : '');
+    return '<section class="workbench-launcher" aria-label="选择创作方式">'
+      + '<a class="workbench-launch-card is-canvas" href="' + escapeHtml(canvasHref) + '">'
+      + '<span class="workbench-launch-index" aria-hidden="true">01</span>'
+      + '<span class="workbench-launch-copy"><span class="workbench-launch-kicker">NOMI</span><strong>无限画布</strong></span>'
       + '<span class="workbench-launch-arrow" aria-hidden="true">&#8594;</span>'
-      + '</button>'
+      + '</a>'
       + '<button class="workbench-launch-card" type="button" data-open-project-wizard>'
-      + '<span class="workbench-launch-copy"><span class="workbench-launch-kicker">REFERENCE VIDEO</span><strong>一键转绘</strong><small>上传原片、参考素材和需求，开始项目预检</small></span>'
+      + '<span class="workbench-launch-index" aria-hidden="true">02</span>'
+      + '<span class="workbench-launch-copy"><span class="workbench-launch-kicker">REFERENCE VIDEO</span><strong>一键转绘</strong></span>'
       + '<span class="workbench-launch-arrow" aria-hidden="true">&#8594;</span>'
       + '</button>'
       + '<button class="workbench-launch-card" type="button" data-open-script-drama-wizard>'
-      + '<span class="workbench-launch-copy"><span class="workbench-launch-kicker">SCRIPT TO DRAMA</span><strong>一键短剧</strong><small>从剧本或 Word 开始，进入短剧生产</small></span>'
+      + '<span class="workbench-launch-index" aria-hidden="true">03</span>'
+      + '<span class="workbench-launch-copy"><span class="workbench-launch-kicker">SCRIPT TO DRAMA</span><strong>一键短剧</strong></span>'
       + '<span class="workbench-launch-arrow" aria-hidden="true">&#8594;</span>'
       + '</button>'
-      + '</div></section>';
+      + '</section>';
   }
 
   function animateWorkbenchEntry() {
@@ -2887,21 +3076,10 @@
 
   function openProjectWorkbench(project) {
     if (!project?.id) return;
-    state.workspaceProjectId = project.workspaceProjectId || project.id;
-    if (project.projectKind === 'redraw') {
-      state.activeProject = project;
-      state.workbenchProjectId = project.id;
-      state.redrawStudioStageId = '01';
-      state.redrawMarketLocale = null;
-      openRedrawStudio(project.id, {updateHash:true});
-      return;
-    }
     state.activeProject = project;
-    state.workbenchProjectId = project.projectKind === 'redraw' ? project.id : null;
-    state.workbenchSelectionKey = workbenchSelectionKey(project);
-    state.workbenchTab = 'overview';
-    showView('workbench');
-    updateWorkbenchRoute({transition:true});
+    showView('projects');
+    if (location.hash !== '#projects') location.hash = 'projects';
+    renderProjects();
   }
 
   function workbenchCandidatePreview(project) {
@@ -3021,19 +3199,43 @@
   }
 
   function renderPublicWorkbenchPreview() {
-    return '<section class="public-workbench public-workbench-empty" aria-label="未登录工作台"><header class="public-workbench-hero"><div><span>念念 AI · 工作台</span><h3>登录后使用工作台</h3><p>此页面不展示项目、进度或生产信息。</p></div><div class="public-workbench-hero-meta"><strong>未登录</strong><small>登录后继续你的创作</small><button type="button" data-modal="login">登录</button></div></header></section>';
+    const flows = [
+      {
+        type:'小说短剧',
+        project:'雾城夜航 · 概念样片',
+        current:'01',
+        next:'整理原文与改编范围',
+        description:'从原文与改编范围出发，完成角色、分镜、视频与交付。',
+        stages:[
+          ['01','故事设定','原文、范围与事实账本'],
+          ['02','角色与分集','角色关系与资产职责'],
+          ['03','智能分镜','首帧计划与镜头生产包'],
+          ['04','视频与交付','媒体 QA 与交付记录']
+        ]
+      },
+    ];
+    const flowCards = flows.map(flow => {
+      const stages = flow.stages.map(stage => {
+        const number = Number(stage[0]);
+        const current = Number(flow.current);
+        const state = number < current ? '已验证' : (number === current ? '当前阶段' : '等待上游');
+        const classes = number < current ? 'is-complete' : (number === current ? 'is-current' : 'is-locked');
+        return '<li class="public-preview-stage ' + classes + '"><span>' + (number < current ? '✓' : stage[0]) + '</span><div><strong>' + escapeHtml(stage[1]) + '</strong><small>' + escapeHtml(stage[2]) + '</small></div><em>' + escapeHtml(state) + '</em></li>';
+      }).join('');
+      return '<article class="public-preview-project"><header><div><span>' + escapeHtml(flow.type) + ' · 脱敏演示</span><h3>' + escapeHtml(flow.project) + '</h3></div><strong>' + escapeHtml('阶段 ' + flow.current + ' / 04') + '</strong></header><p>' + escapeHtml(flow.description) + '</p><ol>' + stages + '</ol><footer><div><span>演示中的下一步</span><strong>' + escapeHtml(flow.next) + '</strong></div><button type="button" data-modal="login">登录后使用真实工作台</button></footer></article>';
+    }).join('');
+    return '<section class="public-workbench" aria-label="公开工作台预览"><header class="public-workbench-hero"><div><span>念念 AI · 公开制作台</span><h3>看清每一步，再开始真实创作</h3><p>这是独立脱敏演示：展示短剧阶段、质量门与下一步，不读取任何真实项目内容。</p></div><div class="public-workbench-hero-meta"><strong>只读演示</strong><small>无项目数据 · 无生产提交</small><button type="button" data-modal="login">登录</button></div></header><section class="public-workbench-intent"><article><span>现在在哪</span><strong>制作阶段与当前质量门始终可见</strong></article><article><span>能做什么</span><strong>只展示当前允许的真实行动</strong></article><article><span>为什么锁定</span><strong>未来阶段明确说明前置条件</strong></article></section><div class="public-preview-grid">' + flowCards + '</div><footer class="public-workbench-footer"><p>登录后，同一工作台会只读取当前账户自己的项目，并恢复真实的阶段、质量门和下一步。</p><button type="button" data-modal="login">登录并进入工作台</button></footer></section>';
   }
 
   function renderWorkbenchDeck({ isSignedIn }) {
     const workspaceNav = isSignedIn
-      ? '<aside class="workbench-app-nav"><div class="workbench-workspace-switcher"><span class="workbench-workspace-mark" aria-hidden="true"><img class="brand-logo-image" src="./assets/brand/niannian-ai-mark-transparent.svg" alt="" /></span><div><strong>念念 AI</strong><small>个人工作区</small></div><b aria-hidden="true">&#8942;</b></div><nav class="workbench-app-navigation" aria-label="工作区导航"><span class="is-active"><i aria-hidden="true"></i>项目工作台</span><button type="button" data-workbench-view="projects"><i aria-hidden="true"></i>项目管理</button></nav><div class="workbench-app-nav-footer"><span>开始创建</span><button type="button" data-open-project-wizard><i class="workbench-nav-icon workbench-nav-icon-video" aria-hidden="true"></i>视频转绘</button><button type="button" data-open-script-drama-wizard><i class="workbench-nav-icon workbench-nav-icon-script" aria-hidden="true"></i>小说短剧</button></div></aside>'
+      ? '<aside class="workbench-app-nav"><div class="workbench-workspace-switcher"><span class="workbench-workspace-mark" aria-hidden="true"><img class="brand-logo-image" src="./assets/brand/niannian-ai-authority-gold.svg" alt="" /></span><div><strong>念念 AI</strong><small>个人工作区</small></div><b aria-hidden="true">&#8942;</b></div><nav class="workbench-app-navigation" aria-label="工作区导航"><span class="is-active"><i aria-hidden="true"></i>项目工作台</span><button type="button" data-workbench-view="projects"><i aria-hidden="true"></i>项目管理</button></nav><div class="workbench-app-nav-footer"><span>开始创建</span><button type="button" data-open-script-drama-wizard><i class="workbench-nav-icon workbench-nav-icon-script" aria-hidden="true"></i>小说短剧</button></div></aside>'
       : '';
     if (!isSignedIn) return renderPublicWorkbenchPreview();
 
-    const rows = [
-      ...state.projects.map(project => ({ ...project, projectKind: 'redraw' })),
-      ...state.scriptProjects.map(project => ({ ...project, projectKind: 'script' }))
-    ].sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0));
+    const rows = state.scriptProjects
+      .map(project => ({ ...project, projectKind: 'script' }))
+      .sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0));
     const selectedProject = rows.find(project => workbenchSelectionKey(project) === state.workbenchSelectionKey) || rows[0] || null;
     if (selectedProject) state.workbenchSelectionKey = workbenchSelectionKey(selectedProject);
     void hydrateWorkbenchProjectReview(selectedProject);
@@ -3055,13 +3257,13 @@
     const attention = activeRows.slice(0, 4).map(project => {
       const isScript = project.projectKind === 'script';
       const runtime = project.runtime || {};
-      const action = isScript ? 'data-open-script-studio' : 'data-open-redraw-studio';
-      const node = isScript ? (runtime.currentNode || 'N00') : (runtime.currentNode || project.route?.earliestNode || 'Step01');
+      const action = 'data-open-script-studio';
+      const node = runtime.currentNode || 'N00';
       return '<button class="workbench-attention-item" type="button" ' + action + '="' + escapeHtml(project.id) + '"><span>' + escapeHtml(node) + '</span><strong>' + escapeHtml(project.name) + '</strong><small>' + escapeHtml(humanizeProjectNextAction(runtime.nextAction, projectStatusLabel(project))) + '</small></button>';
     }).join('');
     const projectRegion = rows.length
       ? '<div class="workbench-project-grid">' + rows.slice(0, 6).map(cardFor).join('') + '</div>'
-      : '<section class="workbench-empty-workspace"><div class="workbench-empty-symbol" aria-hidden="true"><i></i><i></i><i></i></div><h3>创建第一个项目</h3><p>新项目会在独立制作台里完成审核、生成与交付。</p><div><button class="workbench-primary-action" type="button" data-open-script-drama-wizard>新建小说短剧</button><button class="workbench-quiet-action" type="button" data-open-project-wizard>新建视频转绘</button></div></section>';
+      : '<section class="workbench-empty-workspace"><div class="workbench-empty-symbol" aria-hidden="true"><i></i><i></i><i></i></div><h3>创建第一个项目</h3><p>新项目会在当前工作台里完成审核、生成与交付。</p><div><button class="workbench-primary-action" type="button" data-open-script-drama-wizard>新建小说短剧</button></div></section>';
     const selectedPreview = workbenchCandidatePreview(selectedProject);
     const selectedRuntime = selectedProject?.runtime || {};
     const selectedIsScript = selectedProject?.projectKind === 'script';
@@ -3140,13 +3342,13 @@
   }
 
   function renderDetail(project) {
-    // Historical #project routes now resolve to the server-owned Step01 workspace.
+    // Historical project routes now return to project management because the
+    // retired video-redraw studio is no longer a user-facing surface.
     if (!project?.id) return;
     state.activeProject = project;
     state.workbenchProjectId = project.id;
-    state.redrawStudioStageId = '01';
-    state.redrawMarketLocale = null;
-    openRedrawStudio(project.id, {updateHash:true});
+    showView('projects');
+    location.hash = 'projects';
   }
 
   function hasPendingSourceReplacement() {
@@ -3243,14 +3445,14 @@
 
   document.addEventListener('click', async event => {
     const step02ProjectId = state.redrawStudioProjectId;
-    const openWorkspaceDelivery = event.target.closest('[data-open-workspace-deliveries]');
-    if (openWorkspaceDelivery) {
-      const workspaceId = openWorkspaceDelivery.dataset.openWorkspaceDeliveries;
-      if (workspaceId) location.hash = 'workspace/' + encodeURIComponent(workspaceId) + '/deliveries';
+    if (event.target.closest('[data-open-step01-role-cards]')) {
+      location.hash = 'redraw/' + encodeURIComponent(step02ProjectId) + '/stage/01?panel=role-cards';
       return;
     }
     const sourceTruth = event.target.closest('[data-open-source-truth]');
     if (sourceTruth) { location.hash='redraw-source-truth/'+encodeURIComponent(sourceTruth.dataset.projectId); return; }
+    const acceptHaikaStep02 = event.target.closest('[data-accept-haika-step02]');
+    if (acceptHaikaStep02) { await acceptHaikaNativeStep02(acceptHaikaStep02.dataset.projectId, acceptHaikaStep02); return; }
     const confirmStep01 = event.target.closest('[data-confirm-step01]');
     if (confirmStep01) { await confirmStep01ForStep02(confirmStep01.dataset.projectId); return; }
     if (event.target.closest('[data-dismiss-step01-confirm-error]')) { state.step02Action=null; renderRedrawStudio(state.projects.find(item=>item.id===step02ProjectId)); return; }
@@ -3307,14 +3509,6 @@
     const commandPaletteItem = event.target.closest('[data-command-palette-item]');
     if (commandPaletteItem) {
       runCommandPaletteItem(commandPaletteItem.dataset.commandPaletteItem);
-      return;
-    }
-    const openFormalStudio = event.target.closest('[data-open-formal-studio]');
-    if (openFormalStudio) {
-      const projectId = state.workspaceProjectId || state.workbenchProjectId || '';
-      location.href = projectId
-        ? '/studio/#/studio?projectId=' + encodeURIComponent(projectId)
-        : '/studio/';
       return;
     }
     const open = event.target.closest('[data-open-project-wizard]');
@@ -3389,16 +3583,34 @@
     }
     const openScriptStudioAction = event.target.closest('[data-open-script-studio]');
     if (openScriptStudioAction) {
-      state.scriptStudioStageId = null;
-      openScriptStudio(openScriptStudioAction.dataset.openScriptStudio);
+      showView('projects');
+      if (location.hash !== '#projects') location.hash = 'projects';
       return;
     }
     const openRedrawStudioAction = event.target.closest('[data-open-redraw-studio]');
     if (openRedrawStudioAction) {
-      state.redrawStudioStageId = null;
-      openRedrawStudio(openRedrawStudioAction.dataset.openRedrawStudio);
+      showView('projects');
+      if (location.hash !== '#projects') location.hash = 'projects';
       return;
     }
+    const retryShotInventory = event.target.closest('[data-retry-shot-inventory]');
+    if (retryShotInventory) { await hydrateStep01ShotSelection(retryShotInventory.dataset.retryShotInventory, {force:true}); return; }
+    const sourceShot = event.target.closest('[data-select-source-shot]');
+    if (sourceShot) {
+      const projectId = sourceShot.dataset.projectId;
+      const selected = state.redrawShotSelectionDrafts[projectId] || new Set();
+      const shotId = sourceShot.dataset.selectSourceShot;
+      if (selected.has(shotId)) selected.delete(shotId); else selected.add(shotId);
+      state.redrawShotSelectionDrafts[projectId] = selected;
+      const video = document.querySelector('#redrawStudioContent .redraw-source-video');
+      if (video && Number.isFinite(Number(sourceShot.dataset.shotStart))) video.currentTime = Number(sourceShot.dataset.shotStart);
+      renderRedrawStudio(state.projects.find(item => item.id === projectId));
+      return;
+    }
+    const clearShotSelection = event.target.closest('[data-clear-shot-selection]');
+    if (clearShotSelection) { state.redrawShotSelectionDrafts[clearShotSelection.dataset.clearShotSelection] = new Set(); renderRedrawStudio(state.projects.find(item => item.id === clearShotSelection.dataset.clearShotSelection)); return; }
+    const confirmShotAnalysis = event.target.closest('[data-confirm-shot-analysis]');
+    if (confirmShotAnalysis) { await confirmSelectedShotsAndAnalyze(confirmShotAnalysis.dataset.confirmShotAnalysis, confirmShotAnalysis); return; }
     const startStep01 = event.target.closest('[data-start-step01]');
     const resumeFixedStep01 = event.target.closest('[data-resume-step01-fixed-phase]');
     if (resumeFixedStep01) {
@@ -3709,7 +3921,7 @@
       n06DispatchSynthetic.textContent = '正在锁定 Mac 测试派发...';
       try {
         const payload = await api('/api/script-projects/' + encodeURIComponent(projectId) + '/n06-video-groups/' + encodeURIComponent(groupId) + '/dispatch-synthetic', {
-          method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirmSyntheticDispatch:true})
+          method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirmSyntheticDispatch:true,specSha256:n06DispatchSynthetic.dataset.specSha})
         });
         state.scriptProjects = state.scriptProjects.map(item => item.id === payload.project.id ? payload.project : item);
         delete state.workbenchActivities[projectId];
@@ -3751,9 +3963,10 @@
     if (n05CandidateDecision) {
       const projectId = n05CandidateDecision.dataset.projectId;
       const candidateId = n05CandidateDecision.dataset.candidateId;
+      const sha256 = n05CandidateDecision.dataset.candidateSha;
       const decision = n05CandidateDecision.dataset.n05CandidateDecision;
-      const saved = readSessionDraft(candidateDecisionDraftScope(projectId, candidateId, decision));
-      state.scriptDecisionDraft = {projectId, candidateId, decision, reason:String(saved?.values?.reason || ''), error:''};
+      const saved = readSessionDraft(candidateDecisionDraftScope(projectId, candidateId, sha256, decision));
+      state.scriptDecisionDraft = {projectId, candidateId, sha256, decision, reason:String(saved?.values?.reason || ''), error:''};
       state.scriptDecisionFeedback = null;
       const project = state.scriptProjects.find(item => item.id === projectId);
       if (project) renderScriptStudio(project);
@@ -3762,7 +3975,7 @@
     const cancelScriptCandidateDecision = event.target.closest('[data-n05-candidate-cancel]');
     if (cancelScriptCandidateDecision) {
       const draft = state.scriptDecisionDraft;
-      if (draft) clearSessionDraft(candidateDecisionDraftScope(draft.projectId, draft.candidateId, draft.decision));
+      if (draft) clearSessionDraft(candidateDecisionDraftScope(draft.projectId, draft.candidateId, draft.sha256, draft.decision));
       state.scriptDecisionDraft = null;
       const project = state.scriptProjects.find(item => item.id === state.scriptStudioProjectId);
       if (project) renderScriptStudio(project);
@@ -3772,6 +3985,7 @@
     if (submitScriptCandidateDecision) {
       const projectId = submitScriptCandidateDecision.dataset.projectId;
       const candidateId = submitScriptCandidateDecision.dataset.candidateId;
+      const sha256 = submitScriptCandidateDecision.dataset.candidateSha;
       const decision = submitScriptCandidateDecision.dataset.n05CandidateSubmit;
       const reasonInput = document.querySelector('[data-n05-decision-reason="' + CSS.escape(candidateId) + '"]');
       const reason = String(reasonInput?.value || '').trim();
@@ -3787,18 +4001,18 @@
         const payload = await api('/api/script-projects/' + encodeURIComponent(projectId) + '/n05-candidates/' + encodeURIComponent(candidateId) + '/decision', {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({decision, reason})
+          body:JSON.stringify({decision, sha256, reason})
         });
         state.scriptProjects = state.scriptProjects.map(item => item.id === payload.project.id ? payload.project : item);
         delete state.workbenchActivities[projectId];
         state.scriptReview = {projectId, review:payload.review};
-        clearSessionDraft(candidateDecisionDraftScope(projectId, candidateId, decision));
+        clearSessionDraft(candidateDecisionDraftScope(projectId, candidateId, sha256, decision));
         state.scriptDecisionDraft = null;
         state.scriptDecisionFeedback = {candidateId, tone:'is-info', message:decision === 'regenerate' ? (payload.regenerationDispatch?.status === 'started' ? '重做已启动，当前候选会保留到新图通过独立视觉 QA。' : '重做请求已记录，等待受控队列处理。') : '当前版本的决定已记录。'};
         if (state.scriptStudioProjectId === projectId) renderScriptStudio(payload.project);
         else renderWorkbench();
       } catch (error) {
-        state.scriptDecisionDraft = {...(state.scriptDecisionDraft || {}), projectId, candidateId, decision, reason, error:error.message};
+        state.scriptDecisionDraft = {...(state.scriptDecisionDraft || {}), projectId, candidateId, sha256, decision, reason, error:error.message};
         const project = state.scriptProjects.find(item => item.id === projectId);
         if (project) renderScriptStudio(project);
       }
@@ -3806,6 +4020,7 @@
     }
     if (authorizeN05) {
       const projectId = authorizeN05.dataset.authorizeN05;
+      const promptSha256 = authorizeN05.dataset.reviewSha;
       const confirmed = window.confirm('确认后，网站将记录：仅可严格按当前 N04 包通过认可渠道整图生成 N05 候选图。不会提交视频，不会打包、发送或提升 registry。是否继续？');
       if (!confirmed) return;
       authorizeN05.disabled = true;
@@ -3814,7 +4029,7 @@
         const payload = await api('/api/script-projects/' + encodeURIComponent(projectId) + '/n04-review/authorize-n05', {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({authorizeN05:true})
+          body:JSON.stringify({authorizeN05:true, reviewedPromptSha256:promptSha256})
         });
         state.scriptProjects = state.scriptProjects.map(item => item.id === payload.project.id ? payload.project : item);
         delete state.workbenchActivities[projectId];
@@ -3879,17 +4094,25 @@
     }
   });
 
-  document.addEventListener('change', event => {
-    const projectSelect = event.target.closest('[data-workbench-project-select]');
-    if (!projectSelect) return;
-    state.workspaceProjectId = projectSelect.value || null;
-    const selected = [...state.projects.map(project => ({...project, projectKind:'redraw'})), ...state.scriptProjects.map(project => ({...project, projectKind:'script'}))]
-      .find(project => (project.workspaceProjectId || project.id) === state.workspaceProjectId);
-    state.workbenchSelectionKey = workbenchSelectionKey(selected);
-    renderWorkbench();
-  });
-
   document.addEventListener('submit', async event => {
+    const shotRangeForm = event.target.closest('[data-shot-range-form]');
+    if (shotRangeForm) {
+      event.preventDefault();
+      const projectId = shotRangeForm.dataset.shotRangeForm;
+      const inventory = state.redrawShotSelections[projectId]?.inventory;
+      const value = String(new FormData(shotRangeForm).get('range') || '').trim();
+      const match = value.match(/^(?:S(?:hot)?\s*)?(\d{1,3})\s*(?:-|–|—|到|至)\s*(?:S(?:hot)?\s*)?(\d{1,3})$/i);
+      const input = shotRangeForm.querySelector('input');
+      if (!inventory || !match) { if (input) input.setCustomValidity('请输入镜头范围，例如 10-18'); input?.reportValidity(); return; }
+      const first = Number(match[1]), last = Number(match[2]);
+      const low = Math.min(first, last), high = Math.max(first, last);
+      const selected = inventory.shots.filter(shot => shot.sequence >= low && shot.sequence <= high).map(shot => shot.shot_id);
+      if (!selected.length || selected.length !== high - low + 1) { if (input) input.setCustomValidity('输入范围超出了镜头清单'); input?.reportValidity(); return; }
+      if (input) input.setCustomValidity('');
+      state.redrawShotSelectionDrafts[projectId] = new Set(selected);
+      renderRedrawStudio(state.projects.find(item => item.id === projectId));
+      return;
+    }
     const authorityImportForm = event.target.closest('[data-step01-authority-import]');
     if (authorityImportForm) {
       event.preventDefault();
@@ -4021,7 +4244,7 @@
     if (target.matches('[data-n05-decision-reason]') && state.scriptDecisionDraft) {
       const reason = String(target.value || '').slice(0, 500);
       state.scriptDecisionDraft = {...state.scriptDecisionDraft, reason};
-      writeSessionDraft(candidateDecisionDraftScope(state.scriptDecisionDraft.projectId, state.scriptDecisionDraft.candidateId, state.scriptDecisionDraft.decision), {reason});
+      writeSessionDraft(candidateDecisionDraftScope(state.scriptDecisionDraft.projectId, state.scriptDecisionDraft.candidateId, state.scriptDecisionDraft.sha256, state.scriptDecisionDraft.decision), {reason});
     }
   });
 
@@ -4106,7 +4329,7 @@
       closeWorkbenchAssetViewer();
       return;
     }
-    if (!scriptDramaWizard?.hidden) {
+    if (scriptDramaWizard && !scriptDramaWizard.hidden) {
       event.preventDefault();
       closeScriptDramaWizard();
       return;
@@ -4126,15 +4349,13 @@
     submit.disabled = true;
     status.textContent = '正在上传源视频、写入任务合同并进行本机素材预检…';
     try {
-      const payload = await api('/api/projects', { method: 'POST', headers:{'Idempotency-Key':submissionIdempotencyKey('redraw-project')}, body: new FormData(form) });
+      const payload = await api('/api/projects', { method: 'POST', body: new FormData(form) });
       state.projects.unshift(payload.project);
-      state.workspaceProjectId = payload.project.workspaceProjectId || payload.project.id;
       renderProjects();
       state.workbenchProjectId = payload.project.id;
       state.workbenchStepId = null;
       renderWorkbench();
       clearSessionDraft('redraw-project');
-      clearSubmissionIdempotencyKey('redraw-project');
       form.reset();
       closeWizard({restoreFocus:false});
       state.redrawStudioStageId = '01';
@@ -4164,16 +4385,15 @@
       if (hasDocument) {
         const upload = await uploadScriptDocumentResumable(sourceDocument);
         scriptDramaStatus.textContent = '正在抽取正文并创建短剧项目…';
-          payload = await api('/api/script-projects/from-upload', {
+        payload = await api('/api/script-projects/from-upload', {
           method:'POST',
-          headers:{'Content-Type':'application/json','Idempotency-Key':submissionIdempotencyKey('script-project')},
+          headers:{'Content-Type':'application/json'},
           body:JSON.stringify({
             name:String(data.get('name') || ''),
             genre:String(data.get('genre') || ''),
             audience:String(data.get('audience') || ''),
             episodeDuration:Number(data.get('episodeDuration')),
             aspectRatio:String(data.get('aspectRatio') || ''),
-            workspaceProjectId:String(data.get('workspaceProjectId') || workspaceProjectIdFor() || ''),
             rightsConfirmed:data.get('rightsConfirmed') === 'on',
             uploadSessionId:upload.id
           })
@@ -4181,24 +4401,21 @@
       } else {
         payload = await api('/api/script-projects', {
           method:'POST',
-          headers:{'Content-Type':'application/json','Idempotency-Key':submissionIdempotencyKey('script-project')},
+          headers:{'Content-Type':'application/json'},
           body:JSON.stringify({
             name:String(data.get('name') || ''),
             genre:String(data.get('genre') || ''),
             audience:String(data.get('audience') || ''),
             episodeDuration:Number(data.get('episodeDuration')),
             aspectRatio:String(data.get('aspectRatio') || ''),
-            workspaceProjectId:String(data.get('workspaceProjectId') || workspaceProjectIdFor() || ''),
             sourceText,
             rightsConfirmed:data.get('rightsConfirmed') === 'on'
           })
         });
       }
       state.scriptProjects.unshift(payload.project);
-      state.workspaceProjectId = payload.project.workspaceProjectId || payload.project.id;
       renderWorkbench();
       clearSessionDraft('script-project');
-      clearSubmissionIdempotencyKey('script-project');
       scriptDramaForm.reset();
       closeScriptDramaWizard({restoreFocus:false});
     } catch (error) {
@@ -4224,7 +4441,6 @@
       const payload = await api('/api/auth/' + type, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email,password}) });
       state.user = payload.user;
       updateAuthUi();
-      window.dispatchEvent(new CustomEvent('niannian:auth-changed'));
       document.getElementById('modalClose').click();
       await loadProjects();
     } catch (error) {
@@ -4236,6 +4452,12 @@
   });
 
   window.addEventListener('hashchange', () => {
+    if (/^#canvas(?:\/|$)/i.test(location.hash)) {
+      normalizeMainSitePath();
+      return;
+    }
+    if (redirectRetiredScriptRoute()) return;
+    if (redirectRetiredRedrawRoute()) return;
     const isStudioRoute = /^#(?:script|redraw|redraw-evidence|redraw-source-truth)\//i.test(location.hash);
     if (!isStudioRoute) {
       document.body.classList.remove('is-production-studio');
@@ -4251,15 +4473,7 @@
       showView('workbench');
       renderWorkbench();
     }
-    if (workspaceDeliveryRoute()) {
-      showView('workbench');
-      renderWorkbench();
-    }
     if (location.hash === '#home' || !location.hash) showView('home');
-    if (location.hash.startsWith('#canvas')) {
-      location.hash = 'workbench';
-      return;
-    }
     if (location.hash.startsWith('#script/')) {
       const route = scriptStudioRoute();
       if (route) {
@@ -4299,6 +4513,12 @@
   // Keep the creation entry usable while the owner session and project projection load.
   renderWorkbench();
   loadSession().then(loadProjects).then(() => {
+    if (location.hash.startsWith('#canvas')) {
+      normalizeMainSitePath();
+      return;
+    }
+    if (redirectRetiredScriptRoute()) return;
+    if (redirectRetiredRedrawRoute()) return;
     if (location.hash.startsWith('#redraw/')) {
       const route = redrawStudioRoute();
       if (route) {
@@ -4321,3 +4541,4 @@
     }
   });
 })();
+

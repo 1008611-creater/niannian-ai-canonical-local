@@ -9,13 +9,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>念念 AI - AI短剧创作平台</title>
-    <link rel="icon" href="./assets/brand/niannian-ai-mark-transparent.svg" type="image/svg+xml" />
+    <link rel="icon" href="./assets/brand/niannian-ai-authority-gold.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20260728-header-logo-removed-r1" />
-    <link rel="stylesheet" href="./product.css?v=20260727-step05-reference-dual-track-r1" />
-    <link rel="stylesheet" href="./video-batch-gate/video-batch-panel.css?v=20260727-video-batch-cost-gate-r1" />
-    <link rel="stylesheet" href="./product-system.css?v=20260727-media-direct-r1" />
-    <link rel="stylesheet" href="./hero-oil-paint.css?v=20260727-media-direct-r1" />
+    <link rel="stylesheet" href="./styles.css?v=20260802-home-header-recovery-r2" />
+    <link rel="stylesheet" href="./product.css?v=20260804-workbench-clarity-r2" />
+      <link rel="stylesheet" href="./director-desk.css?v=20260802-director-desk-r4" />
+    <link rel="stylesheet" href="./step04-delivery.css?v=20260802-step04-word-delivery-r3" />
+    <link rel="stylesheet" href="./product-system.css?v=20260727-step02-public-projection-r1" />
+    <link rel="stylesheet" href="./hero-oil-paint.css?v=20260727-step02-public-projection-r1" />
+    <link rel="stylesheet" href="./amber-authority.css?v=20260802-unified-header-r3" />
   </head>
   <body>
     <a class="skip-link" href="#mainContent">跳到主要内容</a>
@@ -25,14 +27,18 @@
       <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="打开导航" aria-controls="primaryNavigation" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
+      <a class="brand" href="#home" aria-label="念念 AI 首页">
+        <span class="brand-mark" aria-hidden="true">
+          <img class="brand-monogram" src="./assets/brand/niannian-ai-authority-gold.svg" alt="" />
+        </span>
+        <span class="brand-name">念念 AI</span>
+      </a>
+
       <nav class="main-nav" id="primaryNavigation" aria-label="主导航">
         <button class="nav-item is-active" data-view="home">首页</button>
         <button class="nav-item" data-view="projects">项目管理</button>
         <button class="nav-item" data-view="workbench">工作台</button>
-        <button class="nav-item" data-view="canvas">无限画布</button>
-        <button class="nav-item" data-view="showcase">作品展示</button>
-        <button class="nav-item" data-view="guide">创作指引</button>
-        <button class="nav-item" data-view="team">团队管理</button>
+        <button class="nav-item" data-view="director-desk">导演台</button>
         <div class="mobile-account-actions" aria-label="账户操作">
           <button type="button" data-modal="register">注册</button>
           <button type="button" data-modal="enterprise">企业方案</button>
@@ -63,7 +69,7 @@
         <div class="hero-shade" aria-hidden="true"></div>
 
         <div class="hero-copy">
-          <img class="hero-logo" src="./assets/brand/niannian-ai-mark-transparent.svg" alt="念念 AI" />
+          <img class="hero-logo" src="./assets/brand/niannian-ai-authority-gold.svg" alt="念念 AI" />
           <div class="hero-title-row" aria-label="用念念 AI 做高燃短剧">
             <span class="hero-prefix">用念念 AI</span>
             <span class="verb-card" id="heroVerb" aria-live="polite">做高燃短剧</span>
@@ -81,11 +87,7 @@
             <div>
               <span class="eyebrow">PROJECT LIBRARY</span>
               <h2>项目管理</h2>
-              <p>在同一处查看小说短剧与参考视频转绘项目；每个项目只从自己的独立制作台继续。</p>
-            </div>
-            <div class="page-action-group" id="projectCreateActions">
-              <button class="page-action page-action-secondary" type="button" data-open-project-wizard>创建转绘项目</button>
-              <button class="page-action" type="button" data-open-script-drama-wizard>创建小说短剧</button>
+              <p>在同一处查看当前账户的短剧项目与真实制作状态。</p>
             </div>
           </header>
 
@@ -98,7 +100,6 @@
 
           <div class="project-toolbar">
             <label class="project-search"><span>搜索</span><input id="projectSearch" type="search" placeholder="项目名称或任务编号"></label>
-            <label class="project-filter"><span>类型</span><select id="projectTypeFilter"><option value="all">全部类型</option><option value="script">小说短剧</option><option value="redraw">参考视频转绘</option></select></label>
             <label class="project-filter"><span>状态</span><select id="projectStatusFilter"><option value="all">全部状态</option><option value="queued">等待处理</option><option value="running">制作中</option><option value="completed">已完成</option><option value="blocked">已阻塞</option></select></label>
           </div>
 
@@ -112,106 +113,22 @@
         </div>
       </section>
 
-      <section class="workspace view script-studio-view" data-view-panel="script-studio">
-        <div class="workbench-shell script-studio-shell">
-          <header class="workbench-header">
-            <div>
-              <span class="eyebrow">NOVEL TO SHORT DRAMA</span>
-              <h2>小说短剧制作台</h2>
-              <p>独立管理文本事实、分集剧本、视觉审核、候选图与后续视频任务。</p>
-            </div>
-            <div class="workbench-actions">
-              <button class="workbench-text-action" type="button" data-return-script-workbench>返回创作工作台</button>
-            </div>
-          </header>
-          <div id="scriptStudioContent" aria-live="polite"></div>
-        </div>
-      </section>
-
-      <section class="workspace view redraw-studio-view" data-view-panel="redraw-studio">
-        <div class="workbench-shell production-studio-shell">
-          <header class="workbench-header">
-            <div>
-              <span class="eyebrow">REDRAW PRODUCTION</span>
-              <h2>一键转绘制作台</h2>
-              <p>独立管理原片输入、资产规划、分镜生产包与视频编辑质量门。</p>
-            </div>
-            <div class="workbench-actions">
-              <button class="workbench-text-action" type="button" data-return-redraw-workbench>返回创作工作台</button>
-            </div>
-          </header>
-          <div id="redrawStudioContent" aria-live="polite"></div>
-        </div>
-      </section>
-
-      <section class="showcase view" data-view-panel="showcase">
-        <div class="showcase-film-deck" id="showcaseFilmDeck">
-          <article class="showcase-film is-active" data-showcase-film="0" aria-hidden="false" aria-labelledby="showcaseFilmTitle">
-            <img class="showcase-film-image" src="./assets/showcase/short-drama-keyart-v1.png" alt="雨夜城市走廊中，一位穿暗红色外套的成年女性站在前景，一位成年男性站在她身后。" />
-            <div class="showcase-film-shade" aria-hidden="true"></div>
-            <div class="showcase-film-copy">
-              <span>念念 AI 作品展示</span>
-              <h2 id="showcaseFilmTitle">高燃短剧</h2>
-              <button class="showcase-film-enter" type="button" data-open-script-drama-wizard>进入短剧创作 <b aria-hidden="true">&#8594;</b></button>
-            </div>
-            <div class="showcase-film-credit" aria-hidden="true"><span>01</span><i></i><span>ORIGINAL DRAMA STUDY</span></div>
-          </article>
-          <article class="showcase-film" data-showcase-film="1" aria-hidden="true" aria-labelledby="showcaseAnimationTitle">
-            <img class="showcase-film-image" src="./assets/showcase/animation-drama-keyart-v1.png" alt="雨夜高层走廊中，一位穿米白色风衣的成年动画女性阅读纸张，一位穿深色大衣的成年动画男性站在她身后。" />
-            <div class="showcase-film-shade" aria-hidden="true"></div>
-            <div class="showcase-film-copy">
-              <span>念念 AI 作品展示</span>
-              <h2 id="showcaseAnimationTitle">动画漫剧</h2>
-              <button class="showcase-film-enter" type="button" data-open-script-drama-wizard>进入动画创作 <b aria-hidden="true">&#8594;</b></button>
-            </div>
-            <div class="showcase-film-credit" aria-hidden="true"><span>02</span><i></i><span>ORIGINAL ANIMATION STUDY</span></div>
-          </article>
-          <article class="showcase-film" data-showcase-film="2" aria-hidden="true" aria-labelledby="showcaseRedrawTitle">
-            <img class="showcase-film-image" src="./assets/showcase/redraw-keyart-partial-xuedi-v1.png?v=20260714-partial-xuedi-r2" alt="傍晚的现代直播电商办公室中，一位穿浅灰针织开衫的成年男性与一位穿黑色西装连衣裙的成年女性隔桌对峙。" />
-            <div class="showcase-film-shade" aria-hidden="true"></div>
-            <div class="showcase-film-copy">
-              <span>念念 AI 作品展示</span>
-              <h2 id="showcaseRedrawTitle">参考视频转绘</h2>
-              <button class="showcase-film-enter" type="button" data-open-project-wizard>进入转绘创作 <b aria-hidden="true">&#8594;</b></button>
-            </div>
-            <div class="showcase-film-credit" aria-hidden="true"><span>03</span><i></i><span>REFERENCE-GUIDED REDRAW STUDY</span></div>
-          </article>
-        </div>
-        <nav class="showcase-film-nav" aria-label="选择展示案例">
-          <button class="is-active" type="button" data-showcase-film-index="0" aria-pressed="true"><span>01</span>高燃短剧</button>
-          <button type="button" data-showcase-film-index="1" aria-pressed="false"><span>02</span>动画漫剧</button>
-          <button type="button" data-showcase-film-index="2" aria-pressed="false"><span>03</span>视频转绘</button>
-        </nav>
-      </section>
-
-      <section class="guide view" data-view-panel="guide">
-        <div class="guide-shell">
-          <header class="guide-header">
-            <div>
-              <span class="eyebrow">CREATIVE FLOW</span>
-              <h2>创作指引</h2>
-              <p>先选择小说短剧或参考视频转绘，再按各自的质量门进入下一步。</p>
-            </div>
-            <div class="guide-mode-switch" id="guideModeSwitch" aria-label="选择创作流程"></div>
-          </header>
-          <div class="guide-layout">
-            <nav class="guide-rail" aria-label="创作步骤" id="guideStepList"></nav>
-            <article class="guide-focus" id="guideFocus" aria-live="polite"></article>
-            <aside class="guide-checklist" id="guideChecklist"></aside>
-          </div>
-        </div>
-      </section>
-
-      <section class="workspace view team-view" data-view-panel="team">
-        <div class="team-shell">
-          <header class="product-heading">
-            <div>
-              <span class="eyebrow">TEAM SPACE</span>
-              <h2>团队管理</h2>
-              <p>查看当前账户、项目与协作范围。</p>
-            </div>
-          </header>
-          <div id="teamContent" aria-live="polite"></div>
+      <section class="workspace view director-desk-view" data-view-panel="director-desk" aria-label="3D导演台">
+        <div class="director-desk-shell">
+          <button
+            id="directorDeskHostClose"
+            class="director-desk-host-close"
+            type="button"
+            aria-label="返回工作台"
+            title="返回工作台"
+          ><span aria-hidden="true">&larr;</span></button>
+          <iframe
+            id="directorDeskFrame"
+            class="director-desk-frame"
+            title="3D导演台"
+            src="/director-desk/?theme=dark&v=20260803-workbench-director-preview-r2"
+            allow="fullscreen"
+          ></iframe>
         </div>
       </section>
 
@@ -222,45 +139,22 @@
       <span>© 2026 念念智能影像</span>
     </footer>
 
-    
-  <div class="project-wizard-backdrop" id="projectWizard" hidden>
-    <section class="project-wizard" role="dialog" aria-modal="true" aria-labelledby="projectWizardTitle">
-      <button class="wizard-close" type="button" data-close-project-wizard aria-label="关闭">×</button>
-      <div class="wizard-intro">
-        <span class="eyebrow">MX REDRAW ROUTER</span>
-        <h2 id="projectWizardTitle">创建转绘项目</h2>
-        <p>上传源视频并确认使用权限。系统先验证格式、时长、体积、画面和音轨；点击开始分析后，分析服务会提取镜头、台词和画面文字，并完成原片事实核对。</p>
-      </div>
-      <form id="projectCreateForm" class="project-create-form" enctype="multipart/form-data">
-        <input type="hidden" name="workspaceProjectId" value="">
-        <div class="form-field-wide"><button class="wizard-secondary" type="button" data-resume-redraw-draft hidden>恢复上次未提交草稿</button></div>
-        <label class="form-field form-field-wide"><span>项目名称</span><input name="name" required maxlength="80" placeholder="例如：猫咪妙脆角 Meme 转绘"></label>
-        <label class="form-field form-field-wide upload-field"><span>源视频</span><input name="sourceVideo" type="file" accept=".mp4,.mov,video/mp4,video/quicktime" required><small>仅支持 MP4、MOV；15 秒至 3 分钟，300MB 内。建议保留原始清晰文件。</small></label>
-        <label class="rights-check form-field-wide"><input name="rightsConfirmed" type="checkbox" required><span>我确认拥有该源视频的使用或改编权限。</span></label>
-        <div class="wizard-status form-field-wide" id="wizardStatus" aria-live="polite"></div>
-        <div class="wizard-actions form-field-wide"><button class="wizard-secondary" type="button" data-close-project-wizard>取消</button><button class="wizard-primary" type="submit">创建并开始本机预检</button></div>
-      </form>
-    </section>
-  </div>
-
   <div class="project-wizard-backdrop" id="scriptDramaWizard" hidden>
     <section class="project-wizard script-drama-wizard" role="dialog" aria-modal="true" aria-labelledby="scriptDramaWizardTitle">
       <button class="wizard-close" type="button" data-close-script-drama-wizard aria-label="关闭">×</button>
       <div class="wizard-intro">
-        <span class="eyebrow">NOVEL TO SHORT DRAMA</span>
-        <h2 id="scriptDramaWizardTitle">小说一键生成短剧</h2>
-        <p>先把小说正文登记为短剧项目，生成首集改编、人物与首帧审核方案。视频生成始终要等人物、首帧和费用授权通过后才会开放。</p>
+        <span class="eyebrow">SHORT DRAMA</span>
+        <h2 id="scriptDramaWizardTitle">一键短剧</h2>
       </div>
       <form id="scriptDramaCreateForm" class="project-create-form">
-        <input type="hidden" name="workspaceProjectId" value="">
-        <label class="form-field form-field-wide"><span>短剧项目名称</span><input name="name" required maxlength="80" placeholder="例如：离婚当天，被白月光拐进民政局"></label>
+        <label class="form-field form-field-wide"><span>项目名称</span><input name="name" required maxlength="80" placeholder="例如：离婚当天，被白月光拐进民政局"></label>
         <label class="form-field"><span>题材</span><select name="genre"><option>都市情感</option><option>豪门逆袭</option><option>悬疑反转</option><option>古风言情</option><option>奇幻冒险</option></select></label>
         <label class="form-field"><span>目标受众</span><input name="audience" required maxlength="80" value="短剧用户"></label>
         <label class="form-field"><span>单集时长</span><select name="episodeDuration"><option value="60">60 秒</option><option value="90">90 秒</option></select></label>
         <label class="form-field"><span>画面比例</span><select name="aspectRatio"><option value="9:16">竖屏 9:16</option><option value="16:9">横屏 16:9</option></select></label>
-        <label class="form-field form-field-wide upload-field script-document-field"><span>Word 小说文档（可选）</span><input name="sourceDocument" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><small>支持 `.docx`，最大 25MB。网络中断后，重新选择同一文件即可继续已校验的上传内容。</small></label>
-        <label class="form-field form-field-wide"><span>小说或剧本正文（可选）</span><textarea name="sourceText" rows="12" placeholder="也可以直接粘贴章节正文、故事梗概或剧本。系统先做文本事实账本与首集改编，不会直接提交视频生成。"></textarea><small>请上传 Word 或粘贴正文，二选一即可；若两者同时提供，以 Word 文档为准。</small></label>
-        <label class="rights-check form-field-wide"><input name="rightsConfirmed" type="checkbox" required><span>我确认拥有该小说或剧本的使用、改编权限。</span></label>
+        <label class="form-field form-field-wide upload-field script-document-field"><span>Word 剧本文档（可选）</span><input name="sourceDocument" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><small>支持 .docx，最大 25MB。</small></label>
+        <label class="form-field form-field-wide"><span>剧本正文（可选）</span><textarea name="sourceText" rows="10" placeholder="粘贴剧本正文、故事梗概或小说章节"></textarea></label>
+        <label class="rights-check form-field-wide"><input name="rightsConfirmed" type="checkbox" required><span>我确认拥有该剧本的使用、改编权限。</span></label>
         <div class="wizard-status form-field-wide" id="scriptDramaWizardStatus" aria-live="polite"></div>
         <div class="wizard-actions form-field-wide"><button class="wizard-secondary" type="button" data-close-script-drama-wizard>取消</button><button class="wizard-primary" type="submit">创建短剧项目</button></div>
       </form>
@@ -306,13 +200,13 @@
 
     <script src="./vendor/gsap-3.13.0.min.js?v=3.13.0"></script>
     <script src="./vendor/gsap-flip-3.13.0.min.js?v=3.13.0"></script>
-    <script src="./app.js?v=20260802-workbench-launcher-r1"></script>
-    <script src="./mvp-step02-r13.js?v=20260802-workbench-launcher-r1" defer></script>
-    <script src="./mvp-step03-r1.js?v=20260727-step05-reference-dual-track-r1" defer></script>
-    <script src="./video-batch-gate/video-batch-panel.js?v=20260727-video-batch-cost-gate-r1" defer></script>
-    <script src="./video-batch-gate/video-batch-integrated.js?v=20260727-video-batch-cost-gate-r1" defer></script>
-    <script src="./mvp-step01-ledger-r1.js?v=20260727-media-direct-r1" defer></script>
-    <script src="./mvp-step01-story-r1.js?v=20260727-media-direct-r1" defer></script>
-    <script src="./mvp-source-truth-r1.js?v=20260727-media-direct-r1" defer></script>
-  </body>
+    <script src="./app.js?v=20260804-workbench-clarity-r2"></script>
+    <script src="./mvp-step02-r13.js?v=20260804-workbench-clarity-r2" defer></script>
+    <script src="./mvp-step03-r1.js?v=20260727-step02-public-projection-r1" defer></script>
+    <script src="./mvp-step01-ledger-r1.js?v=20260727-step02-public-projection-r1" defer></script>
+    <script src="./mvp-step01-story-r1.js?v=20260727-step02-public-projection-r1" defer></script>
+    <script src="./mvp-source-truth-r1.js?v=20260727-step02-public-projection-r1" defer></script>
+    <script src="./director-desk-host.js?v=20260803-director-desk-host-fix1"></script>
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"2676a1532aaa40c29343645e5dec9b68","r":1}' crossorigin="anonymous"></script>
+</body>
 </html>
